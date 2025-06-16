@@ -1,0 +1,17 @@
+from fastapi import APIRouter
+from app.apiv1.http.admin import AdminStationsController
+from app.apiv1.http.admin import AdminHostsController
+from app.apiv1.http.admin import AdminRadioProgramsController
+from app.apiv1.http.admin import AdminStationScheduleController
+from app.apiv1.http.admin import AdminNewsController
+from app.apiv1.http.admin import AdminForumsController
+from app.apiv1.http.admin import AdminAdvertsController
+
+admin_routers = APIRouter()
+admin_routers.include_router(AdminStationsController.router, prefix="/admin/stations", tags=["Admin Stations"])
+admin_routers.include_router(AdminHostsController.router, prefix="/admin/hosts", tags=["Admin Hosts"])
+admin_routers.include_router(AdminRadioProgramsController.router, prefix="/admin/radio_programs", tags=["Admin Radio Programs"])
+admin_routers.include_router(AdminStationScheduleController.router, prefix="/admin/station_schedule", tags=["Admin Station Schedule"])
+admin_routers.include_router(AdminNewsController.router, prefix="/admin/news", tags=["Admin News"])
+admin_routers.include_router(AdminForumsController.router, prefix="/admin/forums", tags=["Admin Forums"])
+admin_routers.include_router(AdminAdvertsController.router, prefix="/admin/adverts", tags=["Admin Adverts"])

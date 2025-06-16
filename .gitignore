@@ -1,0 +1,51 @@
+# Python
+**/__pycache__/**
+**/*.pyc
+**/*.pyo
+**/venv/**
+**/.env
+
+# Logs
+**/logs/**
+**/*.log
+
+
+
+# Node.js
+admin_frontend/node_modules/
+capital_webiste/node_modules/
+**/node_modules/
+
+# Backend specific
+backend/env/
+# backend/static/
+# backend/main.py
+# backend/app/database.py
+# backend/app/main.py
+# database.py
+# main.py
+# **/database.py
+# **/main.py
+
+# Alembic migrations
+# backend/alembic
+
+# Additional common ignores
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env.local
+.env.development
+.env.production
+
+# Build outputs
+*.egg-info/
+
+# Temporary files
+*.tmp
+*.temp
