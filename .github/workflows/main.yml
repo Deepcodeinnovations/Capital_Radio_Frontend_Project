@@ -14,8 +14,9 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@4.0.0
       with:
         server: ftp.capitalradio.co.ug
-        username: "Deepcode Innovations"
-        password: '4S2w9NSyntBUgEf'
+        port: 22
+        username: "capitalradio"
+        password: '-X2i3g6+Agj_'
         server-dir: /home/capitalradio/admin/
         local-dir: admin_frontend/dist/
         exclude: |
