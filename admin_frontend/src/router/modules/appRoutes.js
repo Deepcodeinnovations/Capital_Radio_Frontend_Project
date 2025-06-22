@@ -48,13 +48,7 @@ export default [
         path: 'podcasts',
         name: 'Podcasts',
         component: () => import('../../views/app/podcasts/Podcasts.vue')
-      },
-      {
-        path: 'podcasts/new',
-        name: 'NewPodcast',
-        component: () => import('../../views/app/podcasts/NewPodcast.vue')
-      },
-      
+      }, 
       {
         path: 'news',
         component: () => import('../../views/app/news/main.vue'),
