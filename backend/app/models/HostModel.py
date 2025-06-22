@@ -1,9 +1,9 @@
 from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy import select, and_
 from app.models.BaseModel import Base
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 class Host(Base):
     __tablename__ = "hosts"
@@ -49,10 +49,17 @@ class Host(Base):
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
     
-    async def to_dict_with_relations(self, db: AsyncSession) -> Dict[str, Any]:
+    async def to_dict_with_relations(self, db: AsyncSession, include_programs: bool = False) -> Dict[str, Any]:
         try:
             await db.refresh(self)
             data = await self.to_dict()
+
+            if include_programs:
+                programs = await self.get_host_programs(db)
+                if programs:
+                    data['programs'] = programs
+                else:
+                    data['programs'] = []
         
             return data
             
@@ -72,3 +79,33 @@ class Host(Base):
         except Exception as e:
             await db.rollback()
             raise Exception(f"Failed to delete station with relations: {str(e)}")
+
+
+    async def get_host_programs(self, db: AsyncSession) -> List[Dict[str, Any]]:
+        try:
+            from app.models.RadioProgramModel import RadioProgram
+            
+            # Get all programs and filter in Python since hosts is JSON
+            stmt = select(RadioProgram).where(
+                and_(
+                    RadioProgram.state == True,
+                    RadioProgram.status == True,
+                    RadioProgram.hosts.isnot(None)
+                )
+            )
+            result = await db.execute(stmt)
+            all_programs = result.scalars().all()
+            
+            # Filter programs that contain this host
+            host_programs = []
+            for program in all_programs:
+                if program.hosts:
+                    for host in program.hosts:
+                        if isinstance(host, dict) and host.get('id') == self.id:
+                            host_programs.append(program)
+                            break
+            
+            return [await program.to_dict() for program in host_programs]
+            
+        except Exception as e:
+            raise Exception(f"Failed to get host programs: {str(e)}")

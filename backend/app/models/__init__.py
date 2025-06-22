@@ -10,3 +10,6 @@ from app.models.ForumModel import Forum
 from app.models.ForumCommentModel import ForumComment
 from app.models.AdvertModel import Advert
 from app.models.LiveChatMessageModel import LiveChatMessage
+from app.models.StationListenersModel import StationListeners
+from app.models.EventModel import Event
+from app.models.RadioSessionRecordingModel import RadioSessionRecording

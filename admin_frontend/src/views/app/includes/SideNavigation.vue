@@ -7,27 +7,30 @@
     'h-full overflow-y-auto transition-all duration-300 ease-in-out shadow-2xl border-r border-blue-700/30 dark:border-slate-700/30 light:border-blue-200/50'
   ]">
     <!-- Logo and Brand -->
-    <div class="p-4 border-b border-blue-700/30 dark:border-slate-700/30 light:border-blue-200/50 flex items-center justify-center backdrop-blur-sm bg-white/5 dark:bg-black/10 light:bg-white/80">
-      <div class="relative">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur-sm opacity-30"></div>
-        <RadioIcon class="h-10 w-10 relative z-10 text-white dark:text-slate-200 light:text-blue-600" />
+    <div class="p-4 border-b border-blue-700/30 dark:border-slate-700/30 light:border-blue-200/50 flex  backdrop-blur-sm bg-white/5 dark:bg-black/10 light:bg-white/80">
+      <div v-if="!collapsed" >
+        <h1 class="text-xl uppercase font-bold bg-gradient-to-r from-white to-cyan-300 dark:from-slate-200 dark:to-cyan-300 light:from-blue-600 light:to-cyan-500 bg-clip-text text-transparent">
+          Capital Radio
+        </h1>
+        <p class="text-xs text-blue-200 dark:text-slate-400 light:text-blue-500 font-medium">Web Manager</p>
       </div>
-      <div v-if="!collapsed" class="ml-3">
-        <span class="text-xl font-bold bg-gradient-to-r from-white to-cyan-300 dark:from-slate-200 dark:to-cyan-300 light:from-blue-600 light:to-cyan-500 bg-clip-text text-transparent">
-          Capital FM
+      <div v-else >
+        <span class="text-sm font-bold bg-gradient-to-r from-white to-cyan-300 dark:from-slate-200 dark:to-cyan-300 light:from-blue-600 light:to-cyan-500 bg-clip-text text-transparent">
+          CUL
         </span>
-        <p class="text-xs text-blue-200 dark:text-slate-400 light:text-blue-500 font-medium">Admin Portal</p>
       </div>
     </div>
     
     <!-- Navigation Menu -->
     <nav class="mt-6 px-2 space-y-1">
-      <!-- Dashboard -->
+      <!-- Dashboard - Admin & Editor only -->
       <router-link 
+        v-if="canAccess('Dashboard')"
         :to="{name: 'Dashboard'}" 
         class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
         :class="[
-          'text-white/90 dark:text-slate-300 light:text-slate-700',
+          ...getActiveClasses('Dashboard'),
+          !isActiveRoute('Dashboard') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
           'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
           'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
           'light:hover:from-blue-100 light:hover:to-cyan-100',
@@ -36,19 +39,21 @@
           { 'justify-center': collapsed }
         ]"
       >
-        <HomeIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
+        <LayoutDashboardIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
         <span v-if="!collapsed">Dashboard</span>
         <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
           <ChevronRightIcon class="h-4 w-4" />
         </div>
       </router-link>
       
-   
+      <!-- Stations - All roles -->
       <router-link 
+        v-if="canAccess('Stations')"
         :to="{ name: 'Stations' }" 
         class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
         :class="[
-          'text-white/90 dark:text-slate-300 light:text-slate-700',
+          ...getActiveClasses('Stations'),
+          !isActiveRoute('Stations') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
           'hover:bg-gradient-to-r hover:from-emerald-600/20 hover:to-green-500/20',
           'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
           'light:hover:from-emerald-100 light:hover:to-green-100',
@@ -67,68 +72,89 @@
         </div>
       </router-link>
       
-      <!-- Podcasts Section -->
-      <div class="space-y-1">
-        <button 
-          @click="toggleSection('podcasts')" 
-          class="group w-full flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
-          :class="[
-            'text-white/90 dark:text-slate-300 light:text-slate-700',
-            'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
-            'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
-            'light:hover:from-blue-100 light:hover:to-cyan-100',
-            'hover:text-white dark:hover:text-slate-100 light:hover:text-blue-700',
-            'hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-slate-500/10 light:hover:shadow-blue-200/20',
-            { 'justify-center': collapsed, 'bg-blue-600/10 dark:bg-slate-700/30 light:bg-blue-100/50': expandedSections.podcasts }
-          ]"
-        >
-          <HeadphonesIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
-          <span v-if="!collapsed" class="flex-1 text-left">Radio Sessions</span>
-          <ChevronDownIcon 
-            v-if="!collapsed" 
-            class="h-4 w-4 transition-transform duration-200" 
-            :class="{ 'transform rotate-180': expandedSections.podcasts }" 
-          />
-        </button>
-        
-        <div 
-          v-if="!collapsed && expandedSections.podcasts" 
-          class="ml-4 pl-4 border-l-2 border-blue-500/20 dark:border-slate-600/30 light:border-blue-300/40 space-y-1"
-        >
-          <router-link 
-            :to="{ name: 'Podcasts' }" 
-            class="group flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
-            :class="[
-              'text-blue-200/80 dark:text-slate-400 light:text-slate-600',
-              'hover:bg-blue-600/10 dark:hover:bg-slate-700/30 light:hover:bg-blue-50',
-              'hover:text-white dark:hover:text-slate-200 light:hover:text-blue-700'
-            ]"
-          >
-            <div class="w-2 h-2 rounded-full bg-blue-400/50 dark:bg-slate-500 light:bg-blue-400 mr-3 group-hover:bg-blue-300 transition-colors"></div>
-            All Radio Sessions
-          </router-link>
-          <router-link 
-            to="/dashboard/podcasts/new" 
-            class="group flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105"
-            :class="[
-              'text-blue-200/80 dark:text-slate-400 light:text-slate-600',
-              'hover:bg-blue-600/10 dark:hover:bg-slate-700/30 light:hover:bg-blue-50',
-              'hover:text-white dark:hover:text-slate-200 light:hover:text-blue-700'
-            ]"
-          >
-            <div class="w-2 h-2 rounded-full bg-blue-400/50 dark:bg-slate-500 light:bg-blue-400 mr-3 group-hover:bg-blue-300 transition-colors"></div>
-            Upload New
-          </router-link>
+      <!-- Podcasts - All roles -->
+      <router-link  
+        v-if="canAccess('Podcasts')"
+        :to="{ name: 'Podcasts' }" 
+        class="group w-full flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
+        :class="[
+          ...getActiveClasses('Podcasts'),
+          !isActiveRoute('Podcasts') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
+          'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
+          'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
+          'light:hover:from-blue-100 light:hover:to-cyan-100',
+          'hover:text-white dark:hover:text-slate-100 light:hover:text-blue-700',
+          'hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-slate-500/10 light:hover:shadow-blue-200/20',
+          { 'justify-center': collapsed }
+        ]"
+      >
+        <PodcastIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
+        <span v-if="!collapsed" class="flex-1 text-left">Radio Sessions</span>
+        <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+          <ChevronRightIcon class="h-4 w-4" />
         </div>
-      </div>
-      
-  
+      </router-link>
 
+      <!-- Live Chats - Admin & Presenter only -->
       <router-link 
+        v-if="canAccess('LiveChats')"
+        :to="{ name: 'LiveChats' }" 
+        class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
+        :class="[
+          ...getActiveClasses('LiveChats'),
+          !isActiveRoute('LiveChats') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
+          'hover:bg-gradient-to-r hover:from-purple-600/20 hover:to-pink-500/20',
+          'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
+          'light:hover:from-purple-100 light:hover:to-pink-100',
+          'hover:text-white dark:hover:text-slate-100 light:hover:text-purple-700',
+          'hover:shadow-lg hover:shadow-purple-500/10 dark:hover:shadow-slate-500/10 light:hover:shadow-purple-200/20',
+          { 'justify-center': collapsed }
+        ]"
+      >
+        <div class="relative">
+          <MessageCircleIcon class="h-5 w-5 text-purple-500 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
+          <div class="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        </div>
+        <span v-if="!collapsed">Radio Live Chats</span>
+        <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+          <ChevronRightIcon class="h-4 w-4" />
+        </div>
+      </router-link>
+
+      <!-- Events Manager - All roles -->
+      <router-link 
+        v-if="canAccess('Events')"
+        :to="{ name: 'Events' }" 
+        class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
+        :class="[
+          ...getActiveClasses('Events'),
+          !isActiveRoute('Events') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
+          'hover:bg-gradient-to-r hover:from-amber-600/20 hover:to-orange-500/20',
+          'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
+          'light:hover:from-amber-100 light:hover:to-orange-100',
+          'hover:text-white dark:hover:text-slate-100 light:hover:text-amber-700',
+          'hover:shadow-lg hover:shadow-amber-500/10 dark:hover:shadow-slate-500/10 light:hover:shadow-amber-200/20',
+          { 'justify-center': collapsed }
+        ]"
+      >
+        <div class="relative">
+          <CalendarDaysIcon class="h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
+          <div class="absolute -top-1 -right-1 w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+        </div>
+        <span v-if="!collapsed">Events Manager</span>
+        <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+          <ChevronRightIcon class="h-4 w-4" />
+        </div>
+      </router-link>
+      
+      <!-- News - Admin & Editor only -->
+      <router-link 
+        v-if="canAccess('News')"
         :to="{name: 'News'}" 
         class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
         :class="[
-          'text-white/90 dark:text-slate-300 light:text-slate-700',
+          ...getActiveClasses('News'),
+          !isActiveRoute('News') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
           'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
           'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
           'light:hover:from-blue-100 light:hover:to-cyan-100',
@@ -144,14 +170,14 @@
         </div>
       </router-link>
       
-
-      
-      <!-- Forums -->
+      <!-- Forums - Admin & Editor only -->
       <router-link 
+        v-if="canAccess('Forums')"
         :to="{ name: 'Forums' }" 
         class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
         :class="[
-          'text-white/90 dark:text-slate-300 light:text-slate-700',
+          ...getActiveClasses('Forums'),
+          !isActiveRoute('Forums') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
           'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
           'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
           'light:hover:from-blue-100 light:hover:to-cyan-100',
@@ -167,12 +193,14 @@
         </div>
       </router-link>
 
-      <!-- Forums -->
+      <!-- Adverts - Admin & Editor only -->
       <router-link 
+        v-if="canAccess('Adverts')"
         :to="{ name: 'Adverts' }" 
         class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
         :class="[
-          'text-white/90 dark:text-slate-300 light:text-slate-700',
+          ...getActiveClasses('Adverts'),
+          !isActiveRoute('Adverts') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
           'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
           'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
           'light:hover:from-blue-100 light:hover:to-cyan-100',
@@ -181,19 +209,44 @@
           { 'justify-center': collapsed }
         ]"
       >
-        <MessageSquareIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
+        <MegaphoneIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
         <span v-if="!collapsed">Adverts/Sponsors</span>
         <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
           <ChevronRightIcon class="h-4 w-4" />
         </div>
       </router-link>
       
-      <!-- Sessions -->
+      <!-- Sessions - All roles -->
       <router-link 
+        v-if="canAccess('Sessions')"
         :to="{ name: 'Sessions' }" 
         class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
         :class="[
-          'text-white/90 dark:text-slate-300 light:text-slate-700',
+          ...getActiveClasses('Sessions'),
+          !isActiveRoute('Sessions') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
+          'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
+          'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
+          'light:hover:from-blue-100 light:hover:to-cyan-100',
+          'hover:text-white dark:hover:text-slate-100 light:hover:text-blue-700',
+          'hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-slate-500/10 light:hover:shadow-blue-200/20',
+          { 'justify-center': collapsed }
+        ]"
+      >
+        <CalendarIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
+        <span v-if="!collapsed">Radio Programs</span>
+        <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+          <ChevronRightIcon class="h-4 w-4" />
+        </div>
+      </router-link>
+      
+      <!-- Hosts & VJs - All roles -->
+      <router-link 
+        v-if="canAccess('Hosts')"
+        :to="{ name: 'Hosts' }" 
+        class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
+        :class="[
+          ...getActiveClasses('Hosts'),
+          !isActiveRoute('Hosts') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
           'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
           'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
           'light:hover:from-blue-100 light:hover:to-cyan-100',
@@ -203,18 +256,22 @@
         ]"
       >
         <MicIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
-        <span v-if="!collapsed">Radio Programs</span>
+        <span v-if="!collapsed">Hosts & VJs Team</span>
         <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
           <ChevronRightIcon class="h-4 w-4" />
         </div>
       </router-link>
+
       
-      <!-- Hosts & VJs -->
+      
+      <!-- Access Users - Admin only -->
       <router-link 
-        :to="{ name: 'Hosts' }" 
+        v-if="canAccess('user_manager')"
+        :to="{ name: 'user_manager' }" 
         class="group flex items-center px-3 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" 
         :class="[
-          'text-white/90 dark:text-slate-300 light:text-slate-700',
+          ...getActiveClasses('user_manager'),
+          !isActiveRoute('user_manager') ? 'text-white/90 dark:text-slate-300 light:text-slate-700' : '',
           'hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-500/20',
           'dark:hover:from-slate-700/50 dark:hover:to-slate-600/50',
           'light:hover:from-blue-100 light:hover:to-cyan-100',
@@ -224,13 +281,11 @@
         ]"
       >
         <UsersIcon class="h-5 w-5 group-hover:scale-110 transition-transform" :class="{ 'mr-3': !collapsed }" />
-        <span v-if="!collapsed">Hosts & VJs Team</span>
+        <span v-if="!collapsed">Access Users</span>
         <div v-if="!collapsed" class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
           <ChevronRightIcon class="h-4 w-4" />
         </div>
       </router-link>
-      
-
     </nav>
     
     <!-- Collapse Button -->
@@ -255,32 +310,80 @@
         <span v-if="!collapsed" class="ml-2">Collapse</span>
       </button>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { 
-  Home as HomeIcon, 
+  LayoutDashboard as LayoutDashboardIcon, 
   Radio as RadioIcon, 
   Mic as MicIcon, 
-  Calendar as CalendarIcon, 
+  Calendar as CalendarIcon,
+  CalendarDays as CalendarDaysIcon,
   Users as UsersIcon, 
   LogOut as LogOutIcon,
   ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
-  Headphones as HeadphonesIcon,
+  Podcast as PodcastIcon,
   Newspaper as NewspaperIcon,
   CircleDot as CircleDotIcon,
-  MessageSquare as MessageSquareIcon
+  MessageSquare as MessageSquareIcon,
+  MessageCircle as MessageCircleIcon,
+  Megaphone as MegaphoneIcon
 } from 'lucide-vue-next';
 
 const store = useStore();
 const router = useRouter();
+const route = useRoute();
+
+// Get current user from store
+const authuser = computed(() => store.getters.authuser);
+const userRole = computed(() => authuser.value?.role || 'presenter');
+
+// Role-based access control
+const rolePermissions = {
+  admin: [
+    'Dashboard', 'Stations', 'Podcasts', 'News', 'Forums', 
+    'Adverts', 'Sessions', 'Hosts', 'LiveChats', 'Events', 'user_manager'
+  ],
+  editor: [
+    'Dashboard', 'Stations', 'Podcasts', 'News', 'Forums', 
+    'Adverts', 'Sessions', 'Hosts', 'Events'
+  ],
+  presenter: [
+    'Stations', 'Podcasts', 'Sessions', 'Hosts', 'LiveChats', 'Events'
+  ]
+};
+
+// Check if user can access a route
+const canAccess = (routeName) => {
+  const permissions = rolePermissions[userRole.value] || rolePermissions.presenter;
+  return permissions.includes(routeName);
+};
+
+// Active route checker
+const isActiveRoute = (routeName) => {
+  return route.path.toLowerCase().includes(routeName.toLowerCase()) || route.name === routeName;
+};
+
+// Get active route classes
+const getActiveClasses = (routeName) => {
+  if (isActiveRoute(routeName)) {
+    return [
+      'bg-gradient-to-r from-blue-600/30 to-cyan-500/30',
+      'dark:from-slate-600/40 dark:to-slate-500/40',
+      'light:from-blue-200/60 light:to-cyan-200/60',
+      'text-white dark:text-slate-100 light:text-blue-800',
+      'shadow-lg shadow-blue-500/20 dark:shadow-slate-500/20 light:shadow-blue-300/30',
+      'border border-blue-500/30 dark:border-slate-500/30 light:border-blue-300/40'
+    ];
+  }
+  return [];
+};
 
 // Sidebar state
 const collapsed = ref(false);

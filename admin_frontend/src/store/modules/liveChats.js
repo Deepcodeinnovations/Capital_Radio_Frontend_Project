@@ -1,66 +1,123 @@
-// liveChats.js - Live Chats store module
+export const namespaced = true
 
 export default {
-  namespaced: true,
-  state: {
-    liveChat: [
-      {
-        id: 1,
-        username: 'MusicLover22',
-        message: 'This track is amazing! Who\'s the artist?',
-        time: '14:40'
+    state: {
+        livechatmessages: null,
+    },
+    
+    getters: {
+        livechatmessages: (state) => state.livechatmessages,
+    },
+
+    mutations: {
+        setlivechatmessages: (state, livechatmessages) => (state.livechatmessages = livechatmessages),
+        pushtolivechatmessages: (state, newlivechatmessages) => state.livechatmessages.push(newlivechatmessages),
+        pushtolivechatmessages: (state, newlivechatmessages) => {
+          const exists = state.livechatmessages.some(msg => 
+              msg.id === newlivechatmessages.id || 
+              (msg.message === newlivechatmessages.message && msg.user_id === newlivechatmessages.user_id && msg.created_at === newlivechatmessages.created_at)
+          );
+          if (!exists) {
+              state.livechatmessages.push(newlivechatmessages);
+          }
       },
-      {
-        id: 2,
-        username: 'DJFan',
-        message: 'It\'s the new release from Glass Animals',
-        time: '14:41'
-      },
-      {
-        id: 3,
-        username: 'RadioHead',
-        message: 'I\'ve been waiting for this song all day!',
-        time: '14:44'
+      removefromlivechatmessages: (state, messageToRemove) => {
+          state.livechatmessages = state.livechatmessages.filter(msg => 
+              msg.id !== messageToRemove.id &&
+              !(msg.message === messageToRemove.message && 
+                msg.user_id === messageToRemove.user_id && 
+                msg.created_at === messageToRemove.created_at)
+          );
       }
-    ],
-    chatRooms: [
-      {
-        id: 1,
-        name: 'Main Chat',
-        description: 'General discussion about music and broadcasts',
-        activeUsers: 42
-      },
-      {
-        id: 2,
-        name: 'Morning Show',
-        description: 'Chat about the morning show topics',
-        activeUsers: 18
-      },
-      {
-        id: 3,
-        name: 'Song Requests',
-        description: 'Request your favorite songs here',
-        activeUsers: 27
-      }
-    ]
-  },
-  mutations: {
-    addChatMessage(state, message) {
-      state.liveChat.push(message)
+    },
+
+    actions: {
+        async fetchAllMessages({ commit }, data) {
+            commit('seterror', '')
+            commit('setmsg', '')
+            commit('setloader', 'fetch_station')
+            return new Promise((resolve, reject) => {
+                axios.post(`/admin/livechat/livechatmessages`, data).then(async response => {
+                        commit('setloader', false)
+                        if (response.data.data) {
+                            commit('setlivechatmessages', response.data.data)
+                        }
+                        resolve(response)
+                    })
+                    .catch(async error => {
+                        commit('setloader', false)
+                        if (error.response) {
+                            if (error.response.data) {
+                                if (error.response.data.msg) {
+                                    commit('seterror', error.response.data.msg)
+                                } else if (error.response.data.message) {
+                                    commit('seterrors', error.response.data.message)
+                                }
+                            }
+                        }
+                        reject(error)
+                    });
+            });
+        },
+        
+        async sendLiveChatMessage({ commit }, data) {
+            commit('seterror', '')
+            commit('setmsg', '')
+            commit('setloader', 'fetch_station')
+            return new Promise((resolve, reject) => {
+                axios.post(`/admin/livechat/create`, data).then(async response => {
+                        commit('setloader', false)
+                        console.log(response.data.data)
+                        if (response.data.data) {
+                            commit('pushtolivechatmessages', response.data.data)
+                        }
+                        resolve(response)
+                    })
+                    .catch(async error => {
+                        commit('setloader', false)
+                        if (error.response) {
+                            if (error.response.data) {
+                                if (error.response.data.msg) {
+                                    commit('seterror', error.response.data.msg)
+                                } else if (error.response.data.message) {
+                                    commit('seterrors', error.response.data.message)
+                                }
+                            }
+                        }
+                        reject(error)
+                    });
+            });
+        },
+
+        async deleteLiveChatMessage({ commit }, data) {
+            commit('seterror', '')
+            commit('setmsg', '')
+            commit('setloader', 'fetch_station')
+            return new Promise((resolve, reject) => {
+                axios.post(`/admin/livechat/delete`, data).then(async response => {
+                        commit('setloader', false)
+                        if (response.data.data) {
+                            commit('setlivechatmessages', response.data.data)
+                        }
+                        resolve(response)
+                    })
+                    .catch(async error => {
+                        commit('setloader', false)
+                        if (error.response) {
+                            if (error.response.data) {
+                                if (error.response.data.msg) {
+                                    commit('seterror', error.response.data.msg)
+                                } else if (error.response.data.message) {
+                                    commit('seterrors', error.response.data.message)
+                                }
+                            }
+                        }
+                        reject(error)
+                    });
+            });
+        },
+
+
+
     }
-  },
-  actions: {
-    sendChatMessage({ commit }, message) {
-      const newMessage = {
-        id: Date.now(),
-        ...message,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
-      commit('addChatMessage', newMessage)
-    }
-  },
-  getters: {
-    liveChat: state => state.liveChat,
-    chatRooms: state => state.chatRooms
-  }
 }

@@ -18,14 +18,14 @@ capital_webiste/node_modules/
 
 # Backend specific
 backend/env/
-backend/static/
-backend/main.py
-backend/app/database.py
-backend/app/main.py
-database.py
-main.py
-**/database.py
-**/main.py
+# backend/static/
+# backend/main.py
+# backend/app/database.py
+# backend/app/main.py
+# database.py
+# main.py
+# **/database.py
+# **/main.py
 
 # Alembic migrations
 # backend/alembic

@@ -6,22 +6,24 @@ from app.utils.constants import SUCCESS, ERROR
 from app.utils.returns_data import returnsdata
 from typing import Optional, Dict, Any
 from app.utils.security import get_current_user_details, decode_and_validate_token, extract_token_from_header
-from app.apiv1.services.user.UserStationService import get_station_by_access_link, create_livechat_message, get_station_livechat_messages, delete_station_livechat_message
+from app.apiv1.services.user.UserStationService import get_station_by_access_link, create_livechat_message, get_station_livechat_messages, delete_station_livechat_message, get_user_hosts_by_station, get_user_radio_sessions, get_user_radio_events
 from app.apiv1.services.user.UserNewsService import get_user_news, get_user_news_breaking, get_news_article_by_slug
 from app.apiv1.services.user.UserForumService import get_user_forums, get_forum_by_slug, get_forum_comments, create_forum_comment, delete_forum_comment
+from app.apiv1.services.user.UserAdvertService import get_user_adverts_by_station
 import json
 
 router = APIRouter()
 
 
 @router.post("/station",  status_code=status.HTTP_201_CREATED)
-async def get_access_station(request: Request, db: AsyncSession = Depends(get_database)):
+async def get_access_station(request: Request, db: AsyncSession = Depends(get_database), authuser = Depends(get_current_user_details)):
     try:
         form_data = await request.form()
         access_link = form_data.get("access_link")
+        user_id = authuser.get("id")
         if not access_link:
-            return  returnsdata.error_msg("Station ID is required", ERROR)
-        data = await get_station_by_access_link(db, access_link)
+            return  returnsdata.error_msg("Station Access Link is required", ERROR)
+        data = await get_station_by_access_link(db, access_link, user_id)
         return  returnsdata.success(data=data,msg="Station data retrieved successfully",status=SUCCESS)
     except Exception as e:
         return returnsdata.error_msg( f"Logout failed: {str(e)}", ERROR )
@@ -42,7 +44,60 @@ async def get_user_news_endpoint(request: Request, db: AsyncSession = Depends(ge
     except Exception as e:
         return returnsdata.error_msg(f"Failed to retrieve news: {str(e)}", ERROR)
 
+@router.post("/adverts", status_code=status.HTTP_201_CREATED)
+async def get_user_adverts_endpoint(request: Request, db: AsyncSession = Depends(get_database)):
+    try:
+        form_data = await request.form()
+        per_page = int(form_data.get("per_page", 10))
+        page = int(form_data.get("page", 1))
+        station_id = form_data.get("station_id")
+        if not station_id:
+            return returnsdata.error_msg("Station ID is required", ERROR)
+        data = await get_user_adverts_by_station(db, station_id=station_id, per_page=per_page, page=page)
+        return data
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to retrieve adverts: {str(e)}", ERROR)
 
+@router.post("/hosts", status_code=status.HTTP_201_CREATED)
+async def get_user_hosts_endpoint(request: Request, db: AsyncSession = Depends(get_database)):
+    try:
+        form_data = await request.form()
+        per_page = int(form_data.get("per_page", 10))
+        page = int(form_data.get("page", 1))
+        station_id = form_data.get("station_id")
+        if not station_id:
+            return returnsdata.error_msg("Station ID is required", ERROR)
+        data = await get_user_hosts_by_station(db, station_id=station_id, per_page=per_page, page=page)
+        return data
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to retrieve hosts: {str(e)}", ERROR)
+
+@router.post("/radio_sessions")
+async def get_radio_sessions_endpoint(request: Request,db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
+    try:
+        data = dict(await request.form())
+        page = int(data.get("page", 1))
+        per_page = int(data.get("per_page", 10))
+        station_id = data.get("station_id")
+        if not station_id:
+            return returnsdata.error_msg("Station ID is required", ERROR)
+        radio_sessions = await get_user_radio_sessions(db,station_id=station_id, data=data, page=page, per_page=per_page)
+        return returnsdata.success(data=radio_sessions, msg="Radio sessions retrieved successfully", status=SUCCESS)
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to get radio sessions: {str(e)}", ERROR)
+
+@router.post("/events")
+async def get_radio_events_endpoint(request: Request,db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
+    try:
+        data = dict(await request.form())
+        page = int(data.get("page", 1))
+        per_page = int(data.get("per_page", 50))
+        radio_sessions = await get_user_radio_events(db,data=data, page=page, per_page=per_page)
+        return returnsdata.success(data=radio_sessions, msg="Radio sessions retrieved successfully", status=SUCCESS)
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to get radio sessions: {str(e)}", ERROR)
+
+##news breaking
 @router.post("/news/breaking",  status_code=status.HTTP_201_CREATED)
 async def get_user_news_breaking_endpoint(request: Request, db: AsyncSession = Depends(get_database)):
     try:

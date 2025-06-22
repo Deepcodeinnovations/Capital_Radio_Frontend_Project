@@ -2,11 +2,14 @@ from fastapi import WebSocket, WebSocketDisconnect
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils.security import decode_and_validate_token, get_user_from_token
 from app.utils.returns_data import returnsdata
+from app.models.StationListenersModel import StationListeners
+from app.models.UserModel import User
 from app.utils.constants import SUCCESS, ERROR
 from typing import Dict, List, Optional, Any
+from sqlalchemy import select, delete, and_
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 logger = logging.getLogger(__name__)
@@ -193,31 +196,31 @@ class WebSocketManager:
             logger.error(f"Error sending to user {user_id}: {str(e)}")
             return False
 
-    async def broadcast_to_station(self, station_id: str, data: Any, message_type: str = "station_broadcast", message: str = "Station broadcast") -> Dict[str, bool]:
+    async def broadcast_to_station(self, db: AsyncSession, station_id: str, data: Any, message_type: str = "station_broadcast", message: str = "Station broadcast") -> Dict[str, bool]:
         try:
-            if station_id not in self.station_users:
-                logger.warning(f"No users connected to station {station_id}")
-                return {}
+            listeners = await db.execute(select(StationListeners).where(StationListeners.station_id == station_id).where(StationListeners.last_seen > datetime.now() - timedelta(hours=24)))
+            listeners = listeners.scalars().all()
             
-            results = {}
-            user_ids = self.station_users[station_id].copy()
-            
-            for user_id in user_ids:
-                results[user_id] = await self.send_to_user(
-                    user_id=user_id,
+            for listener in listeners:
+                await self.send_to_user(
+                    user_id=listener.user_id,
                     data=data,
                     message_type=message_type,
                     message=message
                 )
-            
-            successful_sends = sum(1 for success in results.values() if success)
-            logger.info(f"Station broadcast to {station_id}: {successful_sends}/{len(user_ids)} successful")
-            
-            return results
-            
+            adminuser = await db.execute(select(User).where(User.role != 'user'))
+            adminuser = adminuser.scalars().all()
+            if adminuser:
+                for admin in adminuser:
+                    await self.send_to_user(
+                        user_id=admin.id,
+                        data=data,
+                        message_type=message_type,
+                        message=message
+                )
         except Exception as e:
             logger.error(f"Error broadcasting to station {station_id}: {str(e)}")
-            return {}
+            return False
 
     async def broadcast_websocket_data(self, user_id: str, data: Any, type: str = "data", message: str = "Data received") -> bool:
         return await self.send_to_user(user_id=user_id, data=data, message_type=type, message=message)

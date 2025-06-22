@@ -77,7 +77,7 @@ axiosInstance.interceptors.request.use(
     // Token handling
     const authuser = store.getters.authuser;
     if (authuser) {
-      config.headers.Authorization = 'Bearer ' + localStorage.getItem('capital_radio_token' + authuser.id);
+      config.headers.Authorization = 'Bearer ' + localStorage.getItem('capital_radio_token_admin' + authuser.id);
     } else {
       config.headers.Authorization = 'Bearer ';
     }

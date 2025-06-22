@@ -12,6 +12,9 @@ import hosts from './modules/hosts'
 import radio_programs from './modules/radio_programs'
 import forums from './modules/forums'
 import adverts from './modules/adverts'
+import websocket_manager from './modules/websocket_manager'
+import events from './modules/events'
+import station_recordings from './modules/station_recordings'
 
 export default createStore({
   modules: {
@@ -24,7 +27,10 @@ export default createStore({
     hosts,
     radio_programs,
     forums,
-    adverts
+    adverts,
+    websocket_manager,
+    events,
+    station_recordings
   },
 
   plugins: [createPersistedState(

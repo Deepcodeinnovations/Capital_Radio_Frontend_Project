@@ -25,7 +25,7 @@ load_dotenv()
 # Constants
 SECRET_KEY = os.getenv("SECRET_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyOCwidXNlcm5hbWUiOiJyYW5kb21fdXNlciJ9.KfpKPkcoVZBIlVXZJ6eSpxFG6wlGbGUDnU8VlESnL-Q")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60000"))
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "6000000"))
 
 # Setup password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

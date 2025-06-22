@@ -1,236 +1,217 @@
 <template>
-  <div class="space-y-6">
-    <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-radio-purple-600">
+  <div class="">
+    <!-- Header Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-4">
+      <!-- Stations Overview -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-500">Total Stations</p>
-            <p class="text-2xl font-bold text-gray-900">5</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Total Stations</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ statistics?.overview?.total_stations || 0 }}</p>
+            <p class="text-sm text-green-600 flex items-center mt-1">
+              <ArrowUpIcon class="w-4 h-4 mr-1" />
+              {{ statistics?.overview?.live_stations || 0 }} Live
+            </p>
           </div>
-          <div class="p-3 bg-radio-purple-100 rounded-full">
-            <RadioIcon class="h-6 w-6 text-radio-purple-600" />
-          </div>
-        </div>
-        <div class="mt-4">
-          <div class="flex items-center">
-            <ArrowUpIcon class="h-4 w-4 text-green-500 mr-1" />
-            <span class="text-xs font-medium text-green-500">12% increase</span>
-            <span class="text-xs text-gray-500 ml-2">from last month</span>
+          <div class="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+            <RadioIcon class="w-6 h-6 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
       </div>
-      
-      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-radio-orange-500">
+
+      <!-- Programs -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-500">Total Podcasts</p>
-            <p class="text-2xl font-bold text-gray-900">28</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Total Programs</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ statistics?.overview?.total_programs || 0 }}</p>
+            <p class="text-sm text-purple-600 flex items-center mt-1">
+              <PlayIcon class="w-4 h-4 mr-1" />
+              Active Shows
+            </p>
           </div>
-          <div class="p-3 bg-radio-orange-100 rounded-full">
-            <HeadphonesIcon class="h-6 w-6 text-radio-orange-500" />
-          </div>
-        </div>
-        <div class="mt-4">
-          <div class="flex items-center">
-            <ArrowUpIcon class="h-4 w-4 text-green-500 mr-1" />
-            <span class="text-xs font-medium text-green-500">8% increase</span>
-            <span class="text-xs text-gray-500 ml-2">from last month</span>
+          <div class="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+            <HeadphonesIcon class="w-6 h-6 text-purple-600 dark:text-purple-400" />
           </div>
         </div>
       </div>
-      
-      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+
+      <!-- News Articles -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-500">News Articles</p>
-            <p class="text-2xl font-bold text-gray-900">42</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">News Articles</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ statistics?.content?.news?.total || 0 }}</p>
+            <p class="text-sm text-green-600 flex items-center mt-1">
+              <CircleDotIcon class="w-4 h-4 mr-1" />
+              {{ statistics?.content?.news?.published || 0 }} Published
+            </p>
           </div>
-          <div class="p-3 bg-blue-100 rounded-full">
-            <NewspaperIcon class="h-6 w-6 text-blue-500" />
-          </div>
-        </div>
-        <div class="mt-4">
-          <div class="flex items-center">
-            <ArrowUpIcon class="h-4 w-4 text-green-500 mr-1" />
-            <span class="text-xs font-medium text-green-500">15% increase</span>
-            <span class="text-xs text-gray-500 ml-2">from last month</span>
+          <div class="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
+            <NewspaperIcon class="w-6 h-6 text-green-600 dark:text-green-400" />
           </div>
         </div>
       </div>
-      
-      <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+
+      <!-- Users -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-500">Active Hosts</p>
-            <p class="text-2xl font-bold text-gray-900">12</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Total Users</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ statistics?.users?.total_users || 0 }}</p>
+            <p class="text-sm text-orange-600 flex items-center mt-1">
+              <UserIcon class="w-4 h-4 mr-1" />
+              {{ statistics?.users?.active_users || 0 }} Active
+            </p>
           </div>
-          <div class="p-3 bg-green-100 rounded-full">
-            <UsersIcon class="h-6 w-6 text-green-500" />
-          </div>
-        </div>
-        <div class="mt-4">
-          <div class="flex items-center">
-            <ArrowUpIcon class="h-4 w-4 text-green-500 mr-1" />
-            <span class="text-xs font-medium text-green-500">2 new</span>
-            <span class="text-xs text-gray-500 ml-2">this month</span>
+          <div class="p-3 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
+            <UsersIcon class="w-6 h-6 text-orange-600 dark:text-orange-400" />
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Live Now Section -->
-    <div class="bg-gradient-to-r from-radio-purple-800 to-radio-purple-900 rounded-xl shadow-lg p-6 text-white">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold flex items-center">
-          <CircleDotIcon class="h-5 w-5 text-red-500 mr-2 animate-pulse" />
-          Live Now
-        </h2>
-        <router-link to="/dashboard/live-broadcast" class="text-sm text-radio-orange-300 hover:text-radio-orange-200 flex items-center">
-          View All <ArrowRightIcon class="h-4 w-4 ml-1" />
-        </router-link>
-      </div>
-      
-      <div class="bg-radio-purple-700/50 rounded-lg p-4 backdrop-blur-sm">
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
-          <div class="flex items-center mb-4 md:mb-0">
-            <div class="h-16 w-16 rounded-full bg-radio-orange-500 flex items-center justify-center text-white font-bold text-xl mr-4">
-              UV
-            </div>
-            <div>
-              <h3 class="font-bold text-lg">{{ liveNow.title }}</h3>
-              <p class="text-radio-purple-200">Urban Vibe FM</p>
-              <div class="flex items-center mt-1">
-                <UserIcon class="h-4 w-4 mr-1 text-radio-purple-300" />
-                <span class="text-sm text-radio-purple-300">{{ liveNow.host }}</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="flex flex-col items-end">
-            <div class="flex items-center space-x-2 mb-2">
-              <span class="text-sm bg-radio-purple-600 px-2 py-1 rounded">On Air</span>
-              <span class="text-sm">{{ liveNow.time }}</span>
-            </div>
-            <div class="flex space-x-2">
-              <button class="bg-radio-orange-500 hover:bg-radio-orange-600 p-2 rounded-full transition-colors">
-                <PlayIcon class="h-5 w-5" />
-              </button>
-              <button class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
-                <MessageSquareIcon class="h-5 w-5" />
-              </button>
-              <button class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
-                <ShareIcon class="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Recent Content Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Recent Podcasts -->
-      <div class="bg-white rounded-xl shadow-md p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-bold text-gray-900">Recent Podcasts</h2>
-          <router-link to="/dashboard/podcasts" class="text-sm text-radio-purple-600 hover:text-radio-purple-800 flex items-center">
-            View All <ArrowRightIcon class="h-4 w-4 ml-1" />
-          </router-link>
-        </div>
-        
+
+    <!-- Content Overview & Recent Activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 py-4 gap-6">
+      <!-- Content Statistics -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Content Overview</h3>
         <div class="space-y-4">
-          <div v-for="(track, index) in recentlyPlayed" :key="track.id" class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors">
-            <div class="h-12 w-12 rounded-lg bg-gradient-to-br from-radio-purple-500 to-radio-orange-500 flex items-center justify-center text-white mr-4">
-              <HeadphonesIcon class="h-6 w-6" />
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">News Articles</span>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
+                {{ statistics?.content?.news?.featured || 0 }} Featured
+              </span>
+              <span class="font-semibold text-gray-900 dark:text-white">{{ statistics?.content?.news?.total || 0 }}</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Events</span>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-300 px-2 py-1 rounded">
+                {{ statistics?.content?.events?.upcoming || 0 }} Upcoming
+              </span>
+              <span class="font-semibold text-gray-900 dark:text-white">{{ statistics?.content?.events?.total || 0 }}</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Forum Posts</span>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-300 px-2 py-1 rounded">
+                {{ statistics?.content?.forums?.pinned || 0 }} Pinned
+              </span>
+              <span class="font-semibold text-gray-900 dark:text-white">{{ statistics?.content?.forums?.total || 0 }}</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Advertisements</span>
+            <div class="flex items-center space-x-2">
+              <span class="text-sm bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300 px-2 py-1 rounded">
+                {{ statistics?.content?.adverts?.active || 0 }} Active
+              </span>
+              <span class="font-semibold text-gray-900 dark:text-white">{{ statistics?.content?.adverts?.total || 0 }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
+          <ArrowRightIcon class="w-5 h-5 text-gray-400" />
+        </div>
+        <div class="space-y-3 max-h-80 overflow-y-auto">
+          <div 
+            v-for="activity in statistics?.recent_activity?.slice(0, 6)" 
+            :key="activity.title + activity.timestamp"
+            class="flex items-start space-x-3 p-3 rounded-lg bg-gray-50 dark:bg-slate-700/50"
+          >
+            <div class="p-1 rounded-full" :class="getActivityIconBg(activity.type)">
+              <component :is="getActivityIcon(activity.type)" class="w-4 h-4" :class="getActivityIconColor(activity.type)" />
             </div>
             <div class="flex-1 min-w-0">
-              <h3 class="text-sm font-medium text-gray-900 truncate">{{ track.title }}</h3>
-              <p class="text-xs text-gray-500">{{ track.artist }} • {{ track.time }}</p>
-            </div>
-            <div class="flex space-x-2">
-              <button class="text-gray-400 hover:text-radio-purple-600">
-                <PlayIcon class="h-5 w-5" />
-              </button>
-              <button class="text-gray-400 hover:text-radio-purple-600">
-                <DownloadIcon class="h-5 w-5" />
-              </button>
+              <p class="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
+                {{ activity.title }}
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {{ activity.user }} {{ activity.action }} • {{ formatDate(activity.timestamp) }}
+              </p>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Live Chat Section -->
-      <div class="bg-white rounded-xl shadow-md p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-bold text-gray-900">Live Chat</h2>
-          <router-link to="/dashboard/live-chats" class="text-sm text-radio-purple-600 hover:text-radio-purple-800 flex items-center">
-            View All <ArrowRightIcon class="h-4 w-4 ml-1" />
-          </router-link>
+    </div>
+
+    <!-- Top Performing Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Top Articles -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Articles</h3>
+        <div class="space-y-3">
+          <div 
+            v-for="(article, index) in statistics?.content?.news?.top_articles?.slice(0, 5)" 
+            :key="article.title + index"
+            class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-slate-700/50"
+          >
+            <div class="flex-1 min-w-0 mr-3">
+              <p class="text-sm font-medium text-gray-900 dark:text-white line-clamp-2">
+                {{ article.title }}
+              </p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <ShareIcon class="w-4 h-4 text-gray-400" />
+              <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ article.views }}</span>
+            </div>
+          </div>
         </div>
-        
-        <div class="space-y-4 max-h-64 overflow-y-auto mb-4">
-          <div v-for="message in liveChat" :key="message.id" class="bg-gray-50 rounded-lg p-3">
-            <div class="flex items-center gap-2 mb-1">
-              <div class="w-6 h-6 rounded-full bg-radio-purple-100 flex items-center justify-center text-xs font-bold text-radio-purple-600">
-                {{ message.username.charAt(0).toUpperCase() }}
+      </div>
+
+      <!-- User Statistics -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-slate-700">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">User Statistics</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Total Users</span>
+            <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ statistics?.users?.total_users || 0 }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Active Users</span>
+            <span class="text-xl font-semibold text-green-600">{{ statistics?.users?.active_users || 0 }}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600 dark:text-gray-400">Recent Active</span>
+            <span class="text-lg font-medium text-blue-600">{{ statistics?.users?.recent_active || 0 }}</span>
+          </div>
+          <div class="pt-2 border-t border-gray-200 dark:border-slate-600">
+            <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">By Role</h4>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Admins</span>
+                <span class="font-medium">{{ statistics?.users?.by_role?.admin || 0 }}</span>
               </div>
-              <span class="font-medium">{{ message.username }}</span>
-              <span class="text-xs text-gray-500">{{ message.time }}</span>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Editors</span>
+                <span class="font-medium">{{ statistics?.users?.by_role?.editor || 0 }}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600 dark:text-gray-400">Presenters</span>
+                <span class="font-medium">{{ statistics?.users?.by_role?.presenter || 0 }}</span>
+              </div>
             </div>
-            <p class="text-sm">{{ message.message }}</p>
-          </div>
-        </div>
-        
-        <div class="flex gap-2">
-          <input 
-            v-model="newMessage" 
-            type="text" 
-            placeholder="Type a message..." 
-            class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-radio-purple-500 focus:border-transparent"
-            @keyup.enter="sendMessage"
-          >
-          <button 
-            @click="sendMessage" 
-            class="bg-radio-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-radio-purple-700 transition-colors"
-          >
-            Send
-          </button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Upcoming Sessions -->
-    <div class="bg-white rounded-xl shadow-md p-6">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-bold text-gray-900">Upcoming Shows</h2>
-        <router-link to="/dashboard/sessions" class="text-sm text-radio-purple-600 hover:text-radio-purple-800 flex items-center">
-          View Schedule <ArrowRightIcon class="h-4 w-4 ml-1" />
-        </router-link>
-      </div>
-      
-      <div class="space-y-4">
-        <div v-for="show in upcomingShows" :key="show.id" class="flex flex-col md:flex-row justify-between items-start md:items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-          <div class="flex items-center mb-2 md:mb-0">
-            <div class="h-10 w-10 rounded-full bg-radio-purple-100 flex items-center justify-center text-radio-purple-700 font-medium text-sm mr-3">
-              {{ show.host.charAt(0) }}{{ show.host.split(' ')[1]?.charAt(0) || '' }}
-            </div>
-            <div>
-              <h3 class="font-medium">{{ show.title }}</h3>
-              <p class="text-sm text-gray-600">with {{ show.host }} - {{ show.genre }}</p>
-            </div>
-          </div>
-          <div class="md:text-right">
-            <p class="text-lg font-semibold text-radio-purple-700">{{ show.time }}</p>
-            <span v-if="show.status" class="text-xs bg-radio-orange-100 text-radio-orange-800 px-2 py-1 rounded">{{ show.status }}</span>
           </div>
         </div>
       </div>
     </div>
+
+
   </div>
 </template>
+
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useStore } from 'vuex';
 import {
   Radio as RadioIcon,
   Headphones as HeadphonesIcon,
@@ -243,115 +224,67 @@ import {
   Play as PlayIcon,
   MessageSquare as MessageSquareIcon,
   Share as ShareIcon,
-  Download as DownloadIcon
+  Download as DownloadIcon,
+  Calendar as CalendarIcon,
+  Zap as ZapIcon
 } from 'lucide-vue-next';
 
-// Sample data for upcoming shows
-const upcomingShows = [
-  {
-    id: 1,
-    title: 'Morning Drive',
-    host: 'DJ Smiley',
-    genre: 'Talk & Music',
-    time: '8:00 AM - 10:00 AM',
-    status: 'Live Now'
-  },
-  {
-    id: 2,
-    title: 'Lunch Hour Mix',
-    host: 'MC Kat',
-    genre: 'Dance',
-    time: '12:00 PM - 1:00 PM',
-    status: 'Upcoming'
-  },
-  {
-    id: 3,
-    title: 'Evening Chill',
-    host: 'DJ Smooth',
-    genre: 'R&B',
-    time: '6:00 PM - 8:00 PM'
-  }
-];
+const store = useStore();
 
-// Sample data for live now
-const liveNow = {
-  title: 'Morning Drive',
-  host: 'DJ Smiley',
-  time: '8:00 AM - 10:00 AM',
-  listeners: 1245
-};
+const statistics = computed(() => store.getters.adminStats);
 
-// Sample data for recently played
-const recentlyPlayed = [
-  {
-    id: 1,
-    title: 'Blinding Lights',
-    artist: 'The Weeknd',
-    time: '5 mins ago'
-  },
-  {
-    id: 2,
-    title: 'Save Your Tears',
-    artist: 'The Weeknd',
-    time: '12 mins ago'
-  },
-  {
-    id: 3,
-    title: 'Levitating',
-    artist: 'Dua Lipa',
-    time: '18 mins ago'
-  },
-  {
-    id: 4,
-    title: 'Stay',
-    artist: 'The Kid LAROI, Justin Bieber',
-    time: '25 mins ago'
-  },
-  {
-    id: 5,
-    title: 'Good 4 U',
-    artist: 'Olivia Rodrigo',
-    time: '32 mins ago'
-  }
-];
-
-// Sample data for live chat
-const liveChat = [
-  {
-    id: 1,
-    username: 'musiclover',
-    message: 'Loving the new track!',
-    time: '2 mins ago'
-  },
-  {
-    id: 2,
-    username: 'radiofan',
-    message: 'Can you play some Drake next?',
-    time: '5 mins ago'
-  },
-  {
-    id: 3,
-    username: 'dj_fan',
-    message: 'DJ Smiley is the best!',
-    time: '8 mins ago'
-  }
-];
-
-// New message input
-const newMessage = ref('');
-
-// Send message function
-const sendMessage = () => {
-  if (newMessage.value.trim()) {
-    liveChat.unshift({
-      id: liveChat.length + 1,
-      username: 'you',
-      message: newMessage.value,
-      time: 'Just now'
-    });
-    newMessage.value = '';
+const fetchStatistics = async () => {
+  try {
+    await store.dispatch('AdminStatistics');
+  } catch (error) {
+    console.error('Failed to fetch statistics:', error);
   }
 };
+
+const getActivityIcon = (type) => {
+  switch (type) {
+    case 'news': return NewspaperIcon;
+    case 'event': return CalendarIcon;
+    case 'forum': return MessageSquareIcon;
+    case 'user': return UserIcon;
+    default: return ZapIcon;
+  }
+};
+
+const getActivityIconBg = (type) => {
+  switch (type) {
+    case 'news': return 'bg-blue-100 dark:bg-blue-900/20';
+    case 'event': return 'bg-green-100 dark:bg-green-900/20';
+    case 'forum': return 'bg-purple-100 dark:bg-purple-900/20';
+    case 'user': return 'bg-orange-100 dark:bg-orange-900/20';
+    default: return 'bg-gray-100 dark:bg-gray-900/20';
+  }
+};
+
+const getActivityIconColor = (type) => {
+  switch (type) {
+    case 'news': return 'text-blue-600 dark:text-blue-400';
+    case 'event': return 'text-green-600 dark:text-green-400';
+    case 'forum': return 'text-purple-600 dark:text-purple-400';
+    case 'user': return 'text-orange-600 dark:text-orange-400';
+    default: return 'text-gray-600 dark:text-gray-400';
+  }
+};
+
+const formatDate = (timestamp) => {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+  
+  if (diffInHours < 1) return 'Just now';
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  if (diffInHours < 48) return 'Yesterday';
+  return date.toLocaleDateString();
+};
+
+onMounted(() => {
+  fetchStatistics();
+});
 </script>
 
 <style scoped>

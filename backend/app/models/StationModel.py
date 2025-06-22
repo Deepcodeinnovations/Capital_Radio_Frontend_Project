@@ -1,10 +1,10 @@
 from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy import select, func, and_
 from sqlalchemy.orm import relationship, backref
 from app.models.BaseModel import Base
-from datetime import datetime
-from typing import Optional, Dict, Any
+from datetime import datetime, timedelta
+from typing import Optional, Dict, Any, List
 
 class Station(Base):
     __tablename__ = "stations"
@@ -21,7 +21,6 @@ class Station(Base):
     streaming_link = Column(String(500), nullable=True)
     backup_streaming_link = Column(String(500), nullable=True)
     # Streaming Information
-    listeners = Column(Integer, default=0)
     streaming_status = Column(String(50), default="offline")  # live, offline, maintenance
     radio_access_status = Column(Boolean, default=True)
     
@@ -45,7 +44,6 @@ class Station(Base):
             'about': self.about,
             'access_link': self.access_link,
             'streaming_link': self.streaming_link,
-            'listeners': self.listeners,
             'streaming_status': self.streaming_status,
             'radio_access_status': self.radio_access_status,
             'logo_path': self.logo_path,
@@ -73,9 +71,13 @@ class Station(Base):
                         'name': creator.name,
                         'email': creator.email
                     }
-            
+            listeners = await self.get_listeners(db)
+            if listeners:
+                data['listeners'] = listeners
+            else:
+                data['listeners'] = 0
             data['stats'] = {
-                'total_listeners': self.listeners or 0,
+                'total_listeners': listeners,
                 'is_streaming': self.streaming_status == 'live',
                 'is_accessible': self.radio_access_status and self.status and self.state
             }
@@ -101,3 +103,12 @@ class Station(Base):
         except Exception as e:
             await db.rollback()
             raise Exception(f"Failed to delete station with relations: {str(e)}")
+
+
+    async def get_listeners(self, db: AsyncSession) -> int:
+        from app.models.StationListenersModel import StationListeners
+        try:
+            result = await db.execute(select(func.count(StationListeners.id)).where(StationListeners.station_id == self.id).where(StationListeners.last_seen > datetime.now() - timedelta(hours=24)))
+            return result.scalar_one_or_none()
+        except Exception as e:
+            raise Exception(f"Failed to get listeners: {str(e)}")

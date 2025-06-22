@@ -1,10 +1,11 @@
 # RadioSessionRecordingModel.py
 from sqlalchemy import Column, String, DateTime, ForeignKey, Boolean, Text, JSON, Integer, Float
 from sqlalchemy.orm import relationship, backref
+from sqlalchemy import delete, select, and_
 from datetime import datetime
 from app.models.BaseModel import Base
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Dict, Any
+from typing import Dict, Any, List
 import uuid
 
 class RadioSessionRecording(Base):
@@ -102,12 +103,77 @@ class RadioSessionRecording(Base):
                 data['station'] = await self.station.to_dict()
             if self.program:
                 data['program'] = await self.program.to_dict()
+
+            show_hosts = await self.get_program_hosts(db, self.hosts)
+            if show_hosts:
+                data['hosts'] = show_hosts
+            else:
+                data['hosts'] = []
                 
             return data
             
         except Exception as e:
             raise Exception(f"Failed to convert recording to dictionary with relations: {str(e)}")
-    
+
+    async def delete_with_relations(self, db: AsyncSession):
+        try:
+            from app.utils.file_upload import remove_file
+            if self.recording_file_path:
+                remove_file(self.recording_file_path)
+            await db.execute(delete(RadioSessionRecording).where(RadioSessionRecording.id == self.id))
+            await db.commit()
+            return True
+        except Exception as e:
+            await db.rollback()
+            raise Exception(f"Failed to delete recording with relations: {str(e)}")
+
+
+    async def get_program_hosts(self, db: AsyncSession, hosts_json: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        try:
+            if not hosts_json or not isinstance(hosts_json, list):
+                return []
+                
+            from app.models.HostModel import Host
+            
+            # Extract host IDs from the JSON structure
+            hosts_ids = []
+            for host in hosts_json:
+                if isinstance(host, dict) and 'id' in host:
+                    hosts_ids.append(host['id'])
+                elif isinstance(host, str):  # In case IDs are stored as strings
+                    hosts_ids.append(host)
+            
+            if not hosts_ids:
+                return []
+                
+            stmt = select(Host).where(Host.id.in_(hosts_ids))
+            result = await db.execute(stmt)
+            hosts = result.scalars().all()
+            
+            # Convert to dictionaries - this is the key fix
+            hosts_data = []
+            for host in hosts:
+                try:
+                    host_dict = await host.to_dict() if hasattr(host, 'to_dict') else {
+                        'id': host.id,
+                        'name': getattr(host, 'name', ''),
+                        'role': getattr(host, 'role', ''),
+                        'email': getattr(host, 'email', ''),
+                        'phone': getattr(host, 'phone', ''),
+                        'image_url': getattr(host, 'image_url', ''),
+                    }
+                    hosts_data.append(host_dict)
+                except Exception as e:
+                    # If individual host conversion fails, skip it
+                    print(f"Failed to convert host {host.id}: {e}")
+                    continue
+                    
+            return hosts_data
+            
+        except Exception as e:
+            print(f"Failed to get program hosts: {str(e)}")
+            return []  # Return empty list instead of raising exception
+
     def get_recording_filename(self) -> str:
         if not self.session_date or not self.station:
             return f"recording_{self.id}.{self.audio_format}"

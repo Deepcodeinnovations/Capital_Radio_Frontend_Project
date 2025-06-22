@@ -120,7 +120,7 @@
             
             <div class="py-1">
               <router-link 
-                to="/dashboard/profile" 
+                :to="{name:'my_accoount'}" 
                 class="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
                 @click="showUserMenu = false"
               >
@@ -128,14 +128,7 @@
                 <span>Your Profile</span>
               </router-link>
               
-              <router-link 
-                to="/dashboard/settings" 
-                class="flex items-center px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
-                @click="showUserMenu = false"
-              >
-                <SettingsIcon class="h-4 w-4 mr-3" />
-                <span>Settings</span>
-              </router-link>
+              
               
               <button 
                 class="flex items-center w-full px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"

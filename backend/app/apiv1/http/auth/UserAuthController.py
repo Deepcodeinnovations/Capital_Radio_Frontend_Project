@@ -7,7 +7,7 @@ from app.utils.returns_data import returnsdata
 from typing import Optional, Dict, Any
 from app.utils.security import get_current_user_details, decode_and_validate_token, extract_token_from_header
 from app.apiv1.services.user.UserAuthService import authenticate_or_create_open_user, update_user_information, get_user_by_id
-from app.apiv1.services.user.UserStationService import get_station_by_access_link
+from app.apiv1.services.user.UserStationService import get_station_by_initial_access_link, get_station_by_access_link
 import json
 
 router = APIRouter()
@@ -20,7 +20,7 @@ async def login_user(request: Request,  db: AsyncSession = Depends(get_database)
         body_data = await request.form()
         device_fingerprint = body_data.get("device_fingerprint")
         station_access_link = body_data.get("access_link")
-        station_data = await get_station_by_access_link(db, station_access_link)
+        station_data = await get_station_by_initial_access_link(db, station_access_link)
         if not station_data:
             return  returnsdata.error_msg("Station not found", ERROR)
         station_id = station_data.get("id")

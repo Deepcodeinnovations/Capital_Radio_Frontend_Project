@@ -1,14 +1,36 @@
-
+import store from '@/store';
+const checkAuth = (to, from, next) => {
+  const isAuthenticated = store.getters.authuser !== undefined && store.getters.authuser !== null && localStorage.getItem('capital_radio_token_admin' + store.getters.authuser?.id);
+  if (!isAuthenticated) {
+    next({ name: 'Login' });
+  } else {
+    next();
+  }
+};
 export default [
   {
     path: '/',
     component: () => import('../../views/app/main.vue'),
+    beforeEnter: checkAuth,
     children: [
       {
         path: '',
         name: 'Dashboard',
         component: () => import('../../views/app/main/MainDashboard.vue')
       },
+
+      {
+        path: 'my-accoount',
+        name: 'my_accoount',
+        component: () => import('../../views/app/users/myaccount.vue')
+      },
+
+      {
+        path: 'user-manager',
+        name: 'user_manager',
+        component: () => import('../../views/app/users/user_manager.vue')
+      },
+
 
       //stations
       {
@@ -128,12 +150,13 @@ export default [
         name: 'LiveChats',
         component: () => import('../../views/app/liveChats/LiveChats.vue')
       },
+
       {
-        path: 'live-chats/:id',
-        name: 'ChatRoomDetails',
-        component: () => import('../../views/app/liveChats/ChatRoomDetails.vue'),
-        props: true
-      }
+        path: 'events',
+        name: 'Events',
+        component: () => import('../../views/app/events/Events.vue')
+      },
+      
     ]
   }
 ]

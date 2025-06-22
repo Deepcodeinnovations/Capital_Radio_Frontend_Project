@@ -30,6 +30,9 @@ export default {
         loading:'',
         pageloading:'',
         uploadPercentage:0,
+        clientdata: null,
+        clientlocation: null,
+        clientdevice: null,
     },
     
     getters : {
@@ -40,6 +43,9 @@ export default {
         loading: (state )=> state.loading,
         pageloading: (state )=> state.pageloading,
         uploadPercentage: (state )=> state.uploadPercentage,
+        clientdata: (state )=> state.clientdata,
+        clientlocation: (state )=> state.clientlocation,
+        clientdevice: (state )=> state.clientdevice,
     },
 
     mutations : { 
@@ -50,9 +56,66 @@ export default {
         setmsg :(state,msg ) => (state.msg = msg), 
         setapierror :(state,apierror ) => (state.apierror = apierror),
         setuploadPercentage :(state,uploadPercentage ) => (state.uploadPercentage = uploadPercentage),
+        setclientdata :(state,clientdata ) => (state.clientdata = clientdata),
+        setclientlocation :(state,clientlocation ) => (state.clientlocation = clientlocation),
+        setclientdevice :(state,clientdevice ) => (state.clientdevice = clientdevice),
     },
 
     actions : {
+
+        async getclientlocationanddevicedata({ commit }) {
+            return new Promise((resolve, reject) => {
+              fetch('https://ipwho.is/')
+                .then(response => {
+                  if (!response.ok) throw new Error('Failed to fetch location data');
+                  return response.json();
+                })
+                .then(locationData => {
+                  const clientdata = {
+                    ip: locationData.ip,
+                    city: locationData.city,
+                    region: locationData.region,
+                    country: locationData.country,
+                    postal: locationData.postal,
+                    latitude: locationData.latitude,
+                    longitude: locationData.longitude,
+                    timezone: locationData.timezone.id,
+                    currency: locationData.currency || '',
+                    isp: locationData.org
+                  };
+          
+                  commit('setclientlocation', clientdata);
+          
+                  const userAgent = navigator.userAgent;
+                  let deviceType = 'Unknown';
+          
+                  if (/mobile/i.test(userAgent)) deviceType = 'Mobile';
+                  else if (/tablet/i.test(userAgent)) deviceType = 'Tablet';
+                  else if (/windows|macintosh|linux/i.test(userAgent)) deviceType = 'Desktop';
+          
+                  commit('setclientdevice', deviceType);
+          
+                  const clientinfo = {
+                    ...clientdata,
+                    device: deviceType,
+                    access_route: window.location.pathname,
+                    access_time: new Date().toISOString()
+                  };
+          
+
+                  commit('setclientdata', clientinfo);
+                  resolve({ ip: locationData.ip, location: clientdata, device: deviceType });
+                })
+                .catch(error => {
+                  console.error('Error fetching client data:', error);
+                  reject(error);
+                })
+                .finally(() => {
+                  commit('setloader', '');
+                });
+            });
+        },
+
         async clearutils( { commit }) {
             commit('seterror', '')
             commit('setmsg', '')

@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, JSON, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, update, delete, func, and_, between, or_, asc, desc
 from sqlalchemy.future import select
 from sqlalchemy.orm import relationship
 from app.models.BaseModel import Base
@@ -34,7 +35,7 @@ class RadioProgram(Base):
             'duration': self.duration,
             'station_id': self.station_id,
             'studio': self.studio,
-            'hosts': self.hosts or [],
+            'hosts': self.hosts,
             'image_path': self.image_path,
             'image_url': self.image_url,
             'created_by': self.created_by,
@@ -58,12 +59,9 @@ class RadioProgram(Base):
                     'streaming_status': self.station.streaming_status,
                     'radio_access_status': self.station.radio_access_status
                 }
-
-            if self.hosts:
-                if isinstance(self.hosts, list):
-                    data['hosts'] = self.hosts
-                else:
-                    data['hosts'] = []
+            hosts = await self.get_program_hosts(db, self.hosts)
+            if hosts:
+                data['hosts'] = hosts
             else:
                 data['hosts'] = []
             
@@ -72,7 +70,7 @@ class RadioProgram(Base):
         except Exception as e:
             raise Exception(f"Failed to convert radio program to dictionary with relations: {str(e)}")
     
-
+  
 
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
@@ -88,4 +86,14 @@ class RadioProgram(Base):
             await db.rollback()
             raise Exception(f"Failed to delete radio program with relations: {str(e)}")
     
-  
+
+    async def get_program_hosts(self, db: AsyncSession, hosts_json: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        try:
+            from app.models.HostModel import Host
+            hosts_ids = [host['id'] for host in hosts_json]
+            stmt = select(Host).where(Host.id.in_(hosts_ids))
+            result = await db.execute(stmt)
+            hosts = result.scalars().all()
+            return [await host.to_dict() for host in hosts]
+        except Exception as e:
+            raise Exception(f"Failed to get program hosts: {str(e)}")
