@@ -237,7 +237,7 @@ export default {
                 const formData = new FormData()
                 formData.append('email', email)
                 
-                axios.post("/auth/admin/users/password/forgot", formData).then(async response => {
+                axios.post("/auth/admin/password_reset", formData).then(async response => {
                     commit('setloader', false, { root: true })
                     commit('setAdminResetEmail', email)
                     const success_msg = response.data.msg || 'Reset code sent to email'
@@ -256,7 +256,7 @@ export default {
         async verifyResetCode({ commit }, data) {
             commit('setloader', 'verifyCode', { root: true })
             return new Promise((resolve, reject) => {
-                axios.post("/auth/admin/users/password/verify-code", data).then(async response => {
+                axios.post("/auth/admin/verify_reset", data).then(async response => {
                     commit('setloader', false, { root: true })
                     const success_msg = response.data.msg || 'Code verified successfully'
                     await comp_play_success_file(success_msg)
@@ -274,7 +274,7 @@ export default {
         async resetAdminPassword({ commit }, data) {
             commit('setloader', 'resetPassword', { root: true })
             return new Promise((resolve, reject) => {
-                axios.post("/auth/admin/users/password/reset", data).then(async response => {
+                axios.post("/auth/admin/update_password", data).then(async response => {
                     commit('setloader', false, { root: true })
                     commit('setAdminResetEmail', '')
                     const success_msg = response.data.msg || 'Password reset successfully'

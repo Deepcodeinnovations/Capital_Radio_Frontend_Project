@@ -197,7 +197,7 @@ async def reset_admin_password(request: Request, db: AsyncSession = Depends(get_
         form_data = await request.form()
         email = form_data.get("email")
         password = form_data.get("password")
-        user_id = form_data.get("user_id")
+        user_id = form_data.get("admin_id")
         
         if not all([email, password, user_id]):
             return returnsdata.error_msg("Email, password, and user_id are required", ERROR)

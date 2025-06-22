@@ -34,7 +34,7 @@ const getCacheData = (key) => {
 
 const apidirecturl = window.location.href.includes('localhost') || window.location.href.includes('192.168.100.10')
 ? 'http://127.0.0.1:8000/api/v1/user/'
-: 'https://bmrydatadispatchhost.com/api/v1/user/';
+: 'https://capitalradio.deepcodegroup.com/api/v1/user/';
 
 const axiosInstance = axios.create({
   baseURL:apidirecturl,
