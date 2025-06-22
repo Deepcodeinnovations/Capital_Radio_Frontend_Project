@@ -2,9 +2,9 @@ import os
 def get_static_url():
     current_path = os.path.abspath(__file__)
     
-    if 'bmrydatadispatchhost' in current_path:
+    if 'deepcodegroup.com' in current_path:
         # Production connection string
-        return  "https://bmrydatadispatchhost.com/"
+        return  "https://capitalradio.deepcodegroup.com/"
     else:
         # Local development connection string
         return  "http://127.0.0.1:8000/"

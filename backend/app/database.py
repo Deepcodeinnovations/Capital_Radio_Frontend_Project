@@ -8,7 +8,7 @@ import os
 def get_database_url():
     current_path = os.path.abspath(__file__)
     
-    if 'bmrydatadispatchhost.com' in current_path:
+    if 'deepcodegroup.com' in current_path:
         # Production connection string
         return 'mysql+aiomysql://root:kx_LCMVqsquv8@localhost:3306/capitalfm_system_db'
     else:
