@@ -91,16 +91,14 @@
           </div>
           
           <div>
-            <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Content*</label>
-            <div class="border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden">
-              <SummernoteEditor
+            <label for="content" class="block text-sm font-medium text-white dark:text-gray-300 mb-1">Full Content*</label>
+            <SummernoteEditor
                 v-model="article.content"
                 :config="summernoteConfig"
-                class="summernote-editor"
+                class="summernote-editor bg-white"
                 @input="handleContentChange"
               />
-            </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Use the rich text editor to format your article content</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Write your full article content</p>
           </div>
         </div>
 
@@ -149,25 +147,45 @@
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Featured Image</h2>
           
           <div class="flex items-center space-x-6">
-            <div class="h-32 w-32 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
+            <div class="h-32 w-32 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 relative">
               <img 
-                v-if="article.featured_image_url || imagePreview" 
-                :src="article.featured_image_url || imagePreview" 
+                v-if="featuredImagePreview" 
+                :src="featuredImagePreview" 
                 class="h-full w-full object-cover rounded-lg" 
                 alt="Featured image"
               />
               <NewspaperIcon v-else class="h-12 w-12 text-gray-400" />
+              
+              <!-- Remove button for existing image -->
+              <button
+                v-if="featuredImagePreview && !featuredImageFile"
+                type="button"
+                @click="removeFeaturedImage"
+                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs hover:bg-red-600"
+              >
+                ×
+              </button>
             </div>
             
             <div class="flex-1">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Upload Featured Image</label>
-              <div class="flex items-center">
+              <div class="flex items-center space-x-3">
                 <label for="featured-image" class="cursor-pointer bg-white dark:bg-gray-700 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none">
                   <span>Choose file</span>
                   <input id="featured-image" type="file" class="sr-only" accept="image/*" @change="handleFeaturedImageUpload" />
                 </label>
-                <p class="ml-3 text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF up to 2MB (1200x630px recommended)</p>
+                
+                <!-- Clear selected file button -->
+                <button
+                  v-if="featuredImageFile"
+                  type="button"
+                  @click="clearFeaturedImage"
+                  class="px-3 py-2 text-sm text-red-600 hover:text-red-800"
+                >
+                  Clear
+                </button>
               </div>
+              <p class="ml-0 mt-1 text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF up to 2MB (1200x630px recommended)</p>
             </div>
           </div>
         </div>
@@ -178,19 +196,29 @@
           
           <div>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Upload Gallery Images</label>
-            <div class="flex items-center">
+            <div class="flex items-center space-x-3">
               <label for="gallery-images" class="cursor-pointer bg-white dark:bg-gray-700 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none">
                 <span>Choose files</span>
                 <input id="gallery-images" type="file" class="sr-only" accept="image/*" multiple @change="handleGalleryImagesUpload" />
               </label>
-              <p class="ml-3 text-xs text-gray-500 dark:text-gray-400">Select multiple images for gallery</p>
+              
+              <!-- Clear all gallery images button -->
+              <button
+                v-if="galleryImageFiles.length > 0 || (article.gallery_images && article.gallery_images.length > 0)"
+                type="button"
+                @click="clearAllGalleryImages"
+                class="px-3 py-2 text-sm text-red-600 hover:text-red-800"
+              >
+                Clear All
+              </button>
             </div>
+            <p class="ml-0 mt-1 text-xs text-gray-500 dark:text-gray-400">Select multiple images for gallery</p>
           </div>
 
           <!-- Gallery Preview -->
-          <div v-if="galleryPreviews.length > 0 || (article.gallery_images && article.gallery_images.length > 0)" class="grid grid-cols-4 gap-4">
-            <!-- Existing gallery images -->
-            <div v-for="(image, index) in article.gallery_images || []" :key="'existing-' + index" class="relative">
+          <div v-if="galleryImageFiles.length > 0 || (article.gallery_images && article.gallery_images.length > 0)" class="grid grid-cols-4 gap-4">
+            <!-- Existing gallery images (only show if not replacing) -->
+            <div v-for="(image, index) in (isReplacingGallery ? [] : article.gallery_images || [])" :key="'existing-' + index" class="relative">
               <img :src="image.url" class="h-20 w-20 object-cover rounded-lg" alt="Gallery image" />
               <button
                 type="button"
@@ -200,6 +228,7 @@
                 ×
               </button>
             </div>
+            
             <!-- New gallery images -->
             <div v-for="(preview, index) in galleryPreviews" :key="'new-' + index" class="relative">
               <img :src="preview" class="h-20 w-20 object-cover rounded-lg" alt="Gallery preview" />
@@ -331,7 +360,7 @@ const store = useStore();
 // Computed properties
 const loading = computed(() => store.getters.loading);
 const categories = computed(() => store.getters.categories || []);
-const stations = computed(() => store.getters.stations || []); // Assuming you have a stations store
+const stations = computed(() => store.getters.stations || []);
 const isEdit = computed(() => !!route.params.id);
 
 // Reactive data
@@ -357,54 +386,81 @@ const article = ref({
 
 const featuredImageFile = ref(null);
 const galleryImageFiles = ref([]);
-const imagePreview = ref('');
+const featuredImagePreview = ref('');
 const galleryPreviews = ref([]);
 const tagsString = ref('');
+const isReplacingGallery = ref(false);
 
-// Summernote configuration
 const summernoteConfig = ref({
-  height: 300,
-  toolbar: [
-    ['style', ['style']],
-    ['font', ['bold', 'underline', 'clear']],
-    ['fontname', ['fontname']],
-    ['color', ['color']],
-    ['para', ['ul', 'ol', 'paragraph']],
-    ['table', ['table']],
-    ['insert', ['link', 'picture', 'video']],
-    ['view', ['fullscreen', 'codeview', 'help']]
-  ],
-  placeholder: 'Write your article content here...',
-  fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
-  fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36'],
-  callbacks: {
-    onImageUpload: function(files) {
-      // Handle image upload in the editor
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        // You can implement image upload to your server here
-        // For now, we'll create a local URL
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          $(this).summernote('insertImage', e.target.result);
-        }.bind(this);
-        reader.readAsDataURL(file);
+    height: 300,
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['fontname', ['fontname']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['table', ['table']],
+      ['insert', ['link', 'picture', 'video']],
+      ['view', ['fullscreen', 'codeview', 'help']]
+    ],
+    placeholder: 'Write your article content here...',
+    fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+    fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36'],
+    callbacks: {
+      onImageUpload: function(files) {
+        // Handle image upload in the editor
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          // You can implement image upload to your server here
+          // For now, we'll create a local URL
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            $(this).summernote('insertImage', e.target.result);
+          }.bind(this);
+          reader.readAsDataURL(file);
+        }
       }
     }
-  }
-});
+  });
+  
+  const handleContentChange = (content) => {
+    article.value.content = content;
+  };
 
 // Methods
 const handleFeaturedImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
     featuredImageFile.value = file;
-    imagePreview.value = URL.createObjectURL(file);
+    featuredImagePreview.value = URL.createObjectURL(file);
   }
+};
+
+const removeFeaturedImage = () => {
+  article.value.featured_image_url = '';
+  featuredImagePreview.value = '';
+  featuredImageFile.value = null;
+  // Reset the file input
+  const fileInput = document.getElementById('featured-image');
+  if (fileInput) fileInput.value = '';
+};
+
+const clearFeaturedImage = () => {
+  featuredImageFile.value = null;
+  featuredImagePreview.value = article.value.featured_image_url || '';
+  // Reset the file input
+  const fileInput = document.getElementById('featured-image');
+  if (fileInput) fileInput.value = '';
 };
 
 const handleGalleryImagesUpload = (event) => {
   const files = Array.from(event.target.files);
+  
+  // If this is the first time adding new images after existing ones, mark as replacing
+  if (article.value.gallery_images && article.value.gallery_images.length > 0 && galleryImageFiles.value.length === 0) {
+    isReplacingGallery.value = true;
+  }
+  
   galleryImageFiles.value = [...galleryImageFiles.value, ...files];
   
   files.forEach(file => {
@@ -413,12 +469,14 @@ const handleGalleryImagesUpload = (event) => {
 };
 
 const removeGalleryPreview = (index) => {
+  // Revoke the object URL to prevent memory leaks
+  URL.revokeObjectURL(galleryPreviews.value[index]);
   galleryPreviews.value.splice(index, 1);
   galleryImageFiles.value.splice(index, 1);
-};
-
-const handleContentChange = (content) => {
-  article.value.content = content;
+  
+  // Reset the file input
+  const fileInput = document.getElementById('gallery-images');
+  if (fileInput) fileInput.value = '';
 };
 
 const removeExistingGalleryImage = async (imageId) => {
@@ -436,11 +494,26 @@ const removeExistingGalleryImage = async (imageId) => {
   }
 };
 
+const clearAllGalleryImages = () => {
+  // Clear new images
+  galleryPreviews.value.forEach(preview => URL.revokeObjectURL(preview));
+  galleryPreviews.value = [];
+  galleryImageFiles.value = [];
+  
+  // Clear existing images
+  article.value.gallery_images = [];
+  isReplacingGallery.value = true;
+  
+  // Reset the file input
+  const fileInput = document.getElementById('gallery-images');
+  if (fileInput) fileInput.value = '';
+};
+
 const fetchArticle = async () => {
   if (isEdit.value) {
     try {
       await store.dispatch('fetcharticle', route.params.id);
-      const fetchedArticle = store.getters['article'];
+      const fetchedArticle = store.getters.article;
       
       if (fetchedArticle) {
         article.value = {
@@ -448,6 +521,9 @@ const fetchArticle = async () => {
           category_id: fetchedArticle.category?.id || '',
           station_id: fetchedArticle.station?.id || ''
         };
+        
+        // Set featured image preview
+        featuredImagePreview.value = fetchedArticle.featured_image_url || '';
         
         // Convert tags array to string
         if (fetchedArticle.tags) {
@@ -507,15 +583,22 @@ const saveArticle = async () => {
       formData.append('tags', JSON.stringify(tagsArray));
     }
 
-    // Add featured image
+    // Add featured image if new one is selected
     if (featuredImageFile.value) {
       formData.append('featured_image', featuredImageFile.value);
     }
 
-    // Add gallery images
-    galleryImageFiles.value.forEach((file, index) => {
-      formData.append(`gallery_image_${index}`, file);
-    });
+    // Add gallery images if new ones are selected
+    if (galleryImageFiles.value.length > 0) {
+      galleryImageFiles.value.forEach((file, index) => {
+        formData.append(`gallery_image_${index}`, file);
+      });
+      
+      // If replacing gallery, add a flag
+      if (isReplacingGallery.value) {
+        formData.append('replace_gallery', 'true');
+      }
+    }
 
     if (isEdit.value) {
       await store.dispatch('updatearticle', { 
@@ -554,8 +637,9 @@ onMounted(() => {
   }
 });
 </script>
-
 <style scoped>
+
+
 /* Summernote editor styling */
 :deep(.note-editor) {
   border: 1px solid #d1d5db;

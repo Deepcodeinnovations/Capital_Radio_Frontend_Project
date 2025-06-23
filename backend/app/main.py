@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from app.models import *
 from app.routes import api_router
 from app.database import init_models, close_models, get_database
-from app.utils.RecordingBackgroundUtil import recording_service
+
 import logging
 import os
 
@@ -69,7 +69,7 @@ async def startup():
         logger.info("Initializing application...")
         await init_models()
         logger.info("Application startup completed successfully")
-        await recording_service.start()
+      
     except Exception as e:
         logger.error(f"Startup failed: {e}", exc_info=True)
         raise
@@ -80,7 +80,7 @@ async def shutdown():
         logger.info("Shutting down application...")
         await close_models()
         logger.info("Application shutdown completed successfully")
-        await recording_service.stop()
+        
     except Exception as e:
         logger.error(f"Shutdown failed: {e}", exc_info=True)
         raise

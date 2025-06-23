@@ -15,8 +15,37 @@ from app.apiv1.services.admin.AdminRecordingBackgroundService import (
     update_radio_session_recording_status
 )
 from datetime import datetime
-
+from app.utils.RecordingBackgroundUtil import recording_service
 router = APIRouter()
+
+@router.post("/start")
+async def start_recording_endpoint(request: Request,db: AsyncSession = Depends(get_database),current_user = Depends(get_current_user_details)):
+    try:
+        verify_admin_access(current_user)
+        await recording_service.validate_and_start()
+        return returnsdata.success_msg(msg="Recording started successfully", status=SUCCESS)
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to start recording: {str(e)}", ERROR)
+
+
+@router.post("/stop")
+async def stop_recording_endpoint(request: Request,db: AsyncSession = Depends(get_database),current_user = Depends(get_current_user_details)):
+    try:
+        verify_admin_access(current_user)
+        await recording_service.stop()
+        return returnsdata.success_msg(msg="Recording stopped successfully", status=SUCCESS)
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to stop recording: {str(e)}", ERROR)
+
+@router.post("/recording_status")
+async def get_recording_status_endpoint(request: Request,db: AsyncSession = Depends(get_database),current_user = Depends(get_current_user_details)):
+    try:
+        verify_admin_access(current_user)
+        recording_status = recording_service.get_service_status()
+        return returnsdata.success(data=recording_status, msg="Recording status retrieved successfully", status=SUCCESS)
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to get recording status: {str(e)}", ERROR)
+
 
 @router.post("/list")
 async def get_radio_sessions_endpoint(request: Request,db: AsyncSession = Depends(get_database),current_user = Depends(get_current_user_details)):

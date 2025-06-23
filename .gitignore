@@ -18,6 +18,7 @@ capital_webiste/node_modules/
 
 # Backend specific
 backend/env/
+backend/temp_recordings/
 # backend/static/
 # backend/main.py
 # backend/app/database.py
