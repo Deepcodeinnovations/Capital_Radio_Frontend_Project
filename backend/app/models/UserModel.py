@@ -31,7 +31,7 @@ class User(Base):
     email_verified_at = Column(DateTime, nullable=True)
     verify_code = Column(String(6), nullable=True)
     verify_code_at = Column(DateTime, nullable=True)
-
+    
     # Activity tracking
     last_seen = Column(DateTime, nullable=True)
     device_token = Column(Text, nullable=True)

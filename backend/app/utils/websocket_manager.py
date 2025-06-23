@@ -200,14 +200,15 @@ class WebSocketManager:
         try:
             listeners = await db.execute(select(StationListeners).where(StationListeners.station_id == station_id).where(StationListeners.last_seen > datetime.now() - timedelta(hours=24)))
             listeners = listeners.scalars().all()
-            
+
             for listener in listeners:
-                await self.send_to_user(
-                    user_id=listener.user_id,
-                    data=data,
-                    message_type=message_type,
-                    message=message
-                )
+                if listener.user_id in self.active_connections:
+                    await self.send_to_user(
+                        user_id=listener.user_id,
+                        data=data,
+                        message_type=message_type,
+                        message=message
+                    )
             adminuser = await db.execute(select(User).where(User.role != 'user'))
             adminuser = adminuser.scalars().all()
             if adminuser:

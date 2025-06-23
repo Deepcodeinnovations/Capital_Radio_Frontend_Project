@@ -82,7 +82,7 @@ export default {
                 commit('setWsConnectionStatus', 'connecting');
                 const isLocalhost = window.location.href.includes('localhost') || window.location.href.includes('192.168.100.10');
                 const protocol = isLocalhost ? 'ws:' : 'wss:';
-                const host = isLocalhost ? '127.0.0.1:8000' : 'bmrydatadispatchhost.com';
+                const host = isLocalhost ? '127.0.0.1:8000' : 'capitalradio.deepcodegroup.com';
                 const getWebSocketUrl = `${protocol}//${host}/api/v1/websockets/eventStream/connect`;
                 const wsUrl = getWebSocketUrl + `?token=${authtoken}`;
                 console.log('WebSocket: Connecting to', wsUrl);

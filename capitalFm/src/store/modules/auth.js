@@ -118,6 +118,33 @@ export default {
        },
 
 
+       async generatedevice_fingerprint({commit}) {
+            function generateUniqueString64(customChars = null) {
+                const defaultChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+                const chars = customChars || defaultChars;
+                
+                let result = '';
+                
+                // Add timestamp for uniqueness
+                const timestamp = Date.now().toString(36);
+                result += timestamp;
+                
+                // Fill remaining with random characters
+                while (result.length < 64) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                
+                return result.substring(0, 64);
+            }
+        
+            let fingerprint_data = generateUniqueString64();
+            
+            commit('setdevice_fingerprint', fingerprint_data);
+            localStorage.setItem('capital_radio_device_fingerprint', fingerprint_data);
+            console.log(fingerprint_data);
+        },
+
+
 
 
        async login({ commit }, data) {
