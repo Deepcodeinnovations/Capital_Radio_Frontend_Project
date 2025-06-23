@@ -26,6 +26,33 @@ from app.apiv1.services.admin.AdminNewsServivce import (
 router = APIRouter()
 import json
 
+
+@router.post("/list", status_code=status.HTTP_200_OK)
+async def get_articles_list(request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
+    try:
+        verify_admin_access(current_user)
+        
+        body_data = await request.form()
+        
+        filters = {
+            "page": int(body_data.get("page", 1)),
+            "per_page": int(body_data.get("per_page", 20)),
+            "is_published": body_data.get("is_published", "").lower() == "true" if body_data.get("is_published") else None,
+            "is_featured": body_data.get("is_featured", "").lower() == "true" if body_data.get("is_featured") else None,
+            "is_breaking": body_data.get("is_breaking", "").lower() == "true" if body_data.get("is_breaking") else None,
+            "category_id": body_data.get("category_id"),
+            "station_id": body_data.get("station_id"),
+            "author_id": body_data.get("author_id"),
+            "search": body_data.get("search"),
+            "order_by": body_data.get("order_by")
+        }
+        
+        articles_data = await get_news_articles(db, filters)
+        return returnsdata.success(data=articles_data, msg="Articles retrieved successfully", status=SUCCESS)
+        
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to get articles: {str(e)}", ERROR)
+
 @router.post("/create", status_code=status.HTTP_201_CREATED)
 async def create_article(request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
     try:
@@ -166,114 +193,16 @@ async def get_article_by_id(article_id: str, request: Request, db: AsyncSession 
         return returnsdata.error_msg(f"Failed to get article: {str(e)}", ERROR)
 
 
-
-@router.post("/slug/{slug}", status_code=status.HTTP_200_OK)
-async def get_article_by_slug(slug: str, request: Request, db: AsyncSession = Depends(get_database)):
-    try:
-        article_data = await get_news_article_by_slug(db, slug)
-        return returnsdata.success(data=article_data, msg="Article retrieved successfully", status=SUCCESS)
-        
-    except Exception as e:
-        return returnsdata.error_msg(f"Failed to get article: {str(e)}", ERROR)
-
-
-
-@router.post("/list", status_code=status.HTTP_200_OK)
-async def get_articles_list(request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
-    try:
-        verify_admin_access(current_user)
-        
-        body_data = await request.form()
-        
-        filters = {
-            "page": int(body_data.get("page", 1)),
-            "per_page": int(body_data.get("per_page", 20)),
-            "is_published": body_data.get("is_published", "").lower() == "true" if body_data.get("is_published") else None,
-            "is_featured": body_data.get("is_featured", "").lower() == "true" if body_data.get("is_featured") else None,
-            "is_breaking": body_data.get("is_breaking", "").lower() == "true" if body_data.get("is_breaking") else None,
-            "category_id": body_data.get("category_id"),
-            "station_id": body_data.get("station_id"),
-            "author_id": body_data.get("author_id"),
-            "search": body_data.get("search"),
-            "order_by": body_data.get("order_by")
-        }
-        
-        articles_data = await get_news_articles(db, filters)
-        return returnsdata.success(data=articles_data, msg="Articles retrieved successfully", status=SUCCESS)
-        
-    except Exception as e:
-        return returnsdata.error_msg(f"Failed to get articles: {str(e)}", ERROR)
-
-
-
-@router.post("/public/list", status_code=status.HTTP_200_OK)
-async def get_public_articles_list(request: Request, db: AsyncSession = Depends(get_database)):
-    try:
-        body_data = await request.form()
-        
-        filters = {
-            "page": int(body_data.get("page", 1)),
-            "per_page": int(body_data.get("per_page", 20)),
-            "is_published": True,  # Only published articles for public
-            "is_featured": body_data.get("is_featured", "").lower() == "true" if body_data.get("is_featured") else None,
-            "is_breaking": body_data.get("is_breaking", "").lower() == "true" if body_data.get("is_breaking") else None,
-            "category_id": body_data.get("category_id"),
-            "station_id": body_data.get("station_id"),
-            "search": body_data.get("search"),
-            "order_by": body_data.get("order_by")
-        }
-        
-        articles_data = await get_news_articles(db, filters)
-        return returnsdata.success(data=articles_data, msg="Articles retrieved successfully", status=SUCCESS)
-        
-    except Exception as e:
-        return returnsdata.error_msg(f"Failed to get articles: {str(e)}", ERROR)
-
-
-
 @router.post("/delete/{article_id}", status_code=status.HTTP_200_OK)
-async def delete_article(article_id: str, request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
+async def delete_article_endpoint(article_id: str, request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
     try:
         verify_admin_access(current_user)
         
         success = await delete_news_article(db, article_id)
-        return returnsdata.success_msg(msg="Article deleted successfully", status=SUCCESS)
+        return returnsdata.success_msg(msg="Article deleted successfully with Precision", status=SUCCESS)
         
     except Exception as e:
         return returnsdata.error_msg(f"Failed to delete article: {str(e)}", ERROR)
-
-
-
-@router.post("/engagement/{article_id}", status_code=status.HTTP_200_OK)
-async def update_engagement(article_id: str, request: Request, db: AsyncSession = Depends(get_database)):
-    try:
-        body_data = await request.form()
-        action = body_data.get("action")
-        
-        if action not in ["like", "share", "view"]:
-            return returnsdata.error_msg("Invalid action. Must be 'like', 'share', or 'view'", ERROR)
-        
-        article_data = await update_article_engagement(db, article_id, action)
-        return returnsdata.success(data=article_data, msg=f"Article {action} updated successfully", status=SUCCESS)
-        
-    except Exception as e:
-        return returnsdata.error_msg(f"Failed to update engagement: {str(e)}", ERROR)
-
-
-
-@router.post("/trending", status_code=status.HTTP_200_OK)
-async def get_trending_articles(request: Request, db: AsyncSession = Depends(get_database)):
-    try:
-        body_data = await request.form()
-        limit = int(body_data.get("limit", 10))
-        
-        articles_data = await get_trending_news(db, limit)
-        return returnsdata.success(data=articles_data, msg="Trending articles retrieved successfully", status=SUCCESS)
-        
-    except Exception as e:
-        return returnsdata.error_msg(f"Failed to get trending articles: {str(e)}", ERROR)
-
-
 
 @router.post("/update_image/{article_id}", status_code=status.HTTP_200_OK)
 async def update_article_image(article_id: str, request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
@@ -326,6 +255,83 @@ async def remove_article_gallery_image(article_id: str, image_id: str, request: 
         
     except Exception as e:
         return returnsdata.error_msg(f"Failed to remove gallery image: {str(e)}", ERROR)
+
+
+@router.post("/slug/{slug}", status_code=status.HTTP_200_OK)
+async def get_article_by_slug(slug: str, request: Request, db: AsyncSession = Depends(get_database)):
+    try:
+        article_data = await get_news_article_by_slug(db, slug)
+        return returnsdata.success(data=article_data, msg="Article retrieved successfully", status=SUCCESS)
+        
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to get article: {str(e)}", ERROR)
+
+
+
+
+
+
+
+@router.post("/public/list", status_code=status.HTTP_200_OK)
+async def get_public_articles_list(request: Request, db: AsyncSession = Depends(get_database)):
+    try:
+        body_data = await request.form()
+        
+        filters = {
+            "page": int(body_data.get("page", 1)),
+            "per_page": int(body_data.get("per_page", 20)),
+            "is_published": True,  # Only published articles for public
+            "is_featured": body_data.get("is_featured", "").lower() == "true" if body_data.get("is_featured") else None,
+            "is_breaking": body_data.get("is_breaking", "").lower() == "true" if body_data.get("is_breaking") else None,
+            "category_id": body_data.get("category_id"),
+            "station_id": body_data.get("station_id"),
+            "search": body_data.get("search"),
+            "order_by": body_data.get("order_by")
+        }
+        
+        articles_data = await get_news_articles(db, filters)
+        return returnsdata.success(data=articles_data, msg="Articles retrieved successfully", status=SUCCESS)
+        
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to get articles: {str(e)}", ERROR)
+
+
+
+
+
+
+@router.post("/engagement/{article_id}", status_code=status.HTTP_200_OK)
+async def update_engagement(article_id: str, request: Request, db: AsyncSession = Depends(get_database)):
+    try:
+        body_data = await request.form()
+        action = body_data.get("action")
+        
+        if action not in ["like", "share", "view"]:
+            return returnsdata.error_msg("Invalid action. Must be 'like', 'share', or 'view'", ERROR)
+        
+        article_data = await update_article_engagement(db, article_id, action)
+        return returnsdata.success(data=article_data, msg=f"Article {action} updated successfully", status=SUCCESS)
+        
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to update engagement: {str(e)}", ERROR)
+
+
+
+@router.post("/trending", status_code=status.HTTP_200_OK)
+async def get_trending_articles(request: Request, db: AsyncSession = Depends(get_database)):
+    try:
+        body_data = await request.form()
+        limit = int(body_data.get("limit", 10))
+        
+        articles_data = await get_trending_news(db, limit)
+        return returnsdata.success(data=articles_data, msg="Trending articles retrieved successfully", status=SUCCESS)
+        
+    except Exception as e:
+        return returnsdata.error_msg(f"Failed to get trending articles: {str(e)}", ERROR)
+
+
+
+
 
 
 # Category endpoints

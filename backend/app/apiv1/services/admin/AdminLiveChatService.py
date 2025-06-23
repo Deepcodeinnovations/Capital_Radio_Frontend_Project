@@ -37,7 +37,7 @@ async def delete_station_livechat_message(db: AsyncSession, message_id: str) -> 
         station_id = messages_data.station_id
 
         message_dict = await messages_data.to_dict_with_relations(db=db)
-        await db.execute(delete(LiveChatMessage).where(LiveChatMessage.id == message_id))
+        await messages_data.delete_with_relations(db)
         await websocket_manager.broadcast_to_station(
                 db=db,
                 station_id=station_id,

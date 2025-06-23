@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, Integer
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, delete
 from app.models.BaseModel import Base
 from datetime import datetime
 from typing import Optional, Dict, Any, List
@@ -69,10 +69,7 @@ class Host(Base):
 
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
-            self.state = False
-            self.status = False
-            self.updated_at = datetime.utcnow()
-            
+            await db.execute(delete(Host).where(Host.id == self.id))
             await db.commit()
             return True
             

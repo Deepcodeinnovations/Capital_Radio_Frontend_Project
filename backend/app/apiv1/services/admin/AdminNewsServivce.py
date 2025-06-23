@@ -296,13 +296,9 @@ async def delete_news_article(db: AsyncSession, article_id: str) -> bool:
         
         if not article:
             raise HTTPException(status_code=404, detail="News article not found")
-        
-        article.state = False
-        article.updated_at = datetime.utcnow()
-        
-        await db.commit()
-        return True
-        
+
+        success = await article.delete_with_relations(db)
+        return success
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to delete news article: {str(e)}")

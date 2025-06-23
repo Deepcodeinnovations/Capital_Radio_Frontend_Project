@@ -170,12 +170,8 @@ async def delete_event_by_id(db: AsyncSession, event_id: str) -> bool:
         event = result.scalar_one_or_none()
         if not event:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event not found")
-        event.delete_with_relations(db)
-        await db.commit()
+        await event.delete_with_relations(db)
         return True
-        
-    except HTTPException:
-        raise
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to delete event: {str(e)}")

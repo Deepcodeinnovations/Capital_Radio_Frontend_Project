@@ -73,16 +73,18 @@ class Forum(Base):
     
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
-            # Soft delete by setting state to False
-            self.state = False
-            self.updated_at = datetime.utcnow()
+            await db.refresh(self, ['comments'])
             
-            # Also soft delete all related comments
             if self.comments:
+                from app.models.ForumCommentModel import ForumComment
                 for comment in self.comments:
-                    comment.state = False
-                    comment.updated_at = datetime.utcnow()
+                    comment_query = select(ForumComment).where(ForumComment.id == comment.id)
+                    comm = await db.execute(comment_query)
+                    comment_obj = comm.scalar_one_or_none()
+                    if comment_obj:
+                        await comment_obj.delete_with_relations(db)
             
+            await db.execute(delete(Forum).where(Forum.id == self.id))
             await db.commit()
             return True
             

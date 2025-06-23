@@ -74,11 +74,7 @@ class RadioProgram(Base):
 
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
-            self.hosts = []
-            self.state = False
-            self.status_value = False
-            self.updated_at = datetime.utcnow()
-            
+            await db.execute(delete(RadioProgram).where(RadioProgram.id == self.id))
             await db.commit()
             return True
             

@@ -48,6 +48,7 @@ class LiveChatMessage(Base):
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
             await db.execute(delete(LiveChatMessage).where(LiveChatMessage.id == self.id))
+            await db.commit()
             return True
             
         except Exception as e:

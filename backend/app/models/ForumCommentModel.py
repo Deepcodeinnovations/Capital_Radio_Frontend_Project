@@ -109,12 +109,9 @@ class ForumComment(Base):
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
             await db.refresh(self, ['replies'])
-            # First, recursively delete all replies
             if self.replies:
                 for reply in self.replies:
                     await db.execute(delete(ForumComment).where(ForumComment.id == reply.id))
-            
-            # Then hard delete this comment
             await db.execute(delete(ForumComment).where(ForumComment.id == self.id))
             await db.commit()
             return True

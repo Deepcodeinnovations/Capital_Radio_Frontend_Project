@@ -107,6 +107,19 @@ class News(Base):
         except Exception as e:
             raise Exception(f"Failed to convert news to dictionary with relations: {str(e)}")
 
+
+    async def delete_with_relations(self, db: AsyncSession) -> bool:
+        try:
+            await db.delete(self)
+            await db.commit()
+            return True
+        except Exception as e:
+            await db.rollback()
+            raise Exception(f"Failed to delete livechat message with relations: {str(e)}")
+
+
+    
+
 class NewsCategory(Base):
     __tablename__ = "news_categories"
     

@@ -74,10 +74,7 @@ class Advert(Base):
     
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
-            # Soft delete by setting state to False
-            self.state = False
-            self.updated_at = datetime.utcnow()
-            
+            await db.execute(delete(Advert).where(Advert.id == self.id))
             await db.commit()
             return True
             
@@ -86,9 +83,6 @@ class Advert(Base):
             raise Exception(f"Failed to delete advert with relations: {str(e)}")
     
     async def increment_views(self, db: AsyncSession) -> bool:
-        """
-        Increment the views count for this advert
-        """
         try:
             self.views_count += 1
             await db.commit()
@@ -98,9 +92,6 @@ class Advert(Base):
             raise Exception(f"Failed to increment views: {str(e)}")
     
     async def increment_clicks(self, db: AsyncSession) -> bool:
-        """
-        Increment the clicks count for this advert
-        """
         try:
             self.clicks_count += 1
             await db.commit()

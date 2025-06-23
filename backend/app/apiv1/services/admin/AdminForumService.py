@@ -131,10 +131,7 @@ async def delete_forum_by_id(db: AsyncSession, forum_id: str) -> bool:
         
         if not forum:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Forum not found")
-        
-        forum.state = False
-        forum.updated_at = datetime.utcnow()
-        
+        await forum.delete_with_relations(db)
         await db.commit()
         return True
         
