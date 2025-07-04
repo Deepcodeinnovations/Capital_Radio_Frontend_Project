@@ -11,6 +11,7 @@ class User(Base):
     role = Column(String(36), nullable=True)
     provider = Column(String(255), nullable=True)
     provider_id = Column(String(255), nullable=True)
+    station_id = Column(String(255), nullable=True)
     password = Column(String(255), nullable=True)
     allow_login = Column(Boolean, default=True)
     remember_token = Column(String(255), nullable=True)

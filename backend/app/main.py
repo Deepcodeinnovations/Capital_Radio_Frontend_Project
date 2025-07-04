@@ -34,7 +34,7 @@ current_path = os.path.abspath(__file__)
 if 'deepcodegroup.com' not  in current_path:
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:3000","http://192.168.100.10:3000", "http://localhost:3001","http://localhost:3002","http://localhost:5173",'https://boomry.com','https://admin.boomry.com'],
+        allow_origins=["http://localhost:3000", "http://localhost:3001","http://localhost:3002","http://localhost:3003",'https://boomry.com','https://admin.boomry.com'],
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],

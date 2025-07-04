@@ -29,11 +29,11 @@ async def login_user(request: Request,  db: AsyncSession = Depends(get_database)
         if not station_id:
             return  returnsdata.error_msg("Station ID is required", ERROR)
         
-        user_data = await authenticate_or_create_open_user(db, device_fingerprint)
+        user_data = await authenticate_or_create_open_user(db, device_fingerprint, station_id)
         
         return  returnsdata.success(data=user_data,msg="Login successful",status="Success")
     except Exception as e:
-        return returnsdata.error_msg( f"Logout failed: {str(e)}", ERROR )
+        return returnsdata.error_msg( f"Login failed: {str(e)}", ERROR )
 
 
 

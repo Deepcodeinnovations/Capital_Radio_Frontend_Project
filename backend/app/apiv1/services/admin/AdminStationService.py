@@ -82,7 +82,6 @@ async def create_new_station(db: AsyncSession, station_data: Dict[str, Any], adm
             access_link=station_data.get("access_link", ""),
             streaming_link=station_data.get("streaming_link", ""),
             about=station_data.get("about", ""),
-            listeners=station_data.get("listeners", 0),
             streaming_status=station_data.get("streaming_status", "offline"),
             radio_access_status=station_data.get("radio_access_status", True),
             logo_url=logo_url,

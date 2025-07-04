@@ -1,0 +1,25 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'animate.css';
+
+
+
+.backgroundFixed {
+    background-size: cover !important;
+    background-position: center !important; 
+    background-repeat: no-repeat !important; 
+    background-attachment: fixed !important;
+}
+
+
+/* Ensure sharp edges and bold design */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Override any rounded corners for this design */
+  .rounded-none {
+    border-radius: 0 !important;
+  }

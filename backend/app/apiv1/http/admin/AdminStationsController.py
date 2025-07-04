@@ -49,7 +49,6 @@ async def create_station(request: Request,db: AsyncSession = Depends(get_databas
             "access_link": body_data.get("access_link", ""),
             "streaming_link": body_data.get("streaming_link", ""),
             "about": body_data.get("about", ""),
-            "listeners": int(body_data.get("listeners", 0)),
             "streaming_status": body_data.get("streaming_status", "offline"),
             "radio_access_status": body_data.get("radio_access_status") == "true"
         }
@@ -92,7 +91,6 @@ async def update_station(station_id: str,request: Request,db: AsyncSession = Dep
             "access_link": body_data.get("access_link", ""),
             "streaming_link": body_data.get("streaming_link", ""),
             "about": body_data.get("about", ""),
-            "listeners": int(body_data.get("listeners", 0)),
             "streaming_status": body_data.get("streaming_status", "offline"),
             "radio_access_status": body_data.get("radio_access_status") == "true"
         }

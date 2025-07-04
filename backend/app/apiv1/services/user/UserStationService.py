@@ -22,7 +22,7 @@ from app.utils.advanced_paginator import paginate_query, QueryOptimizer
 
 async def get_station_by_initial_access_link(db: AsyncSession, access_link: str) -> Dict[str, Any]:
     try:
-        result = await db.execute(select(Station).where(and_(Station.access_link == access_link, Station.state == True, Station.status == True)))
+        result = await db.execute(select(Station).where(and_(Station.access_link == access_link, Station.state == True, Station.status == True)).limit(1))
         station = result.scalar_one_or_none()
         
         if not station:
@@ -38,7 +38,7 @@ async def get_station_by_initial_access_link(db: AsyncSession, access_link: str)
 
 async def get_station_by_access_link(db: AsyncSession, access_link: str, user_id: str) -> Dict[str, Any]:
     try:
-        result = await db.execute(select(Station).where(and_(Station.access_link == access_link, Station.state == True, Station.status == True)))
+        result = await db.execute(select(Station).where(and_(Station.access_link == access_link, Station.state == True, Station.status == True)).limit(1))
         station = result.scalar_one_or_none()
         
         if not station:

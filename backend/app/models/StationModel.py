@@ -61,6 +61,7 @@ class Station(Base):
         try:
             await db.refresh(self, ['programs','schedule'])
             data = await self.to_dict()
+            
             if self.created_by:
                 from app.models.UserModel import User
                 creator_result = await db.execute(select(User).where(User.id == self.created_by))
@@ -69,24 +70,39 @@ class Station(Base):
                     data['creator'] = {
                         'id': creator.id,
                         'name': creator.name,
-                        'email': creator.email
+                        'email': creator.email,
+                        'role': creator.role,
+                        'created_at': creator.created_at.isoformat() if creator.created_at else None,
+                        'updated_at': creator.updated_at.isoformat() if creator.updated_at else None
                     }
-            listeners = await self.get_listeners(db)
-            if listeners:
-                data['listeners'] = listeners
+                else:
+                    data['creator'] = None
             else:
-                data['listeners'] = 0
+                data['creator'] = None
+            
+            listeners = await self.get_listeners(db)
+            data['listeners'] = listeners if listeners else 0
+            
             data['stats'] = {
-                'total_listeners': listeners,
+                'total_listeners': listeners if listeners else 0,
                 'is_streaming': self.streaming_status == 'live',
                 'is_accessible': self.radio_access_status and self.status and self.state
             }
-            if include_programs:
-                data['programs'] = [await program.to_dict_with_relations(db) for program in self.programs]
-            if include_schedule:
-                data['schedule'] = await self.schedule.to_dict_with_relations(db)
-            return data
             
+            if include_programs:
+                if self.programs:
+                    data['programs'] = [await program.to_dict_with_relations(db) for program in self.programs if program]
+                else:
+                    data['programs'] = []
+            
+            if include_schedule:
+                if self.schedule:
+                    data['schedule'] = await self.schedule.to_dict_with_relations(db)
+                else:
+                    data['schedule'] = None
+            
+            return data
+                    
         except Exception as e:
             raise Exception(f"Failed to convert station to dictionary with relations: {str(e)}")
 
