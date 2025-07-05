@@ -38,7 +38,7 @@
               <div class="inline-flex items-center rounded-full space-x-2 bg-white/10 backdrop-blur-md px-3 md:px-4 py-2 border border-white/20 mb-4 md:mb-6">
                 <div class="w-2 h-2 bg-[#F8CB00] animate-pulse"></div>
                 <span class="text-white/90 font-medium text-xs md:text-sm uppercase tracking-wider">
-                  {{ currentSlideData?.type === 'advert' ? 'Featured' : currentSlideData?.type === 'news' ? 'Breaking News' : 'Live Radio' }}
+                  {{ currentSlideData?.type === 'advert' ? 'Sponsored' : currentSlideData?.type === 'news' ? 'Breaking News' : 'Live Radio' }}
                 </span>
               </div>
 
@@ -51,7 +51,7 @@
 
               <!-- Subtitle -->
               <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 md:mb-8 leading-relaxed max-w-4xl">
-                {{ truncateText(currentSlideData?.description || 'Uganda\'s Premier Radio Station - Fresh Hits, Breaking News & Entertainment', 90) }}
+                {{ truncateText(currentSlideData?.description ??  currentSlideData?.excerpt ?? 'Uganda\'s Premier Radio Station - Fresh Hits, Breaking News & Entertainment', 140) }}
               </p>
 
               <!-- Action Buttons -->

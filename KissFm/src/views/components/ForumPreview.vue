@@ -1,244 +1,278 @@
 <template>
-  <section class="py-20 bg-white relative overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 opacity-10">
-      <div class="absolute top-0 right-0 w-72 h-72 bg-[#F8CB00] rounded-full blur-3xl"></div>
-      <div class="absolute bottom-0 left-0 w-96 h-96 bg-red-500 rounded-full blur-3xl"></div>
-      <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
+  <section class="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-pink-50">
+    <!-- Background decoration with KIIS colors -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full blur-3xl"></div>
     </div>
     
-    <div class="container mx-auto px-6 relative">
+    <div class="container mx-auto px-4 md:px-6 relative z-20 py-20">
       <!-- Section Header -->
       <div class="text-center mb-16">
         <div class="inline-flex items-center justify-center mb-6">
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
+          <div class="h-px w-12 bg-gradient-to-r from-pink-500 to-purple-500"></div>
           <span class="mx-4 text-gray-800 font-bold tracking-wider text-sm uppercase">Community</span>
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
+          <div class="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500"></div>
         </div>
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-          Join Our Community <span class="text-[#F8CB00]">Discussions</span>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6">
+          Join Our Community <span class="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">Discussions</span>
         </h2>
-        <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-          Connect with fellow Capital FM listeners, share your thoughts, and be part of Uganda's most vibrant radio community
+        <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+          Connect with fellow KIIS 100.9 listeners, share your thoughts, and be part of Uganda's most vibrant radio community
         </p>
       </div>
       
-      <!-- Main Forum Card -->
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden mb-12">
-        <div class="grid grid-cols-1 lg:grid-cols-3">
-          <!-- Community Stats -->
-          <div class="bg-gray-50 p-8 lg:p-10 relative">
-            <div class="text-center mb-8">
-              <div class="w-16 h-16 bg-[#F8CB00]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users class="w-8 h-8 text-[#F8CB00]" />
+      <!-- Community Stats Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+        <!-- Loading State -->
+        <template v-if="isLoading">
+          <div v-for="i in 4" :key="i" class="animate-pulse">
+            <div class="h-32 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl"></div>
+          </div>
+        </template>
+        
+        <!-- Stats Cards -->
+        <template v-else>
+          <div class="relative group">
+            <div class="absolute -inset-0.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"></div>
+            <div class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-pink-200/30 text-center transition-all duration-500 transform hover:scale-105">
+              <div class="text-2xl md:text-3xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
+                {{ formatNumber(forumStats.total_topics) }}
               </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">Community Stats</h3>
-              <p class="text-gray-600">Growing every day</p>
-            </div>
-            
-            <!-- Loading State -->
-            <div v-if="isLoading" class="grid grid-cols-2 gap-4 mb-8">
-              <div v-for="i in 4" :key="i" class="animate-pulse">
-                <div class="h-20 bg-gray-200 rounded-xl"></div>
-              </div>
-            </div>
-            
-            <!-- Stats Grid -->
-            <div v-else class="grid grid-cols-2 gap-4 mb-8">
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-[#F8CB00]/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-[#F8CB00] mb-1 group-hover:animate-pulse">
-                  {{ formatNumber(forumStats.total_topics) }}
-                </div>
-                <div class="text-sm text-gray-600">Topics</div>
-                <div class="text-xs text-green-600 mt-1">
-                  +{{ getWeeklyGrowth(forumStats.total_topics) }} this week
-                </div>
-              </div>
-              
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-blue-500/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-blue-600 mb-1 group-hover:animate-pulse">
-                  {{ formatNumber(forumStats.total_replies) }}
-                </div>
-                <div class="text-sm text-gray-600">Replies</div>
-                <div class="text-xs text-green-600 mt-1">
-                  +{{ getWeeklyGrowth(forumStats.total_replies) }} this week
-                </div>
-              </div>
-              
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-red-500/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-red-500 mb-1 group-hover:animate-pulse">
-                  {{ formatNumber(forumStats.active_users) }}
-                </div>
-                <div class="text-sm text-gray-600">Active Users</div>
-                <div class="text-xs text-green-600 mt-1">
-                  +{{ getWeeklyGrowth(forumStats.active_users) }} this week
-                </div>
-              </div>
-              
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-orange-500/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-orange-600 mb-1 group-hover:animate-pulse">
-                  {{ formatNumber(forumStats.online_now) }}
-                </div>
-                <div class="text-sm text-gray-600">Online Now</div>
-                <div class="flex items-center justify-center mt-1">
-                  <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-1"></div>
-                  <div class="text-xs text-green-600">Live</div>
-                </div>
+              <div class="text-sm font-bold text-gray-600 uppercase tracking-wider">Topics</div>
+              <div class="text-xs text-green-600 mt-1 font-semibold">
+                +{{ getWeeklyGrowth(forumStats.total_topics) }} this week
               </div>
             </div>
-            
-            <button 
-              @click="navigateToForums"
-              class="relative group w-full overflow-hidden"
-            >
-              <div class="absolute -inset-1 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-xl blur opacity-50 group-hover:opacity-70 transition duration-300"></div>
-              <div class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-6 py-3 rounded-xl text-white font-bold flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-105">
-                <MessageSquare class="w-5 h-5" />
-                <span>Join Community</span>
-              </div>
-            </button>
           </div>
           
-          <!-- Hot Discussions -->
-          <div class="lg:col-span-2 p-8 lg:p-10">
-            <div class="flex items-center justify-between mb-8">
+          <div class="relative group">
+            <div class="absolute -inset-0.5 bg-gradient-to-br from-purple-400 to-pink-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"></div>
+            <div class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-purple-200/30 text-center transition-all duration-500 transform hover:scale-105">
+              <div class="text-2xl md:text-3xl font-black bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
+                {{ formatNumber(forumStats.total_replies) }}
+              </div>
+              <div class="text-sm font-bold text-gray-600 uppercase tracking-wider">Replies</div>
+              <div class="text-xs text-green-600 mt-1 font-semibold">
+                +{{ getWeeklyGrowth(forumStats.total_replies) }} this week
+              </div>
+            </div>
+          </div>
+          
+          <div class="relative group">
+            <div class="absolute -inset-0.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"></div>
+            <div class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-pink-200/30 text-center transition-all duration-500 transform hover:scale-105">
+              <div class="text-2xl md:text-3xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
+                {{ formatNumber(forumStats.active_users) }}
+              </div>
+              <div class="text-sm font-bold text-gray-600 uppercase tracking-wider">Active Users</div>
+              <div class="text-xs text-green-600 mt-1 font-semibold">
+                +{{ getWeeklyGrowth(forumStats.active_users) }} this week
+              </div>
+            </div>
+          </div>
+          
+          <div class="relative group">
+            <div class="absolute -inset-0.5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"></div>
+            <div class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-yellow-200/30 text-center transition-all duration-500 transform hover:scale-105">
+              <div class="text-2xl md:text-3xl font-black bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
+                {{ formatNumber(forumStats.online_now) }}
+              </div>
+              <div class="text-sm font-bold text-gray-600 uppercase tracking-wider">Online Now</div>
+              <div class="flex items-center justify-center mt-1">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-1"></div>
+                <div class="text-xs text-green-600 font-bold">Live</div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+      
+      <!-- Hot Discussions Section -->
+      <div class="relative mb-12">
+        <div class="absolute -inset-1 bg-gradient-to-r from-pink-400 via-purple-500 to-pink-400 rounded-3xl opacity-20 blur-sm"></div>
+        <div class="relative bg-white/90 backdrop-blur-xl rounded-3xl border border-pink-200/50 overflow-hidden">
+          
+          <!-- Section Header -->
+          <div class="bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10 px-6 md:px-8 py-6 border-b border-pink-200/30">
+            <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Hot Discussions</h3>
-                <p class="text-gray-600">Trending topics in our community</p>
+                <h3 class="text-2xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-2">Hot Discussions</h3>
+                <p class="text-gray-600 font-medium">Trending topics in our community</p>
               </div>
               
-              <div class="flex items-center space-x-2">
+              <div class="flex items-center space-x-3">
                 <button 
                   @click="prevTopic"
                   :disabled="currentTopicIndex === 0"
-                  class="p-2 rounded-lg hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  class="p-3 rounded-2xl bg-white/80 backdrop-blur-sm hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600 hover:text-white text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 border border-pink-200/50"
                 >
                   <ChevronLeft class="w-5 h-5" />
                 </button>
                 <button 
                   @click="nextTopic"
                   :disabled="currentTopicIndex >= hotTopics.length - 3"
-                  class="p-2 rounded-lg hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  class="p-3 rounded-2xl bg-white/80 backdrop-blur-sm hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600 hover:text-white text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 border border-pink-200/50"
                 >
                   <ChevronRight class="w-5 h-5" />
                 </button>
                 <button 
                   @click="navigateToForums"
-                  class="flex items-center space-x-2 text-[#F8CB00] hover:text-red-500 font-medium ml-4 transition-colors"
+                  class="flex items-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-bold px-4 py-3 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg"
                 >
                   <span>View All</span>
                   <ArrowRight class="w-4 h-4" />
                 </button>
               </div>
             </div>
-            
+          </div>
+          
+          <!-- Topics Content -->
+          <div class="p-6 md:p-8">
             <!-- Loading State -->
-            <div v-if="isLoading" class="space-y-4">
+            <div v-if="isLoading" class="space-y-6">
               <div v-for="i in 3" :key="i" class="animate-pulse">
-                <div class="h-32 bg-gray-200 rounded-xl"></div>
+                <div class="h-40 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl"></div>
               </div>
             </div>
             
             <!-- Hot Topics List -->
-            <div v-else-if="hotTopics.length > 0" class="space-y-4">
+            <div v-else-if="hotTopics.length > 0" class="space-y-6">
               <div 
                 v-for="(topic, index) in visibleTopics" 
                 :key="topic.id"
-                class="group p-6 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#F8CB00]/50 transition-all cursor-pointer transform hover:scale-[1.02]"
+                class="relative group cursor-pointer"
                 @click="navigateToTopic(topic)"
               >
-                <div class="flex items-start justify-between mb-4">
-                  <div class="flex items-center space-x-3">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
-                          :class="getCategoryStyle(topic.category || 'GENERAL')">
-                      {{ topic.category || 'General Discussion' }}
-                    </span>
-                    <span v-if="topic.is_hot" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-600">
-                      <Flame class="w-3 h-3 mr-1" />
-                      Hot
-                    </span>
+                <div class="absolute -inset-0.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+                
+                <div class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-pink-200/30 transition-all duration-500 transform hover:scale-[1.02]">
+                  
+                  <!-- Topic Header -->
+                  <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                      <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider"
+                            :class="getCategoryStyle(topic.category || 'GENERAL')">
+                        {{ topic.category || 'General Discussion' }}
+                      </span>
+                      <span v-if="topic.is_hot" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-red-500 to-orange-500 text-white">
+                        <Flame class="w-3 h-3 mr-1" />
+                        HOT
+                      </span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                      <div class="flex items-center space-x-1 bg-white/60 backdrop-blur-sm px-2 py-1 rounded-full">
+                        <Eye class="w-4 h-4" />
+                        <span class="font-semibold">{{ formatNumber(topic.views_count || 0) }}</span>
+                      </div>
+                      <div class="flex items-center space-x-1 bg-white/60 backdrop-blur-sm px-2 py-1 rounded-full">
+                        <MessageSquare class="w-4 h-4" />
+                        <span class="font-semibold">{{ formatNumber(topic.comments_count || 0) }}</span>
+                      </div>
+                    </div>
                   </div>
                   
-                  <div class="flex items-center space-x-4 text-sm text-gray-500">
-                    <div class="flex items-center space-x-1">
-                      <Eye class="w-4 h-4" />
-                      <span>{{ formatNumber(topic.views_count || 0) }}</span>
-                    </div>
-                    <div class="flex items-center space-x-1">
-                      <MessageSquare class="w-4 h-4" />
-                      <span>{{ formatNumber(topic.comments_count || 0) }}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <h4 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-[#F8CB00] transition-colors line-clamp-2">
-                  {{ topic.title }}
-                </h4>
-                
-                <p class="text-gray-600 mb-4 line-clamp-2">
-                  {{ topic.body }}
-                </p>
-                
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-3">
-                    <div class="flex items-center space-x-2">
-                      <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white">
-                        <img 
-                          v-if="topic.creator?.image_url" 
-                          :src="topic.creator.image_url" 
-                          :alt="topic.creator.name" 
-                          class="w-full h-full object-cover"
-                        />
-                        <div v-else class="w-full h-full bg-gray-300 flex items-center justify-center">
-                          <User class="w-4 h-4 text-gray-500" />
+                  <!-- Topic Content -->
+                  <h4 class="text-lg md:text-xl font-black text-gray-900 mb-3 group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300 line-clamp-2">
+                    {{ topic.title }}
+                  </h4>
+                  
+                  <p class="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+                    {{ topic.body }}
+                  </p>
+                  
+                  <!-- Topic Footer -->
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                      <div class="flex items-center space-x-2">
+                        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-pink-200">
+                          <img 
+                            v-if="topic.creator?.image_url" 
+                            :src="topic.creator.image_url" 
+                            :alt="topic.creator.name" 
+                            class="w-full h-full object-cover"
+                          />
+                          <div v-else class="w-full h-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center">
+                            <User class="w-5 h-5 text-white" />
+                          </div>
+                        </div>
+                        <div>
+                          <p class="text-sm font-bold text-gray-900">
+                            {{ topic.creator?.name || 'Anonymous' }}
+                          </p>
+                          <p class="text-xs text-gray-500 font-medium">
+                            {{ topic.creator?.role || 'Member' }}
+                          </p>
                         </div>
                       </div>
-                      <div>
-                        <p class="text-sm font-medium text-gray-900">
-                          {{ topic.creator?.name || 'Anonymous' }}
-                        </p>
-                        <p class="text-xs text-gray-500">
-                          {{ topic.creator?.role || 'Member' }}
-                        </p>
-                      </div>
                     </div>
-                  </div>
-                  
-                  <div class="text-right">
-                    <p class="text-sm text-gray-900">{{ formatDate(topic.created_at) }}</p>
-                    <p class="text-xs text-gray-500">
-                      Last reply {{ formatDate(topic.updated_at) }}
-                    </p>
+                    
+                    <div class="text-right">
+                      <p class="text-sm font-bold text-gray-900">{{ formatDate(topic.created_at) }}</p>
+                      <p class="text-xs text-gray-500 font-medium">
+                        Last reply {{ formatDate(topic.updated_at) }}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             
             <!-- Empty State -->
-            <div v-else class="text-center py-12">
-              <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageSquare class="w-8 h-8 text-gray-400" />
+            <div v-else class="text-center py-16">
+              <div class="w-20 h-20 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <MessageSquare class="w-10 h-10 text-pink-400" />
               </div>
-              <h3 class="text-lg font-medium text-gray-900 mb-2">No Hot Discussions Yet</h3>
+              <h3 class="text-xl font-black text-gray-900 mb-2">No Hot Discussions Yet</h3>
               <p class="text-gray-600">Be the first to start a trending conversation!</p>
-            </div>
-            
-            <div class="mt-8 pt-6 border-t border-gray-200">
-              <button 
-                @click="navigateToForums"
-                class="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-xl transition-all transform hover:scale-105"
-              >
-                <div class="flex items-center justify-center space-x-2">
-                  <MessageSquare class="w-5 h-5" />
-                  <span>Browse All Discussions</span>
-                </div>
-              </button>
             </div>
           </div>
         </div>
       </div>
       
-
+      <!-- Call to Action Section -->
+      <div class="text-center">
+        <div class="relative inline-block group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+          <button 
+            @click="navigateToForums"
+            class="relative bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black px-12 py-6 rounded-3xl transition-all duration-500 transform hover:scale-105 shadow-2xl"
+          >
+            <div class="flex items-center space-x-3">
+              <Users class="w-6 h-6" />
+              <span class="text-lg tracking-wide">Join Our Community</span>
+              <ArrowRight class="w-6 h-6" />
+            </div>
+          </button>
+        </div>
+        
+        <p class="text-gray-600 mt-4 font-medium">
+          Connect with {{ formatNumber(forumStats.active_users) }} other KIIS listeners
+        </p>
+      </div>
+    </div>
+    
+    <!-- Bottom Curved Border -->
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden z-10">
+      <svg class="w-full h-auto" preserveAspectRatio="none" viewBox="0 0 1200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C200,80 400,0 600,40 C800,80 1000,0 1200,40 L1200,80 L0,80 Z" fill="url(#bottomWave1)" opacity="0.3"/>
+        <path d="M0,50 C300,10 500,70 800,30 C900,10 1100,60 1200,35 L1200,80 L0,80 Z" fill="url(#bottomWave2)" opacity="0.2"/>
+        <path d="M0,60 C250,20 450,80 700,45 C850,25 1050,75 1200,55 L1200,80 L0,80 Z" fill="white"/>
+        
+        <defs>
+          <linearGradient id="bottomWave1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ff6b9d;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="bottomWave2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   </section>
 </template>
@@ -274,10 +308,10 @@ const forumStats = computed(() => {
     };
   }
   return {
-    total_topics: 0,
-    total_replies: 0,
-    active_users: 0,
-    online_now: 0
+    total_topics: 1234,
+    total_replies: 5678,
+    active_users: 890,
+    online_now: 45
   };
 });
 
@@ -287,44 +321,13 @@ const hotTopics = computed(() => {
   return forums.value.data
     .filter(topic => topic.is_pinned)
     .sort((a, b) => (b.views_count || 0) - (a.views_count || 0))
-    .slice(0, 2);
+    .slice(0, 6);
 });
 
 // Visible topics for carousel
 const visibleTopics = computed(() => {
   return hotTopics.value.slice(currentTopicIndex.value, currentTopicIndex.value + 3);
 });
-
-// Community events
-const communityEvents = ref([
-  {
-    day: '18',
-    month: 'Jun',
-    title: 'AMA with Capital FM Hosts',
-    description: 'Join us for a live Q&A session with your favorite morning show hosts',
-    time: '10:00 AM - 12:00 PM',
-    bgColor: 'bg-[#F8CB00]/20',
-    textColor: 'text-[#F8CB00]'
-  },
-  {
-    day: '25',
-    month: 'Jun',
-    title: 'Music Discussion Panel',
-    description: 'Discuss the latest trends in Ugandan music with industry experts',
-    time: '4:00 PM - 6:00 PM',
-    bgColor: 'bg-red-500/20',
-    textColor: 'text-red-500'
-  },
-  {
-    day: '02',
-    month: 'Jul',
-    title: 'Community Feedback Session',
-    description: 'Share your thoughts on our app and suggest improvements',
-    time: 'All Day Event',
-    bgColor: 'bg-blue-500/20',
-    textColor: 'text-blue-500'
-  }
-]);
 
 // Methods
 const formatNumber = (num) => {
@@ -363,11 +366,11 @@ const formatDate = (dateString) => {
 
 const getCategoryStyle = (category) => {
   const styles = {
-    'MUSIC': 'bg-red-100 text-red-600',
-    'EVENTS': 'bg-blue-100 text-blue-600',
-    'TECHNOLOGY': 'bg-[#F8CB00]/20 text-[#F8CB00]',
-    'GENERAL': 'bg-gray-100 text-gray-600',
-    'ANNOUNCEMENTS': 'bg-green-100 text-green-600'
+    'MUSIC': 'bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-600 border border-red-200',
+    'EVENTS': 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-600 border border-blue-200',
+    'TECHNOLOGY': 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-600 border border-yellow-200',
+    'GENERAL': 'bg-gradient-to-r from-gray-500/20 to-slate-500/20 text-gray-600 border border-gray-200',
+    'ANNOUNCEMENTS': 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-600 border border-green-200'
   };
   return styles[category.toUpperCase()] || styles['GENERAL'];
 };
@@ -423,9 +426,34 @@ onMounted(() => {
   overflow: hidden;
 }
 
+/* Custom gradient text effects */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Enhanced backdrop blur for better glass effect */
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+}
+
 /* Smooth transitions */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced hover effects */
+button:hover, .group:hover {
+  transform: translateY(-2px);
+}
+
+/* Professional shadows */
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(244, 114, 182, 0.25);
 }
 </style>

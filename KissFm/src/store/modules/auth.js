@@ -97,52 +97,75 @@ export default {
            });
        },
 
-       async getdevicefingerprint({ commit  }) {
-           commit('setloader', 'getdevicefingerprint', { root: true })
-           return new Promise((resolve, reject) => {
-               FingerprintJS.load().then(fp => {
-                   fp.get().then(result => {
-                    let deviceFingerprint = localStorage.getItem('capital_radio_device_fingerprint')
-                    console.log(deviceFingerprint)
-                    if(deviceFingerprint === null){
-                        resolve(deviceFingerprint)
-                    }else{
+       async getdevicefingerprint({ commit }) {
+        commit('setloader', 'getdevicefingerprint', { root: true })
+        return new Promise((resolve, reject) => {
+            let deviceFingerprint = localStorage.getItem('capital_radio_device_fingerprint')
+            console.log('Existing fingerprint:', deviceFingerprint)
+            
+            if(deviceFingerprint !== null) {
+                // Device fingerprint exists, use it
+                commit('setdevice_fingerprint', deviceFingerprint)
+                console.log('Using existing fingerprint:', deviceFingerprint)
+                resolve(deviceFingerprint)
+            } else {
+                // No fingerprint exists, generate new one using FingerprintJS
+                FingerprintJS.load().then(fp => {
+                    fp.get().then(result => {
                         commit('setdevice_fingerprint', result.visitorId)
                         localStorage.setItem('capital_radio_device_fingerprint', result.visitorId)
-                        console.log(result.visitorId)
+                        console.log('Generated new FingerprintJS fingerprint:', result.visitorId)
                         resolve(result.visitorId)
-                    }
-                   })
-               })
-           })
-       },
-
-
-       async generatedevice_fingerprint({commit}) {
-            function generateUniqueString64(customChars = null) {
-                const defaultChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
-                const chars = customChars || defaultChars;
-                
-                let result = '';
-                
-                // Add timestamp for uniqueness
-                const timestamp = Date.now().toString(36);
-                result += timestamp;
-                
-                // Fill remaining with random characters
-                while (result.length < 64) {
-                    result += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                
-                return result.substring(0, 64);
+                    }).catch(error => {
+                        console.error('Error generating fingerprint:', error)
+                        reject(error)
+                    })
+                }).catch(error => {
+                    console.error('Error loading FingerprintJS:', error)
+                    reject(error)
+                })
             }
+        })
+    },
+    
+    async generatedevice_fingerprint({commit}) {
+        // Check if fingerprint already exists
+        let existingFingerprint = localStorage.getItem('capital_radio_device_fingerprint')
         
-            let fingerprint_data = generateUniqueString64();
+        if(existingFingerprint !== null) {
+            // Fingerprint already exists, use it
+            commit('setdevice_fingerprint', existingFingerprint)
+            console.log('Using existing fingerprint instead of generating new one:', existingFingerprint)
+            return existingFingerprint
+        }
+        
+        // No existing fingerprint, generate new one
+        function generateUniqueString64(customChars = null) {
+            const defaultChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+            const chars = customChars || defaultChars;
             
-            commit('setdevice_fingerprint', fingerprint_data);
-            localStorage.setItem('capital_radio_device_fingerprint', fingerprint_data);
-            console.log(fingerprint_data);
-        },
+            let result = '';
+            
+            // Add timestamp for uniqueness
+            const timestamp = Date.now().toString(36);
+            result += timestamp;
+            
+            // Fill remaining with random characters
+            while (result.length < 64) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            return result.substring(0, 64);
+        }
+    
+        let fingerprint_data = generateUniqueString64();
+        
+        commit('setdevice_fingerprint', fingerprint_data);
+        localStorage.setItem('capital_radio_device_fingerprint', fingerprint_data);
+        console.log('Generated new custom fingerprint:', fingerprint_data);
+        
+        return fingerprint_data;
+    },
 
 
 

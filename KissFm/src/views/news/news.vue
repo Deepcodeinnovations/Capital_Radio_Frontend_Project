@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen bg-gray-50">
     <!-- Hero Section -->
-    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden" style="margin-top: -5rem !important;">
+    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       <!-- Background Image with Overlay -->
       <div class="absolute inset-0">
         <img 
@@ -9,60 +9,55 @@
           alt="Breaking News" 
           class="w-full h-full object-cover"
         />
-        <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"></div>
+        <div class="absolute inset-0 bg-black/80"></div>
       </div>
 
-      <!-- Animated Background Elements -->
-      <div class="absolute inset-0 overflow-hidden opacity-20">
-        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-red-500 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-yellow-500 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-        <div class="absolute top-1/2 right-1/3 w-48 h-48 bg-blue-500 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+      <!-- Floating background elements -->
+      <div class="absolute inset-0 overflow-hidden opacity-10 pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-pink-500 rounded-full blur-3xl animate-gentle-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-600 rounded-full blur-3xl animate-gentle-float-delayed"></div>
+        <div class="absolute top-1/2 right-1/3 w-48 h-48 bg-pink-400 rounded-full blur-3xl animate-gentle-float"></div>
       </div>
 
       <!-- Hero Content -->
       <div class="relative z-10 container mx-auto px-6 text-center">
         <!-- Hero Badge -->
         <div class="inline-flex items-center justify-center mb-8">
-          <div class="h-px w-12 bg-red-500"></div>
-          <span class="mx-4 text-red-400 font-bold tracking-wider text-sm uppercase">News & Updates</span>
-          <div class="h-px w-12 bg-red-500"></div>
+          <div class="h-px w-12 bg-pink-500"></div>
+          <span class="mx-4 text-pink-400 font-bold tracking-wider text-sm uppercase">News & Updates</span>
+          <div class="h-px w-12 bg-purple-600"></div>
         </div>
 
         <!-- Main Heading -->
-        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-          Latest <span class="text-yellow-400">News</span>
+        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+          Latest <span class="text-pink-500">News</span>
         </h1>
 
         <!-- Subtitle -->
-        <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto leading-relaxed">
-          Stay updated with breaking news, entertainment updates, and exclusive stories from Capital FM
+        <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed">
+          Stay updated with breaking news, entertainment updates, and exclusive stories from KIIS 100.9
         </p>
-
-    
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button
             @click="togglePlayPause"
             :disabled="isLoading"
-            class="relative group overflow-hidden rounded-2xl"
+            class="bg-pink-500 hover:bg-pink-600 px-8 py-4 rounded-2xl text-white font-black flex items-center space-x-3 transition-all duration-300 transform hover:scale-105"
           >
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-80 transition duration-300"></div>
-            <div class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-8 py-4 rounded-2xl text-black font-bold flex items-center space-x-3 transition-all duration-300">
-              <div v-if="isLoading" class="w-5 h-5 border-2 rounded-full border-black border-t-transparent animate-spin"></div>
-              <Volume2 v-else-if="isPlaying" :size="20" class="animate-bounce" />
-              <Play v-else :size="20" />
-              <span class="tracking-wide" v-if="isLoading">CONNECTING</span>
-              <span class="tracking-wide" v-else-if="isPlaying">LISTENING LIVE</span>
-              <span class="tracking-wide" v-else>TUNE IN NOW</span>
-            </div>
+            <div v-if="isLoading" class="w-5 h-5 border-2 rounded-full border-white border-t-transparent animate-spin"></div>
+            <Volume2 v-else-if="isPlaying" :size="20" class="animate-bounce" />
+            <Play v-else :size="20" />
+            <span class="tracking-wide" v-if="isLoading">CONNECTING</span>
+            <span class="tracking-wide" v-else-if="isPlaying">LISTENING LIVE</span>
+            <span class="tracking-wide" v-else>TUNE IN NOW</span>
           </button>
           
           <button 
             @click="scrollToNews"
-            class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300"
+            class="bg-white/10 backdrop-blur-xl border-2 border-white/20 text-white font-bold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300 transform hover:scale-105"
           >
-            <span class="tracking-wide">Browse News</span>
+            <span class="tracking-wide">BROWSE NEWS</span>
           </button>
         </div>
       </div>
@@ -76,25 +71,40 @@
     </section>
 
     <!-- Main Content -->
-    <div class="bg-white relative" id="news-content">
-      <!-- Floating background elements -->
-      <div class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
-        <div class="absolute top-1/4 left-1/5 w-32 h-32 bg-red-500 rounded-full blur-2xl animate-float"></div>
-        <div class="absolute bottom-1/3 right-1/5 w-40 h-40 bg-yellow-500 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
-        <div class="absolute top-1/2 left-1/2 w-24 h-24 bg-blue-500 rounded-full blur-xl animate-pulse-slow"></div>
+    <div class="relative overflow-hidden bg-white" id="news-content">
+      <!-- Background decoration -->
+      <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-0 right-0 w-72 h-72 bg-pink-500 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-600 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-400 rounded-full blur-3xl"></div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+      <div class="container mx-auto px-4 md:px-6 relative z-20 py-20">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center justify-center mb-6">
+            <div class="h-px w-12 bg-pink-500"></div>
+            <span class="mx-4 text-gray-800 font-bold tracking-wider text-sm uppercase">Latest Stories</span>
+            <div class="h-px w-12 bg-purple-600"></div>
+          </div>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6">
+            Stay <span class="text-pink-500">Informed</span>
+          </h2>
+          <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            Get the latest news and updates from Uganda's premier entertainment and music hub
+          </p>
+        </div>
+
         <!-- Search and Filters Section -->
         <div class="mb-12">
           <div class="relative max-w-2xl mx-auto mb-8">
-            <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 text-pink-500 w-5 h-5" />
             <input
               v-model="searchQuery"
               @input="debounceSearch"
               type="text"
               placeholder="Search news articles..."
-              class="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent shadow-sm"
+              class="w-full pl-12 pr-4 py-4 bg-white border-2 border-pink-200 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all duration-300"
             />
           </div>
 
@@ -102,81 +112,85 @@
           <div class="flex justify-center mb-6">
             <button
               @click="showFilters = !showFilters"
-              class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 shadow-sm"
+              class="bg-white hover:bg-gray-50 text-gray-700 font-bold px-6 py-3 rounded-2xl transition-all duration-300 flex items-center gap-2 border-2 border-pink-200 hover:border-pink-300 transform hover:scale-105"
             >
-              <Filter class="w-5 h-5" />
+              <Filter class="w-5 h-5 text-pink-500" />
               Filters & Categories
-              <ChevronDown class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showFilters }" />
+              <ChevronDown class="w-4 h-4 transition-transform text-pink-500" :class="{ 'rotate-180': showFilters }" />
             </button>
           </div>
 
           <!-- Filters Panel -->
-          <div v-if="showFilters" class="bg-gray-50 rounded-xl p-6 mb-8 border border-gray-200 max-w-4xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <!-- Category Filter -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                <select
-                  v-model="filters.category_id"
-                  @change="applyFilters"
-                  class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  <option value="">All Categories</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">
-                    {{ category.name }}
-                  </option>
-                </select>
-              </div>
-
-              <!-- Sort Options -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
-                <select
-                  v-model="filters.order_by"
-                  @change="applyFilters"
-                  class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  <option value="created_at">Latest</option>
-                  <option value="published_at">Published Date</option>
-                  <option value="views">Most Viewed</option>
-                  <option value="priority">Priority</option>
-                </select>
-              </div>
-
-              <!-- Type Filters -->
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                <div class="space-y-2">
-                  <label class="flex items-center">
-                    <input
-                      v-model="filters.is_featured"
-                      @change="applyFilters"
-                      type="checkbox"
-                      class="w-4 h-4 text-red-500 bg-white border-gray-300 rounded focus:ring-red-500"
-                    />
-                    <span class="ml-2 text-gray-700 text-sm">Featured Only</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input
-                      v-model="filters.is_breaking"
-                      @change="applyFilters"
-                      type="checkbox"
-                      class="w-4 h-4 text-red-500 bg-white border-gray-300 rounded focus:ring-red-500"
-                    />
-                    <span class="ml-2 text-gray-700 text-sm">Breaking News</span>
-                  </label>
+          <div v-if="showFilters" class="relative">
+            <div class="absolute -inset-0.5 bg-pink-500 rounded-3xl opacity-20 blur-sm"></div>
+            
+            <div class="relative bg-white rounded-3xl p-6 mb-8 border-2 border-pink-200 max-w-4xl mx-auto">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Category Filter -->
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-2">Category</label>
+                  <select
+                    v-model="filters.category_id"
+                    @change="applyFilters"
+                    class="w-full px-3 py-2 bg-white border-2 border-pink-200 rounded-2xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all duration-300"
+                  >
+                    <option value="">All Categories</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                      {{ category.name }}
+                    </option>
+                  </select>
                 </div>
-              </div>
 
-              <!-- Clear Filters -->
-              <div class="flex items-end">
-                <button
-                  @click="clearFilters"
-                  class="w-full px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  <X class="w-4 h-4" />
-                  Clear All
-                </button>
+                <!-- Sort Options -->
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-2">Sort By</label>
+                  <select
+                    v-model="filters.order_by"
+                    @change="applyFilters"
+                    class="w-full px-3 py-2 bg-white border-2 border-pink-200 rounded-2xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all duration-300"
+                  >
+                    <option value="created_at">Latest</option>
+                    <option value="published_at">Published Date</option>
+                    <option value="views">Most Viewed</option>
+                    <option value="priority">Priority</option>
+                  </select>
+                </div>
+
+                <!-- Type Filters -->
+                <div>
+                  <label class="block text-sm font-bold text-gray-700 mb-2">Type</label>
+                  <div class="space-y-2">
+                    <label class="flex items-center">
+                      <input
+                        v-model="filters.is_featured"
+                        @change="applyFilters"
+                        type="checkbox"
+                        class="w-4 h-4 text-pink-500 bg-white border-pink-300 rounded focus:ring-pink-500"
+                      />
+                      <span class="ml-2 text-gray-700 text-sm font-semibold">Featured Only</span>
+                    </label>
+                    <label class="flex items-center">
+                      <input
+                        v-model="filters.is_breaking"
+                        @change="applyFilters"
+                        type="checkbox"
+                        class="w-4 h-4 text-pink-500 bg-white border-pink-300 rounded focus:ring-pink-500"
+                      />
+                      <span class="ml-2 text-gray-700 text-sm font-semibold">Breaking News</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Clear Filters -->
+                <div class="flex items-end">
+                  <button
+                    @click="clearFilters"
+                    class="w-full px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 border-2 border-pink-200 hover:border-pink-300 font-semibold"
+                  >
+                    <X class="w-4 h-4" />
+                    Clear All
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -184,18 +198,18 @@
 
         <!-- Loading State -->
         <div v-if="isLoading" class="flex justify-center items-center py-20">
-          <div class="w-12 h-12 border-4 border-gray-300 border-t-red-600 rounded-full animate-spin"></div>
+          <div class="w-12 h-12 border-4 border-pink-200 border-t-pink-500 rounded-full animate-spin"></div>
         </div>
 
         <!-- News Content -->
         <div v-else-if="news && news.data && news.data.length > 0">
           <!-- Results Info -->
           <div class="flex items-center justify-between mb-8">
-            <div class="text-gray-600">
+            <div class="text-gray-600 font-semibold">
               {{ searchQuery ? `Search results for "${searchQuery}"` : 'Latest News' }} - 
               Showing {{ news.data.length }} of {{ news.total }}
             </div>
-            <div class="text-gray-600">
+            <div class="text-gray-600 font-semibold">
               Page {{ news.page }} of {{ news.pages }}
             </div>
           </div>
@@ -203,84 +217,84 @@
           <!-- Breaking & Featured News -->
           <div v-if="featuredNews.length > 0" class="mb-12">
             <div class="flex items-center gap-3 mb-8">
-              <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
-                <Zap class="w-5 h-5 text-red-600" />
+              <div class="w-10 h-10 bg-pink-100 rounded-2xl flex items-center justify-center">
+                <Zap class="w-5 h-5 text-pink-500" />
               </div>
-              <h2 class="text-2xl font-bold text-gray-900">Breaking & Featured</h2>
-              <div class="flex-1 h-px bg-gradient-to-r from-red-500 to-transparent"></div>
+              <h3 class="text-2xl font-black text-gray-900">Breaking & Featured</h3>
+              <div class="flex-1 h-px bg-pink-500"></div>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               <article 
                 v-for="article in featuredNews.slice(0, 2)" 
                 :key="article.id"
-                class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg border border-gray-200 hover:border-red-300 transition-all group cursor-pointer relative"
+                class="relative group cursor-pointer"
                 @click="$router.push({name: 'news_details', params: {id: article.slug}})"
               >
-                <!-- Gradient background on hover -->
-                <div class="absolute -inset-1 bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 rounded-xl blur opacity-0 group-hover:opacity-10 transition duration-300"></div>
+                <!-- Border Effect -->
+                <div class="absolute -inset-0.5 bg-pink-500 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
                 
-                <div class="relative">
+                <div class="relative bg-white rounded-3xl overflow-hidden border-2 border-pink-100 hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-500 transform hover:scale-105">
                   <div class="relative h-64 overflow-hidden">
                     <img 
                       :src="article.featured_image_url" 
                       :alt="article.title"
-                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                    <div class="absolute inset-0 bg-black/40"></div>
                     
                     <!-- Badges -->
                     <div class="absolute top-4 left-4 flex gap-2">
-                      <span v-if="article.is_breaking" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      <span v-if="article.is_breaking" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-pink-500 text-white shadow-lg">
                         <Zap class="w-3 h-3 mr-1" />
-                        Breaking
+                        BREAKING
                       </span>
-                      <span v-if="article.is_featured" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <span v-if="article.is_featured" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-yellow-500 text-white shadow-lg">
                         <Star class="w-3 h-3 mr-1" />
-                        Featured
+                        FEATURED
                       </span>
                     </div>
 
                     <!-- Category -->
                     <div class="absolute bottom-4 left-4">
-                      <span class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-800">
+                      <span class="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-black text-gray-800 border border-pink-200">
                         {{ article.category?.name || 'News' }}
                       </span>
                     </div>
                   </div>
                   
                   <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors line-clamp-2">
+                    <h3 class="text-xl font-black text-gray-900 mb-3 group-hover:text-pink-500 transition-all duration-300 line-clamp-2">
                       {{ article.title }}
                     </h3>
                     
-                    <p class="text-gray-600 mb-4 line-clamp-2">
+                    <p class="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
                       {{ article.excerpt }}
                     </p>
                     
                     <div class="flex items-center justify-between">
                       <div class="flex items-center space-x-2">
-                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                          <User class="w-4 h-4 text-gray-500" />
+                        <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
+                          <User class="w-4 h-4 text-pink-500" />
                         </div>
                         <div>
-                          <p class="text-sm font-medium text-gray-900">
-                            {{ article.author?.name || 'Staff Writer' }}
+                          <p class="text-sm font-bold text-gray-900">
+                            {{ article.author?.name || 'KIIS Staff' }}
                           </p>
-                          <p class="text-xs text-gray-500">
+                          <p class="text-xs text-gray-500 font-semibold">
                             {{ formatDate(article.published_at) }}
                           </p>
                         </div>
                       </div>
                       
                       <div class="flex items-center space-x-4 text-sm text-gray-500">
-                        <div class="flex items-center space-x-1">
+                        <div class="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded-full">
                           <Eye class="w-4 h-4" />
-                          <span>{{ article.views_count || 0 }}</span>
+                          <span class="font-semibold">{{ article.views_count || 0 }}</span>
                         </div>
-                        <div class="flex items-center space-x-1">
+                        <div class="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded-full">
                           <Clock class="w-4 h-4" />
-                          <span>{{ article.reading_time || 2 }}min</span>
+                          <span class="font-semibold">{{ article.reading_time || 2 }}min</span>
                         </div>
                       </div>
                     </div>
@@ -291,84 +305,84 @@
           </div>
 
           <!-- All News Grid -->
-          <div class="space-y-4 mb-8">
+          <div class="space-y-6 mb-8">
             <div class="flex items-center gap-3 mb-8">
-              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Newspaper class="w-5 h-5 text-blue-600" />
+              <div class="w-10 h-10 bg-purple-100 rounded-2xl flex items-center justify-center">
+                <Newspaper class="w-5 h-5 text-purple-600" />
               </div>
-              <h2 class="text-2xl font-bold text-gray-900">All Stories</h2>
-              <div class="flex-1 h-px bg-gradient-to-r from-blue-500 to-transparent"></div>
+              <h3 class="text-2xl font-black text-gray-900">All Stories</h3>
+              <div class="flex-1 h-px bg-purple-600"></div>
             </div>
             
             <div 
               v-for="article in news.data" 
               :key="article.id"
-              class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:border-red-300 transition-all group cursor-pointer relative overflow-hidden"
+              class="relative group cursor-pointer"
               @click="$router.push({name: 'news_details', params: {id: article.slug}})"
             >
-              <!-- Gradient background on hover -->
-              <div class="absolute -inset-1 bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500 rounded-xl blur opacity-0 group-hover:opacity-5 transition duration-300"></div>
+              <!-- Border Effect -->
+              <div class="absolute -inset-0.5 bg-pink-500 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
               
-              <div class="relative">
+              <div class="relative bg-white rounded-3xl p-6 border-2 border-pink-100 hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-500 transform hover:scale-[1.02] overflow-hidden">
                 <div class="flex items-start space-x-4">
                   <div class="flex-shrink-0">
-                    <div class="w-24 h-24 rounded-lg overflow-hidden">
+                    <div class="w-24 h-24 rounded-2xl overflow-hidden bg-pink-50">
                       <img :src="article.featured_image_url" :alt="article.title" class="w-full h-full object-cover">
                     </div>
                   </div>
 
                   <div class="flex-1 min-w-0">
-                    <div class="flex items-center space-x-3 mb-2">
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                      <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-gray-100 text-gray-800 border border-gray-200">
                         {{ article.category?.name || 'News' }}
                       </span>
                       
-                      <span v-if="article.is_breaking" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      <span v-if="article.is_breaking" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-pink-100 text-pink-600 border border-pink-200">
                         <Zap class="w-3 h-3 mr-1" />
-                        Breaking
+                        BREAKING
                       </span>
                       
-                      <span v-if="article.is_featured" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      <span v-if="article.is_featured" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-yellow-100 text-yellow-600 border border-yellow-200">
                         <Star class="w-3 h-3 mr-1" />
-                        Featured
+                        FEATURED
                       </span>
                       
-                      <span class="text-xs text-gray-500 flex items-center gap-1">
+                      <span class="text-xs text-gray-500 flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full">
                         <Calendar class="w-3 h-3" />
-                        {{ formatDate(article.published_at) }}
+                        <span class="font-semibold">{{ formatDate(article.published_at) }}</span>
                       </span>
                     </div>
                     
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-red-600 transition-colors line-clamp-2">
+                    <h3 class="text-lg font-black text-gray-900 mb-2 group-hover:text-pink-500 transition-all duration-300 line-clamp-2">
                       {{ article.title }}
                     </h3>
                     
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
                       {{ article.excerpt }}
                     </p>
                     
                     <div class="flex items-center justify-between">
                       <div class="flex items-center space-x-2">
-                        <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
-                          <User class="w-3 h-3 text-gray-500" />
+                        <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center">
+                          <User class="w-4 h-4 text-pink-500" />
                         </div>
-                        <span class="text-sm text-gray-600">
-                          {{ article.author?.name || 'Staff Writer' }}
+                        <span class="text-sm text-gray-600 font-bold">
+                          {{ article.author?.name || 'KIIS Staff' }}
                         </span>
                       </div>
                       
                       <div class="flex items-center space-x-4 text-sm text-gray-500">
-                        <div class="flex items-center space-x-1">
+                        <div class="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded-full">
                           <Eye class="w-4 h-4" />
-                          <span>{{ article.views_count || 0 }}</span>
+                          <span class="font-semibold">{{ article.views_count || 0 }}</span>
                         </div>
-                        <div class="flex items-center space-x-1">
+                        <div class="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded-full">
                           <Clock class="w-4 h-4" />
-                          <span>{{ article.reading_time || 2 }}min</span>
+                          <span class="font-semibold">{{ article.reading_time || 2 }}min</span>
                         </div>
-                        <div class="flex items-center space-x-1">
+                        <div class="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded-full">
                           <Heart class="w-4 h-4" />
-                          <span>{{ article.likes_count || 0 }}</span>
+                          <span class="font-semibold">{{ article.likes_count || 0 }}</span>
                         </div>
                       </div>
                     </div>
@@ -383,7 +397,7 @@
             <button 
               @click="changePage(news.page - 1)"
               :disabled="news.page <= 1"
-              class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              class="px-6 py-3 bg-white border-2 border-pink-200 text-gray-700 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-pink-50 hover:border-pink-300 transition-all duration-300 font-semibold"
             >
               Previous
             </button>
@@ -393,10 +407,10 @@
                 v-for="page in visiblePages"
                 :key="page"
                 @click="changePage(page)"
-                class="w-10 h-10 rounded-lg transition-colors font-medium"
+                class="w-12 h-12 rounded-2xl transition-all duration-300 font-bold"
                 :class="page === news.page 
-                  ? 'bg-red-600 text-white' 
-                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'"
+                  ? 'bg-pink-500 text-white shadow-lg' 
+                  : 'bg-white border-2 border-pink-200 text-gray-700 hover:bg-pink-50 hover:border-pink-300'"
               >
                 {{ page }}
               </button>
@@ -405,7 +419,7 @@
             <button 
               @click="changePage(news.page + 1)"
               :disabled="news.page >= news.pages"
-              class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              class="px-6 py-3 bg-white border-2 border-pink-200 text-gray-700 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-pink-50 hover:border-pink-300 transition-all duration-300 font-semibold"
             >
               Next
             </button>
@@ -414,17 +428,17 @@
 
         <!-- Empty State -->
         <div v-else class="text-center py-20">
-          <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Newspaper class="w-8 h-8 text-gray-400" />
+          <div class="w-20 h-20 bg-pink-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Newspaper class="w-10 h-10 text-pink-500" />
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">No News Available</h3>
-          <p class="text-gray-600 mb-6">
-            {{ searchQuery ? `No results found for "${searchQuery}"` : 'Check back later for the latest updates.' }}
+          <h3 class="text-2xl font-black text-gray-900 mb-4">No News Available</h3>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            {{ searchQuery ? `No results found for "${searchQuery}"` : 'Check back later for the latest updates from KIIS 100.9.' }}
           </p>
           <button 
             v-if="hasActiveFilters"
             @click="clearFilters"
-            class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+            class="bg-pink-500 hover:bg-pink-600 text-white font-black px-8 py-4 rounded-2xl transition-all duration-300 transform hover:scale-105"
           >
             Clear Filters
           </button>
@@ -467,10 +481,12 @@ const filters = ref({
 
 // Categories
 const categories = ref([
-  { id: '1', name: 'Politics', color: '#ef4444' },
-  { id: '2', name: 'Entertainment', color: '#f59e0b' },
+  { id: '1', name: 'Politics', color: '#ec4899' },
+  { id: '2', name: 'Entertainment', color: '#8b5cf6' },
   { id: '3', name: 'Sports', color: '#10b981' },
-  { id: '4', name: 'Technology', color: '#3b82f6' }
+  { id: '4', name: 'Technology', color: '#3b82f6' },
+  { id: '5', name: 'Music', color: '#f59e0b' },
+  { id: '6', name: 'Lifestyle', color: '#ef4444' }
 ]);
 
 // News stats from API response
@@ -484,10 +500,10 @@ const newsStats = computed(() => {
     };
   }
   return {
-    total_articles: 0,
-    breaking_news: 0,
-    featured_stories: 0,
-    views_today: 0
+    total_articles: 128,
+    breaking_news: 5,
+    featured_stories: 12,
+    views_today: 2456
   };
 });
 
@@ -534,6 +550,7 @@ const togglePlayPause = async () => {
 };
 
 const formatDate = (dateString) => {
+  if (!dateString) return '';
   const date = new Date(dateString);
   const now = new Date();
   const diffInHours = (now - date) / (1000 * 60 * 60);
@@ -634,6 +651,7 @@ const getUserNews = async () => {
     isLoading.value = false;
   }
 };
+
 onMounted(() => {
   getUserNews();
 });
@@ -647,23 +665,28 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* Floating animation */
-@keyframes float {
+/* Enhanced backdrop blur for better glass effect */
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+/* Gentle floating animations */
+@keyframes gentle-float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-15px); }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+@keyframes gentle-float-delayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
 }
 
-@keyframes pulse-slow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+.animate-gentle-float {
+  animation: gentle-float 6s ease-in-out infinite;
 }
 
-.animate-pulse-slow {
-  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-gentle-float-delayed {
+  animation: gentle-float-delayed 7s ease-in-out infinite 2s;
 }
 
 /* Smooth animations */
@@ -678,11 +701,6 @@ onMounted(() => {
   50% {
     opacity: .5;
   }
-}
-
-/* Hover effects */
-.group:hover .group-hover\:text-red-600 {
-  color: rgb(220 38 38);
 }
 
 /* Loading animation */
@@ -700,5 +718,24 @@ onMounted(() => {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced hover effects */
+button:hover, .group:hover {
+  transform: translateY(-2px);
+}
+
+/* Professional shadows */
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(244, 114, 182, 0.25);
+}
+
+/* Hover effects */
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
 }
 </style>

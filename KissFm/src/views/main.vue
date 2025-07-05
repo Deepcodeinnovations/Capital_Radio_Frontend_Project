@@ -1,7 +1,7 @@
 <template>
   <div class="relative overflow-hidden bg-transparent">
     <Header style="background-color: transparent !important;" />
-    <HeroSection style="margin-top: -5rem !important;" v-if="$route.name == 'welcome'" />
+    <HeroSection style="margin-top: -4rem !important;" v-if="$route.name == 'welcome'" />
     
     <!-- Main Content -->
     <main class="relative z-10">
@@ -37,7 +37,7 @@ const fetch_initial_data = () => {
 
 const fetch_station_data = async () => {
   const radioData = {
-    access_link: 'https://capitalradio.co.ug'
+    access_link: 'https://kiis1009.co.ug'
   };
   await store.dispatch('fetch_station_details', radioData);
 }

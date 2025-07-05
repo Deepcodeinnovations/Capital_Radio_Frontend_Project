@@ -1,117 +1,107 @@
 <template>
-  <div v-if="isLoading" class="fixed inset-0 bg-white flex items-center justify-center z-50 overflow-hidden">
-    <!-- Animated Background Elements -->
-    <div class="absolute inset-0">
-      <!-- Floating Music Notes -->
-      <div class="absolute top-20 left-20 text-gray-200 text-4xl animate-float">♪</div>
-      <div class="absolute top-40 right-32 text-gray-200 text-3xl animate-float-delay-1">♫</div>
-      <div class="absolute bottom-32 left-40 text-gray-200 text-5xl animate-float-delay-2">♪</div>
-      <div class="absolute bottom-20 right-20 text-gray-200 text-2xl animate-float-delay-3">♫</div>
+  <div v-if="isLoading" class="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-pink-900 flex items-center justify-center z-50 overflow-hidden">
+    <!-- Geometric Background Pattern -->
+    <div class="absolute inset-0 opacity-20">
+      <div class="absolute top-10 left-10 w-20 h-20 border-2 border-pink-400 rotate-45 animate-spin-slow"></div>
+      <div class="absolute top-20 right-20 w-16 h-16 bg-purple-500 rounded-full animate-bounce-alt"></div>
+      <div class="absolute bottom-20 left-20 w-24 h-24 border-2 border-pink-300 rounded-full animate-pulse-ring"></div>
+      <div class="absolute bottom-10 right-10 w-12 h-12 bg-pink-500 transform rotate-45 animate-float-geometric"></div>
       
-      <!-- Radio Waves -->
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <div class="absolute w-96 h-96 border-2 border-gray-100 rounded-full animate-ping"></div>
-        <div class="absolute w-80 h-80 border-2 border-gray-150 rounded-full animate-ping" style="animation-delay: 0.5s"></div>
-        <div class="absolute w-64 h-64 border-2 border-gray-200 rounded-full animate-ping" style="animation-delay: 1s"></div>
+      <!-- Hexagonal Grid Pattern -->
+      <div class="absolute inset-0 opacity-30">
+        <div class="grid grid-cols-12 gap-8 h-full w-full">
+          <div v-for="i in 48" :key="i" class="w-6 h-6 border border-pink-400/30 transform rotate-45" 
+               :style="{ animationDelay: `${i * 0.1}s` }" 
+               :class="i % 3 === 0 ? 'animate-twinkle' : ''"></div>
+        </div>
       </div>
     </div>
     
-    <div class="text-center max-w-lg mx-auto px-6 relative z-10">
-      <!-- Clean Logo with Subtle Glow -->
-      <div class="w-64 h-64 mx-auto mb-8 relative">
-        <div class="absolute inset-0 bg-[#F8CB00]/10 rounded-full blur-xl animate-pulse"></div>
-        <div class="relative w-full h-full animate-bounce-custom">
-          <img 
-            src="/logo2.png" 
-            alt="Capital FM Logo" 
-            class="w-full h-full object-contain drop-shadow-lg animate-logo-glow" 
-          />
+    <div class="text-center max-w-2xl mx-auto px-6 relative z-10">
+      <!-- Modern Logo Container -->
+      <div class="relative mb-12">
+        <!-- Glowing Ring -->
+        <div class="absolute inset-0 w-80 h-80 mx-auto">
+          <div class="w-full h-full border-4 border-pink-400/30 rounded-full animate-rotate-ring"></div>
+          <div class="absolute inset-4 border-2 border-purple-400/40 rounded-full animate-rotate-ring-reverse"></div>
         </div>
         
-        <!-- Pulsing Dots Around Logo -->
-        <div class="absolute -top-2 left-1/2 transform -translate-x-1/2">
-          <div class="w-3 h-3 bg-[#F8CB00] rounded-full animate-pulse"></div>
-        </div>
-        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-          <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.5s"></div>
-        </div>
-        <div class="absolute top-1/2 -left-2 transform -translate-y-1/2">
-          <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 1s"></div>
-        </div>
-        <div class="absolute top-1/2 -right-2 transform -translate-y-1/2">
-          <div class="w-3 h-3 bg-[#F8CB00] rounded-full animate-pulse" style="animation-delay: 1.5s"></div>
-        </div>
+
       </div>
       
-      <!-- Dynamic Welcome Messages -->
-      <div class="mb-8 min-h-[4rem] flex items-center justify-center">
-        <div class="text-center">
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2 animate-text-glow">
+      <!-- Modern Typography -->
+      <div class="mb-10 space-y-4">
+        <h1 class="text-5xl md:text-6xl font-black text-white mb-4 tracking-tight">
+          <span class="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
             {{ currentMessage.title }}
-          </h1>
-          <p class="text-xl md:text-2xl text-gray-600 font-medium animate-fade-in-up">
-            {{ currentMessage.subtitle }}
-          </p>
+          </span>
+        </h1>
+        <p class="text-xl md:text-2xl text-slate-300 font-light tracking-wide">
+          {{ currentMessage.subtitle }}
+        </p>
+      </div>
+      
+      <!-- Sleek Loading Bar -->
+      <div class="mb-8 space-y-6">
+        <div class="flex items-center justify-center space-x-8">
+          <!-- Frequency Display -->
+          <div class="bg-slate-800/70 backdrop-blur-sm px-6 py-3 rounded-xl border border-pink-400/30">
+            <div class="text-2xl font-bold text-pink-400 font-mono">100.9</div>
+            <div class="text-sm text-slate-400 uppercase tracking-widest">FM</div>
+          </div>
+          
+          <!-- Waveform Visualization -->
+          <div class="flex items-end space-x-1">
+            <div class="w-1 bg-pink-500 rounded-full animate-waveform-1" style="height: 20px;"></div>
+            <div class="w-1 bg-purple-500 rounded-full animate-waveform-2" style="height: 35px;"></div>
+            <div class="w-1 bg-pink-400 rounded-full animate-waveform-3" style="height: 25px;"></div>
+            <div class="w-1 bg-purple-400 rounded-full animate-waveform-4" style="height: 40px;"></div>
+            <div class="w-1 bg-pink-500 rounded-full animate-waveform-5" style="height: 18px;"></div>
+            <div class="w-1 bg-purple-500 rounded-full animate-waveform-6" style="height: 30px;"></div>
+            <div class="w-1 bg-pink-400 rounded-full animate-waveform-7" style="height: 22px;"></div>
+          </div>
+          
+          <!-- Status Indicator -->
+          <div class="bg-slate-800/70 backdrop-blur-sm px-4 py-3 rounded-xl border border-purple-400/30">
+            <div class="flex items-center space-x-2">
+              <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span class="text-sm text-slate-300 uppercase tracking-wide">LIVE</span>
+            </div>
+          </div>
         </div>
       </div>
       
-      <!-- Loading Animation Indicators -->
-      <div class="flex justify-center items-center space-x-6 mb-6">
-        <!-- Radio Tower Animation -->
-        <div class="relative">
-          <div class="w-8 h-12 bg-gray-400 animate-tower-signal rounded-sm"></div>
-          <div class="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-red-500 rounded-full animate-blink"></div>
+      <!-- Progress Section -->
+      <div class="space-y-4">
+        <div class="text-slate-400 text-sm uppercase tracking-widest">
+          Hot Hits for Kampala
         </div>
         
-        <!-- Equalizer Bars -->
-        <div class="flex items-end space-x-1">
-          <div class="w-2 bg-[#F8CB00] rounded-sm animate-equalizer-1" style="height: 16px;"></div>
-          <div class="w-2 bg-red-500 rounded-sm animate-equalizer-2" style="height: 24px;"></div>
-          <div class="w-2 bg-blue-500 rounded-sm animate-equalizer-3" style="height: 20px;"></div>
-          <div class="w-2 bg-[#F8CB00] rounded-sm animate-equalizer-4" style="height: 28px;"></div>
-          <div class="w-2 bg-red-500 rounded-sm animate-equalizer-5" style="height: 16px;"></div>
+        <!-- Modern Progress Bar -->
+        <div class="w-full max-w-md mx-auto bg-slate-800/50 rounded-full h-2 overflow-hidden backdrop-blur-sm">
+          <div class="h-full bg-gradient-to-r from-pink-500 to-purple-500 rounded-full animate-progress-modern"></div>
         </div>
         
-        <!-- Frequency Display -->
-        <div class="text-gray-700 font-mono text-lg font-bold animate-frequency">
-          91.3 FM
-        </div>
-      </div>
-      
-      <!-- Loading Dots with Sound Wave Effect -->
-      <div class="flex justify-center space-x-3 mb-6">
-        <div 
-          v-for="(dot, index) in 5" 
-          :key="index"
-          class="w-3 h-3 rounded-full animate-wave"
-          :class="[
-            index % 3 === 0 ? 'bg-[#F8CB00]' : 
-            index % 3 === 1 ? 'bg-red-500' : 'bg-blue-500'
-          ]"
-          :style="{ animationDelay: `${index * 0.2}s` }"
-        ></div>
-      </div>
-      
-      <!-- Capital Radio Tagline -->
-      <div class="text-gray-500 text-lg font-medium animate-pulse">
-        Fresh Hits for Uganda
-      </div>
-      
-      <!-- Progress Bar -->
-      <div class="mt-8 w-full max-w-md mx-auto">
-        <div class="bg-gray-200 rounded-full h-1 overflow-hidden">
-          <div class="h-full bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-full animate-progress-bar"></div>
+        <!-- Loading Dots -->
+        <div class="flex justify-center space-x-3 mt-6">
+          <div 
+            v-for="(dot, index) in 3" 
+            :key="index"
+            class="w-2 h-2 rounded-full animate-dot-pulse"
+            :class="index === 0 ? 'bg-pink-500' : index === 1 ? 'bg-purple-500' : 'bg-pink-400'"
+            :style="{ animationDelay: `${index * 0.3}s` }"
+          ></div>
         </div>
       </div>
       
       <!-- Error Handling -->
-      <div v-if="error" class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-        <p class="text-red-700 mb-3">{{ error }}</p>
+      <div v-if="error" class="mt-8 p-6 bg-red-900/50 backdrop-blur-sm border border-red-400/30 rounded-xl">
+        <p class="text-red-200 mb-4">{{ error }}</p>
         <button 
           @click="retryLoading"
-          class="bg-red-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors"
+          class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
         >
-          Try Again
+          Retry Connection
         </button>
       </div>
     </div>
@@ -134,20 +124,20 @@ const currentMessageIndex = ref(0);
 // Welcome messages that cycle through
 const welcomeMessages = [
   {
-    title: "Welcome to Capital",
-    subtitle: "Uganda's Premier Radio Station"
+    title: "KIIS 100.9",
+    subtitle: "Uganda's Hottest Music Station"
   },
   {
-    title: "Getting Your Favorite Shows",
-    subtitle: "Music, News & Entertainment"
+    title: "Loading Content",
+    subtitle: "Preparing Your Audio Experience"
   },
   {
-    title: "Loading News and Events",
-    subtitle: "Stay Updated with Fresh Content"
+    title: "Connecting Live",
+    subtitle: "Tuning Into The Hottest Hits"
   },
   {
-    title: "Initializing Audio Player",
-    subtitle: "Almost Ready to Rock!"
+    title: "Almost Ready",
+    subtitle: "Get Ready To Vibe With Us"
   }
 ];
 
@@ -184,7 +174,7 @@ const calculate10daysfromaccesstime = () => {
 const startMessageCycle = () => {
   messageInterval = setInterval(() => {
     currentMessageIndex.value = (currentMessageIndex.value + 1) % welcomeMessages.length;
-  }, 2500); // Change message every 2.5 seconds
+  }, 3000); // Change message every 3 seconds
 };
 
 // Main loading function
@@ -219,7 +209,7 @@ const initializeApp = async () => {
     }
       const data = {
         device_fingerprint: device_fingerprint.value,
-        access_link: 'https://capitalradio.co.ug',
+        access_link: 'https://kiis1009.co.ug',
         clientdata: JSON.stringify(clientdata.value),
       };
       console.log('Auth data:', data);
@@ -229,7 +219,7 @@ const initializeApp = async () => {
     // Step 4: Station data
     console.log('Loading station details...');
     const radioData = {
-      access_link: 'https://capitalradio.co.ug'
+      access_link: 'https://kiis1009.co.ug'
     };
     await store.dispatch('fetch_station_details', radioData);
     
@@ -269,7 +259,7 @@ const initializeApp = async () => {
 
   } catch (err) {
     console.error('Loading error:', err);
-    error.value = err.message || 'Failed to initialize Capital Radio. Please try again.';
+    error.value = err.message || 'Failed to initialize KIIS Radio. Please try again.';
     
     if (messageInterval) {
       clearInterval(messageInterval);
@@ -307,202 +297,178 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Bounce Animation for Logo */
-@keyframes bounce-custom {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0) scale(1);
-  }
-  40% {
-    transform: translateY(-20px) scale(1.05);
-  }
-  60% {
-    transform: translateY(-10px) scale(1.02);
-  }
+/* Custom gradient text */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
-.animate-bounce-custom {
-  animation: bounce-custom 2s ease-in-out infinite;
+/* Geometric Animations */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Logo Glow Animation */
-@keyframes logo-glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 10px rgba(248, 203, 0, 0.3));
+@keyframes bounce-alt {
+  0%, 100% { 
+    transform: translateY(0px) scale(1);
   }
-  50% {
-    filter: drop-shadow(0 0 20px rgba(248, 203, 0, 0.5));
+  50% { 
+    transform: translateY(-20px) scale(1.1);
   }
 }
 
-.animate-logo-glow {
-  animation: logo-glow 3s ease-in-out infinite;
-}
-
-/* Text Glow Animation */
-@keyframes text-glow {
-  0%, 100% {
-    color: #1f2937;
-  }
-  50% {
-    color: #374151;
-  }
-}
-
-.animate-text-glow {
-  animation: text-glow 2s ease-in-out infinite;
-}
-
-/* Floating Animation */
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(10deg); }
-}
-
-@keyframes float-delay-1 {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(-5deg); }
-}
-
-@keyframes float-delay-2 {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-25px) rotate(15deg); }
-}
-
-@keyframes float-delay-3 {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(-10deg); }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delay-1 {
-  animation: float-delay-1 8s ease-in-out infinite;
-}
-
-.animate-float-delay-2 {
-  animation: float-delay-2 7s ease-in-out infinite;
-}
-
-.animate-float-delay-3 {
-  animation: float-delay-3 9s ease-in-out infinite;
-}
-
-/* Wave Animation for Loading Dots */
-@keyframes wave {
-  0%, 40%, 100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.5;
-  }
-  20% {
-    transform: translateY(-15px) scale(1.2);
+@keyframes pulse-ring {
+  0% { 
+    transform: scale(1);
     opacity: 1;
   }
+  100% { 
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }
 
-.animate-wave {
-  animation: wave 1.4s ease-in-out infinite;
+@keyframes float-geometric {
+  0%, 100% { 
+    transform: translateY(0px) rotate(45deg);
+  }
+  50% { 
+    transform: translateY(-15px) rotate(45deg);
+  }
 }
 
-/* Equalizer Animation */
-@keyframes equalizer-1 {
-  0%, 100% { height: 16px; }
-  50% { height: 32px; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
 
-@keyframes equalizer-2 {
-  0%, 100% { height: 24px; }
-  50% { height: 40px; }
-}
-
-@keyframes equalizer-3 {
-  0%, 100% { height: 20px; }
-  50% { height: 28px; }
-}
-
-@keyframes equalizer-4 {
-  0%, 100% { height: 28px; }
-  50% { height: 44px; }
-}
-
-@keyframes equalizer-5 {
-  0%, 100% { height: 16px; }
-  50% { height: 36px; }
-}
-
-.animate-equalizer-1 { animation: equalizer-1 1s ease-in-out infinite; }
-.animate-equalizer-2 { animation: equalizer-2 1.2s ease-in-out infinite; }
-.animate-equalizer-3 { animation: equalizer-3 0.8s ease-in-out infinite; }
-.animate-equalizer-4 { animation: equalizer-4 1.1s ease-in-out infinite; }
-.animate-equalizer-5 { animation: equalizer-5 0.9s ease-in-out infinite; }
-
-/* Tower Signal Animation */
-@keyframes tower-signal {
-  0%, 100% { opacity: 1; transform: scaleY(1); }
-  50% { opacity: 0.7; transform: scaleY(1.1); }
-}
-
-.animate-tower-signal {
-  animation: tower-signal 2s ease-in-out infinite;
-}
-
-/* Blink Animation */
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-.animate-blink {
-  animation: blink 1s infinite;
-}
-
-/* Frequency Animation */
-@keyframes frequency {
+/* Logo Animations */
+@keyframes logo-breathe {
   0%, 100% { 
     transform: scale(1);
-    color: #374151;
   }
   50% { 
     transform: scale(1.05);
-    color: #F8CB00;
   }
 }
 
-.animate-frequency {
-  animation: frequency 2s ease-in-out infinite;
+@keyframes rotate-ring {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Progress Bar Animation */
-@keyframes progress-bar {
-  0% { width: 0%; }
-  100% { width: 100%; }
+@keyframes rotate-ring-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
 }
 
-.animate-progress-bar {
-  animation: progress-bar 3s ease-out infinite;
+/* Waveform Animations */
+@keyframes waveform-1 {
+  0%, 100% { height: 20px; }
+  50% { height: 35px; }
 }
 
-/* Fade In Up Animation */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+@keyframes waveform-2 {
+  0%, 100% { height: 35px; }
+  50% { height: 50px; }
+}
+
+@keyframes waveform-3 {
+  0%, 100% { height: 25px; }
+  50% { height: 40px; }
+}
+
+@keyframes waveform-4 {
+  0%, 100% { height: 40px; }
+  50% { height: 60px; }
+}
+
+@keyframes waveform-5 {
+  0%, 100% { height: 18px; }
+  50% { height: 32px; }
+}
+
+@keyframes waveform-6 {
+  0%, 100% { height: 30px; }
+  50% { height: 45px; }
+}
+
+@keyframes waveform-7 {
+  0%, 100% { height: 22px; }
+  50% { height: 38px; }
+}
+
+/* Progress Animation */
+@keyframes progress-modern {
+  0% { 
+    width: 0%;
+    background-position: 0% 50%;
   }
-  to {
+  100% { 
+    width: 100%;
+    background-position: 100% 50%;
+  }
+}
+
+/* Dot Pulse Animation */
+@keyframes dot-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% { 
+    transform: scale(1.3);
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out;
+/* Apply animations */
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
 }
 
-/* Capital FM Brand Colors */
-.bg-capital-yellow { background-color: #F8CB00; }
-.text-capital-yellow { color: #F8CB00; }
+.animate-bounce-alt {
+  animation: bounce-alt 3s ease-in-out infinite;
+}
 
-/* Gray variants for clean design */
-.border-gray-150 { border-color: #f3f4f6; }
+.animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-float-geometric {
+  animation: float-geometric 4s ease-in-out infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-logo-breathe {
+  animation: logo-breathe 4s ease-in-out infinite;
+}
+
+.animate-rotate-ring {
+  animation: rotate-ring 20s linear infinite;
+}
+
+.animate-rotate-ring-reverse {
+  animation: rotate-ring-reverse 15s linear infinite;
+}
+
+.animate-waveform-1 { animation: waveform-1 1.2s ease-in-out infinite; }
+.animate-waveform-2 { animation: waveform-2 1.1s ease-in-out infinite; }
+.animate-waveform-3 { animation: waveform-3 1.3s ease-in-out infinite; }
+.animate-waveform-4 { animation: waveform-4 1.0s ease-in-out infinite; }
+.animate-waveform-5 { animation: waveform-5 1.4s ease-in-out infinite; }
+.animate-waveform-6 { animation: waveform-6 1.2s ease-in-out infinite; }
+.animate-waveform-7 { animation: waveform-7 1.1s ease-in-out infinite; }
+
+.animate-progress-modern {
+  animation: progress-modern 4s ease-out infinite;
+}
+
+.animate-dot-pulse {
+  animation: dot-pulse 1.5s ease-in-out infinite;
+}
 </style>

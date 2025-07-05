@@ -3,7 +3,17 @@
 @import 'tailwindcss/utilities';
 @import 'animate.css';
 
+.playfair {
+    font-family: 'Playfair Display', serif;
+}
 
+.inter {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    font-family: 'Playfair Display', sans-serif;
+}
 
 .backgroundFixed {
     background-size: cover !important;

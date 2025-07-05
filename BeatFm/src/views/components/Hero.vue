@@ -34,7 +34,7 @@
             <div class="inline-flex items-center  space-x-2 bg-red-600/90 backdrop-blur-md px-3 py-1.5 border border-red-500 mb-4">
               <div class="w-1.5 h-1.5 bg-white animate-pulse"></div>
               <span class="text-white font-medium text-xs uppercase tracking-wider">
-                {{ currentSlideData?.type === 'advert' ? 'Featured' : currentSlideData?.type === 'news' ? 'Breaking News' : 'Live Radio' }}
+                {{ currentSlideData?.type === 'advert' ? 'Sponsored' : currentSlideData?.type === 'news' ? 'Breaking News' : 'Live Radio' }}
               </span>
             </div>
 
@@ -47,7 +47,7 @@
 
             <!-- Subtitle -->
             <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-white mb-6 leading-relaxed max-w-2xl mx-auto">
-              {{ truncateText(currentSlideData?.description || 'Ekintabuli Ky\'Omuziki - Uganda\'s Hottest Beats & Entertainment', 90) }}
+              {{ truncateText(currentSlideData?.description ??  currentSlideData?.excerpt ?? 'Ekintabuli Ky\'Omuziki - Uganda\'s Hottest Beats & Entertainment', 180) }}
             </p>
 
             <!-- Action Buttons -->

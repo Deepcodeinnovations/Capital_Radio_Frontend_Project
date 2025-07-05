@@ -33,6 +33,7 @@ async def authenticate_or_create_open_user(db: AsyncSession, device_fingerprint:
                email=f"open-user-{device_fingerprint[:8]}-{int(time.time())}@capitalfm.co.ug",
                role="open_user",
                device_fingerprint=device_fingerprint,
+               station_id=station_id,
                last_seen=datetime.now(),
            )
            

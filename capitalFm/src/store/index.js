@@ -30,8 +30,7 @@ export default createStore({
   plugins: [createPersistedState(
     {
       key : 'capitalradiowebiste.capitalradio.co.ug',
-    //   paths: ['auth','utils','stations','hosts','news','liveChats','forums','adverts'],
-      paths: ['utils'],
+      paths: ['auth','utils','stations','hosts','news','liveChats','forums','adverts'],
       storage:{
          getItem : (key) => secure.get(key),
          setItem: (key, value) => secure.set(key, value),

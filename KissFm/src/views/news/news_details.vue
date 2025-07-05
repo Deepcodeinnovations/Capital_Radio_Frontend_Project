@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-white">
     <!-- Hero Section -->
-    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden" style="margin-top: -5rem !important;">
+    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden" >
       <!-- Background Image with Overlay -->
       <div class="absolute inset-0">
         <img 
@@ -9,14 +9,14 @@
           :alt="newsDetails?.title || 'News Article'" 
           class="w-full h-full object-cover"
         />
-        <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"></div>
+        <div class="absolute inset-0 bg-black/80"></div>
       </div>
 
       <!-- Animated Background Elements -->
       <div class="absolute inset-0 overflow-hidden opacity-20">
-        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-[#F8CB00] rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-red-500 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-        <div class="absolute top-1/2 right-1/3 w-48 h-48 bg-blue-500 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-pink-500 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-600 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 right-1/3 w-48 h-48 bg-pink-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
       </div>
 
       <!-- Hero Content -->
@@ -31,9 +31,9 @@
 
         <!-- Category Badge -->
         <div v-else class="inline-flex items-center justify-center mb-8">
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
-          <span class="mx-4 text-[#F8CB00] font-bold tracking-wider text-sm uppercase">{{ newsDetails?.category?.name || 'News Update' }}</span>
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
+          <div class="h-px w-12 bg-pink-500"></div>
+          <span class="mx-4 text-pink-400 font-bold tracking-wider text-sm uppercase">{{ newsDetails?.category?.name || 'News Update' }}</span>
+          <div class="h-px w-12 bg-pink-500"></div>
         </div>
 
         <!-- Main Heading -->
@@ -43,7 +43,7 @@
 
         <!-- Subtitle -->
         <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto leading-relaxed">
-          {{ newsDetails?.excerpt || 'Stay informed with the latest updates from Capital FM' }}
+          {{ newsDetails?.excerpt || 'Stay informed with the latest updates from KIIS 100.9' }}
         </p>
 
         <!-- Article Meta -->
@@ -54,7 +54,7 @@
               :alt="newsDetails.author?.name"
               class="w-8 h-8 rounded-full object-cover"
             />
-            <span class="font-medium">{{ newsDetails.author?.name || 'Capital FM Team' }}</span>
+            <span class="font-medium">{{ newsDetails.author?.name || 'KIIS Team' }}</span>
           </div>
           
           <div class="flex items-center gap-1">
@@ -72,20 +72,17 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button 
             @click="$router.go(-1)"
-            class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300"
+            class="bg-white/10 backdrop-blur-md border-2 border-white/20 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300"
           >
             <span class="tracking-wide">Back to News</span>
           </button>
           
           <button 
             @click="scrollToArticle"
-            class="relative group overflow-hidden rounded-2xl"
+            class="bg-pink-500 hover:bg-pink-600 px-8 py-4 rounded-2xl text-white font-bold flex items-center space-x-3 transition-all duration-300"
           >
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-80 transition duration-300"></div>
-            <div class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-8 py-4 rounded-2xl text-black font-bold flex items-center space-x-3 transition-all duration-300">
-              <Eye :size="20" />
-              <span class="tracking-wide">READ ARTICLE</span>
-            </div>
+            <Eye :size="20" />
+            <span class="tracking-wide">READ ARTICLE</span>
           </button>
         </div>
       </div>
@@ -116,7 +113,7 @@
             
             <div>
               <h1 class="text-lg font-semibold text-gray-900">{{ newsDetails?.category?.name || 'News Article' }}</h1>
-              <p class="text-sm text-gray-500">{{ newsDetails?.station?.name || 'Capital FM' }}</p>
+              <p class="text-sm text-gray-500">{{ newsDetails?.station?.name || 'KIIS 100.9' }}</p>
             </div>
           </div>
           
@@ -140,17 +137,17 @@
 
     <!-- Loading State -->
     <div v-if="isLoading" class="flex justify-center items-center py-20">
-      <div class="w-8 h-8 border-2 border-gray-300 border-t-[#F8CB00] rounded-full animate-spin"></div>
+      <div class="w-8 h-8 border-2 border-pink-200 border-t-pink-500 rounded-full animate-spin"></div>
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-20">
-      <AlertCircle class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+      <AlertCircle class="w-16 h-16 text-pink-400 mx-auto mb-4" />
       <h3 class="text-xl font-semibold text-gray-900 mb-2">Article Not Found</h3>
       <p class="text-gray-600 mb-6">The article you're looking for doesn't exist or has been removed.</p>
       <button 
         @click="$router.go(-1)"
-        class="px-6 py-2 bg-[#F8CB00] text-black rounded-lg hover:bg-[#F8CB00]/90 transition-colors font-medium"
+        class="px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors font-medium"
       >
         Go Back
       </button>
@@ -159,7 +156,7 @@
     <!-- Main Content -->
     <div v-else-if="newsDetails" class="max-w-4xl mx-auto px-6 py-8">
       <!-- Original Article -->
-      <article id="article-content" class="bg-white rounded-xl border border-gray-200 shadow-sm mb-8 overflow-hidden hover:shadow-md transition-shadow">
+      <article id="article-content" class="bg-white rounded-xl border-2 border-pink-100 shadow-sm mb-8 overflow-hidden hover:shadow-md transition-shadow">
         <div class="p-8">
           <!-- Article Header -->
           <div class="mb-6">
@@ -174,8 +171,7 @@
                 Featured
               </span>
               <span 
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                :style="{ backgroundColor: newsDetails.category?.color + '20', color: newsDetails.category?.color }"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-600"
               >
                 {{ newsDetails.category?.name }}
               </span>
@@ -219,7 +215,7 @@
             <!-- Gallery Section -->
             <div v-if="newsDetails.gallery_images?.length" class="mt-8">
               <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Image class="h-5 w-5 text-[#F8CB00]" />
+                <Image class="h-5 w-5 text-pink-500" />
                 Photo Gallery
               </h3>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -244,14 +240,14 @@
             <!-- Tags -->
             <div v-if="newsDetails.tags?.length" class="mt-8 pt-6 border-t border-gray-200">
               <h4 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <Hash class="h-4 w-4 text-[#F8CB00]" />
+                <Hash class="h-4 w-4 text-pink-500" />
                 Tags
               </h4>
               <div class="flex flex-wrap gap-2">
                 <span 
                   v-for="tag in newsDetails.tags" 
                   :key="tag"
-                  class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors cursor-pointer"
+                  class="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-sm hover:bg-pink-200 transition-colors cursor-pointer"
                 >
                   #{{ tag }}
                 </span>
@@ -280,8 +276,8 @@
               <div class="flex items-center space-x-3">
                 <button 
                   @click="toggleLike"
-                  class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
-                  :class="{ 'bg-red-50 border-red-300 text-red-600': isLiked }"
+                  class="inline-flex items-center px-3 py-1.5 border-2 border-pink-200 rounded-lg hover:bg-pink-50 transition-colors text-sm"
+                  :class="{ 'bg-pink-50 border-pink-300 text-pink-600': isLiked }"
                 >
                   <Heart class="w-4 h-4 mr-1" :class="{ 'fill-current': isLiked }" />
                   {{ isLiked ? 'Liked' : 'Like' }}
@@ -289,7 +285,7 @@
                 
                 <button 
                   @click="shareArticle"
-                  class="inline-flex items-center px-4 py-2 bg-[#F8CB00] text-black rounded-lg hover:bg-[#F8CB00]/90 transition-colors text-sm font-medium"
+                  class="inline-flex items-center px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors text-sm font-medium"
                 >
                   <Share class="w-4 h-4 mr-2" />
                   Share
@@ -301,34 +297,34 @@
       </article>
 
       <!-- Station Info Card -->
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+      <div class="bg-white rounded-xl border-2 border-pink-100 shadow-sm p-6">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-8 h-8 bg-[#F8CB00]/20 rounded-lg flex items-center justify-center">
-            <Radio class="w-4 h-4 text-[#F8CB00]" />
+          <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
+            <Radio class="w-4 h-4 text-pink-500" />
           </div>
-          <h3 class="text-lg font-semibold text-gray-900">Listen to {{ newsDetails.station?.name || 'Capital FM' }}</h3>
+          <h3 class="text-lg font-semibold text-gray-900">Listen to {{ newsDetails.station?.name || 'KIIS 100.9' }}</h3>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <!-- Station Info -->
           <div class="md:col-span-2">
             <div class="flex items-center gap-4 mb-4">
-              <div class="w-16 h-16 bg-gradient-to-br from-[#F8CB00] to-orange-500 rounded-lg flex items-center justify-center">
+              <div class="w-16 h-16 bg-pink-500 rounded-lg flex items-center justify-center">
                 <Radio class="h-8 w-8 text-white" />
               </div>
               <div>
-                <p class="text-gray-900 font-semibold">{{ newsDetails.station?.frequency || '91.3' }} FM</p>
-                <p class="text-gray-500 text-sm">{{ newsDetails.station?.tagline || 'Fresh Hits for Uganda' }}</p>
+                <p class="text-gray-900 font-semibold">{{ newsDetails.station?.frequency || '100.9' }} FM</p>
+                <p class="text-gray-500 text-sm">{{ newsDetails.station?.tagline || 'Hot Hits for Kampala' }}</p>
               </div>
             </div>
             
             <p class="text-gray-600 text-sm mb-4">
-              Stay updated with the latest news, music, and entertainment from Uganda's premier radio station.
+              Stay updated with the latest news, music, and entertainment from Uganda's hottest music station.
             </p>
             
             <div class="flex items-center justify-between text-sm">
-              <div class="flex items-center gap-1 text-green-600">
-                <div class="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+              <div class="flex items-center gap-1 text-pink-600">
+                <div class="w-2 h-2 bg-pink-500 rounded-full animate-pulse"></div>
                 <span>{{ formatNumber(newsDetails.station?.listeners || 15000) }} listeners</span>
               </div>
               <div class="text-gray-400">{{ newsDetails.station?.streaming_status || 'Live' }}</div>
@@ -340,7 +336,7 @@
             <button 
               @click="togglePlayPause"
               :disabled="audioLoading"
-              class="w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 bg-gradient-to-r from-[#F8CB00] to-orange-500 text-white hover:shadow-lg disabled:opacity-50"
+              class="w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white hover:shadow-lg disabled:opacity-50"
             >
               <div v-if="audioLoading" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               <component v-else :is="isPlaying ? Pause : Play" class="h-4 w-4" />
@@ -410,11 +406,11 @@
       >
         <div 
           v-if="toast.show"
-          class="fixed bottom-4 right-4 z-50 bg-white border border-gray-200 rounded-lg p-4 shadow-xl max-w-sm"
+          class="fixed bottom-4 right-4 z-50 bg-white border-2 border-pink-200 rounded-lg p-4 shadow-xl max-w-sm"
         >
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full flex items-center justify-center"
-                 :class="toast.type === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'">
+                 :class="toast.type === 'success' ? 'bg-pink-100 text-pink-500' : 'bg-red-100 text-red-600'">
               <Check v-if="toast.type === 'success'" class="h-4 w-4" />
               <AlertCircle v-else class="h-4 w-4" />
             </div>
@@ -619,7 +615,7 @@ onUnmounted(() => {
 }
 
 .prose :deep(blockquote) {
-  @apply border-l-4 border-[#F8CB00] pl-6 py-2 italic text-gray-600 bg-gray-50 rounded-r-lg my-6;
+  @apply border-l-4 border-pink-500 pl-6 py-2 italic text-gray-600 bg-pink-50 rounded-r-lg my-6;
 }
 
 .prose :deep(ul) {
@@ -629,5 +625,4 @@ onUnmounted(() => {
 .prose :deep(ol) {
   @apply list-decimal list-inside space-y-2 text-gray-700 mb-6;
 }
-
 </style>

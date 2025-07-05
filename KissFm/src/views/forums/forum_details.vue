@@ -1,7 +1,6 @@
-
 <template>
   <div class="min-h-screen bg-white">
-    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden" style="margin-top: -5rem !important;">
+    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       <!-- Background Image with Overlay -->
       <div class="absolute inset-0">
         <img 
@@ -9,53 +8,50 @@
           alt="Community Discussion" 
           class="w-full h-full object-cover"
         />
-        <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"></div>
+        <div class="absolute inset-0 bg-black/80"></div>
       </div>
 
       <!-- Animated Background Elements -->
       <div class="absolute inset-0 overflow-hidden opacity-20">
-        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-[#F8CB00] rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-red-500 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-        <div class="absolute top-1/2 right-1/3 w-48 h-48 bg-blue-500 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-pink-500 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-600 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 right-1/3 w-48 h-48 bg-pink-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
       </div>
 
       <!-- Hero Content -->
       <div class="relative z-10 container mx-auto px-6 text-center">
         <!-- Hero Badge -->
         <div class="inline-flex items-center justify-center mb-8">
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
-          <span class="mx-4 text-[#F8CB00] font-bold tracking-wider text-sm uppercase">Community Discussion</span>
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
+          <div class="h-px w-12 bg-pink-500"></div>
+          <span class="mx-4 text-pink-400 font-bold tracking-wider text-sm uppercase">Community Discussion</span>
+          <div class="h-px w-12 bg-pink-500"></div>
         </div>
 
         <!-- Main Heading -->
         <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-          Forum <span class="text-[#F8CB00]">Discussion</span>
+          Forum <span class="text-pink-500">Discussion</span>
         </h1>
 
         <!-- Subtitle -->
         <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto leading-relaxed">
-          Join the conversation with fellow Capital FM listeners
+          Join the conversation with fellow KIIS 100.9 listeners
         </p>
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button 
             @click="$router.go(-1)"
-            class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300"
+            class="bg-white/10 backdrop-blur-md border-2 border-white/20 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300"
           >
             <span class="tracking-wide">Back to Forums</span>
           </button>
           
           <button 
             @click="scrollToDiscussion"
-            class="relative group overflow-hidden rounded-2xl"
+            class="bg-pink-500 hover:bg-pink-600 px-8 py-4 rounded-2xl text-white font-bold flex items-center space-x-3 transition-all duration-300"
           >
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-80 transition duration-300"></div>
-            <div class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-8 py-4 rounded-2xl text-black font-bold flex items-center space-x-3 transition-all duration-300">
-              <MessageCircle :size="20" />
-              <span class="tracking-wide">JOIN DISCUSSION</span>
-            </div>
+            <MessageCircle :size="20" />
+            <span class="tracking-wide">JOIN DISCUSSION</span>
           </button>
         </div>
       </div>
@@ -104,13 +100,13 @@
 
     <!-- Loading State -->
     <div v-if="isLoading" class="flex justify-center items-center py-20">
-      <div class="w-8 h-8 border-2 border-gray-300 border-t-[#F8CB00] rounded-full animate-spin"></div>
+      <div class="w-8 h-8 border-2 border-pink-200 border-t-pink-500 rounded-full animate-spin"></div>
     </div>
 
     <!-- Main Content -->
     <div v-else-if="forum_details" class="max-w-4xl mx-auto px-6 py-8">
       <!-- Original Post -->
-      <article id="discussion-content" class="bg-white discussion-content rounded-xl border border-gray-200 shadow-sm mb-8 overflow-hidden hover:shadow-md transition-shadow">
+      <article id="discussion-content" class="bg-white discussion-content rounded-xl border-2 border-pink-100 shadow-sm mb-8 overflow-hidden hover:shadow-md transition-shadow">
         <div class="p-8">
           <!-- Post Header -->
           <div class="flex items-start space-x-4 mb-6">
@@ -120,7 +116,7 @@
                 :alt="forum_details.creator?.name" 
                 class="w-12 h-12 rounded-full object-cover"
               />
-              <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+              <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-pink-500 rounded-full border-2 border-white"></div>
             </div>
             
             <div class="flex-1 min-w-0">
@@ -142,7 +138,6 @@
                     <Flame class="w-3 h-3 mr-1" />
                     Hot
                   </span>
-                 
                 </div>
               </div>
               
@@ -172,14 +167,12 @@
                   <MessageCircle class="w-4 h-4" />
                   <span>{{ forum_details.comments_count || 0 }}</span>
                 </div>
-                
               </div>
               
               <div class="flex items-center space-x-3">
-             
                 <button 
                   @click="scrollToReply"
-                  class="inline-flex items-center px-4 py-2 bg-[#F8CB00] text-black rounded-lg hover:bg-[#F8CB00]/90 transition-colors text-sm font-medium"
+                  class="inline-flex items-center px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors text-sm font-medium"
                 >
                   <MessageCircle class="w-4 h-4 mr-2" />
                   Reply
@@ -191,13 +184,13 @@
       </article>
 
       <!-- Comments Section -->
-      <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+      <div class="bg-white rounded-xl border-2 border-pink-100 shadow-sm">
         <!-- Comments Header -->
-        <div class="px-8 py-6 border-b border-gray-200 bg-gray-50">
+        <div class="px-8 py-6 border-b border-gray-200 bg-pink-50">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <MessageCircle class="w-5 h-5 text-blue-600" />
+              <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
+                <MessageCircle class="w-5 h-5 text-pink-500" />
               </div>
               <h3 class="text-lg font-semibold text-gray-900">
                 Replies ({{ mainComments.length }})
@@ -207,7 +200,7 @@
             <select 
               v-model="sortBy"
               @change="loadComments"
-              class="px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#F8CB00] focus:border-transparent"
+              class="px-3 py-2 text-sm border-2 border-pink-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
             >
               <option value="created_at">Latest First</option>
               <option value="likes">Most Liked</option>
@@ -218,7 +211,7 @@
 
         <!-- Comments Loading -->
         <div v-if="commentsLoading" class="flex justify-center items-center py-12">
-          <div class="w-6 h-6 border-2 border-gray-300 border-t-[#F8CB00] rounded-full animate-spin"></div>
+          <div class="w-6 h-6 border-2 border-pink-200 border-t-pink-500 rounded-full animate-spin"></div>
         </div>
 
         <!-- Comments List -->
@@ -229,7 +222,7 @@
             class="comment-thread"
           >
             <!-- Main Comment -->
-            <div class="p-8 hover:bg-gray-50 transition-colors">
+            <div class="p-8 hover:bg-pink-50 transition-colors">
               <div class="flex space-x-4">
                 <div class="relative flex-shrink-0">
                   <img 
@@ -237,7 +230,7 @@
                     :alt="comment.creator?.name" 
                     class="w-10 h-10 rounded-full object-cover"
                   />
-                  <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                  <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-pink-500 rounded-full border-2 border-white"></div>
                 </div>
                 
                 <div class="flex-1 min-w-0">
@@ -259,7 +252,7 @@
                     <div class="flex items-center space-x-4">
                       <button 
                         @click="toggleCommentLike(comment)"
-                        class="flex items-center space-x-1 text-sm text-gray-500 hover:text-red-500 transition-colors"
+                        class="flex items-center space-x-1 text-sm text-gray-500 hover:text-pink-500 transition-colors"
                       >
                         <Heart class="w-4 h-4" />
                         <span>{{ comment.likes_count || 0 }}</span>
@@ -268,7 +261,7 @@
                       <button 
                         v-if="comment.replies_count > 0"
                         @click="toggleReplies(comment.id)"
-                        class="flex items-center space-x-1 text-sm text-[#F8CB00] hover:text-yellow-600 transition-colors"
+                        class="flex items-center space-x-1 text-sm text-pink-500 hover:text-pink-600 transition-colors"
                       >
                         <MessageCircle class="w-4 h-4" />
                         <span>{{ comment.replies_count }} {{ comment.replies_count === 1 ? 'reply' : 'replies' }}</span>
@@ -296,7 +289,7 @@
                       
                       <div 
                         v-if="activeCommentMenu === comment.id"
-                        class="absolute right-0 top-8 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-20"
+                        class="absolute right-0 top-8 w-32 bg-white border-2 border-gray-200 rounded-lg shadow-lg z-20"
                       >
                         <button 
                           @click="deleteComment(comment)"
@@ -314,7 +307,7 @@
               <!-- Reply Form -->
               <div 
                 v-if="replyingTo === comment.id" 
-                class="mt-6 ml-14 p-4 bg-gray-50 rounded-lg border border-gray-200"
+                class="mt-6 ml-14 p-4 bg-pink-50 rounded-lg border-2 border-pink-200"
               >
                 <div class="flex space-x-3">
                   <img 
@@ -328,7 +321,7 @@
                       v-model="replyContent"
                       :placeholder="`Reply to ${comment.creator?.name}...`"
                       rows="3"
-                      class="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-[#F8CB00] focus:border-transparent bg-white text-gray-900 placeholder-gray-500"
+                      class="w-full px-3 py-2 border-2 border-pink-200 rounded-lg resize-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 bg-white text-gray-900 placeholder-gray-500"
                     ></textarea>
                     
                     <div class="flex items-center justify-between mt-3">
@@ -343,7 +336,7 @@
                         <button 
                           @click="submitReply(comment.id)"
                           :disabled="!replyContent.trim() || replyContent.length > 500 || submittingReply"
-                          class="px-4 py-1.5 bg-[#F8CB00] text-black rounded-lg hover:bg-[#F8CB00]/90 disabled:opacity-50 transition-colors text-sm font-medium"
+                          class="px-4 py-1.5 bg-pink-500 hover:bg-pink-600 text-white rounded-lg disabled:opacity-50 transition-colors text-sm font-medium"
                         >
                           {{ submittingReply ? 'Posting...' : 'Reply' }}
                         </button>
@@ -356,12 +349,12 @@
               <!-- Nested Replies -->
               <div 
                 v-if="showReplies[comment.id] && comment.replies && comment.replies.length > 0" 
-                class="mt-6 ml-14 space-y-4 border-l-2 border-[#F8CB00] pl-6"
+                class="mt-6 ml-14 space-y-4 border-l-2 border-pink-500 pl-6"
               >
                 <div 
                   v-for="reply in comment.replies" 
                   :key="reply.id"
-                  class="p-4 bg-gray-50 rounded-lg"
+                  class="p-4 bg-pink-50 rounded-lg"
                 >
                   <div class="flex space-x-3">
                     <img 
@@ -385,8 +378,6 @@
                       </div>
                       
                       <div class="flex items-center space-x-3">
-                        
-                        
                         <div class="relative" v-if="canDeleteComment(reply)">
                           <button 
                             @click="toggleCommentMenu(reply.id)"
@@ -397,7 +388,7 @@
                           
                           <div 
                             v-if="activeCommentMenu === reply.id"
-                            class="absolute right-0 top-6 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-20"
+                            class="absolute right-0 top-6 w-32 bg-white border-2 border-gray-200 rounded-lg shadow-lg z-20"
                           >
                             <button 
                               @click="deleteComment(reply)"
@@ -430,7 +421,7 @@
 
         <!-- No Comments -->
         <div v-else class="p-12 text-center">
-          <MessageCircle class="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <MessageCircle class="w-12 h-12 text-pink-400 mx-auto mb-4" />
           <h3 class="text-lg font-medium text-gray-900 mb-2">No replies yet</h3>
           <p class="text-gray-500">Be the first to share your thoughts!</p>
         </div>
@@ -440,11 +431,11 @@
       <div 
         v-if="!forum_details.is_locked" 
         ref="replyForm" 
-        class="mt-8 bg-white rounded-xl border border-gray-200 shadow-sm p-6"
+        class="mt-8 bg-white rounded-xl border-2 border-pink-100 shadow-sm p-6"
       >
         <div class="flex items-center gap-3 mb-6">
-          <div class="w-8 h-8 bg-[#F8CB00]/20 rounded-lg flex items-center justify-center">
-            <Send class="w-4 h-4 text-[#F8CB00]" />
+          <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
+            <Send class="w-4 h-4 text-pink-500" />
           </div>
           <h3 class="text-lg font-semibold text-gray-900">Add Your Reply</h3>
         </div>
@@ -461,7 +452,7 @@
               v-model="mainReplyContent"
               placeholder="Add a reply to this discussion..."
               rows="4"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-[#F8CB00] focus:border-transparent bg-white text-gray-900 placeholder-gray-500"
+              class="w-full px-4 py-3 border-2 border-pink-200 rounded-lg resize-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 bg-white text-gray-900 placeholder-gray-500"
             ></textarea>
             
             <div class="flex items-center justify-between mt-4">
@@ -469,7 +460,7 @@
               <button 
                 @click="submitMainReply"
                 :disabled="!mainReplyContent.trim() || mainReplyContent.length > 1000 || submittingMainReply"
-                class="inline-flex items-center px-6 py-2 bg-[#F8CB00] text-black rounded-lg hover:bg-[#F8CB00]/90 disabled:opacity-50 transition-colors font-medium"
+                class="inline-flex items-center px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg disabled:opacity-50 transition-colors font-medium"
               >
                 <Send class="w-4 h-4 mr-2" />
                 {{ submittingMainReply ? 'Posting...' : 'Post Reply' }}
@@ -482,12 +473,12 @@
 
     <!-- Error State -->
     <div v-else class="text-center py-20">
-      <MessageCircle class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+      <MessageCircle class="w-16 h-16 text-pink-400 mx-auto mb-4" />
       <h3 class="text-xl font-semibold text-gray-900 mb-2">Discussion Not Found</h3>
       <p class="text-gray-600 mb-6">The discussion you're looking for doesn't exist or has been removed.</p>
       <button 
         @click="$router.go(-1)"
-        class="px-6 py-2 bg-[#F8CB00] text-black rounded-lg hover:bg-[#F8CB00]/90 transition-colors font-medium"
+        class="px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors font-medium"
       >
         Go Back
       </button>
@@ -685,7 +676,6 @@ const toggleCommentMenu = (commentId) => {
   activeCommentMenu.value = activeCommentMenu.value === commentId ? null : commentId;
 };
 
-
 const scrollToDiscussion = () => {
   document.getElementById('discussion-content').scrollIntoView({ 
     behavior: 'smooth',
@@ -762,30 +752,6 @@ onMounted(() => {
   animation: spin 1s linear infinite;
 }
 
-/* Gradient border effect */
-.border-gradient-to-b {
-  background: linear-gradient(to bottom, #F8CB00, #eab308);
-  width: 2px;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(51, 65, 85, 0.3);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(248, 203, 0, 0.6);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(248, 203, 0, 0.8);
-}
-
 /* Smooth transitions */
 * {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -797,34 +763,19 @@ onMounted(() => {
 button:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid #F8CB00;
+  outline: 2px solid #ec4899;
   outline-offset: 2px;
 }
 
 /* Backdrop blur fallback */
 @supports not (backdrop-filter: blur(12px)) {
   .backdrop-blur-xl {
-    background-color: rgba(30, 41, 59, 0.9);
+    background-color: rgba(255, 255, 255, 0.9);
   }
   
   .backdrop-blur-sm {
-    background-color: rgba(30, 41, 59, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
   }
-}
-
-/* Glass morphism effect */
-.glass-effect {
-  background: rgba(30, 41, 59, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Gradient text */
-.gradient-text {
-  background: linear-gradient(to right, #F8CB00, #eab308);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* Card hover effects */
@@ -834,7 +785,7 @@ select:focus-visible {
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 25px -5px rgba(236, 72, 153, 0.1), 0 10px 10px -5px rgba(236, 72, 153, 0.05);
 }
 
 /* Button animations */
@@ -856,48 +807,6 @@ select:focus-visible {
 
 .btn-primary:hover::before {
   left: 100%;
-}
-
-/* Status badge glow */
-.badge-glow {
-  box-shadow: 0 0 20px rgba(248, 203, 0, 0.3);
-}
-
-/* Typing indicator */
-@keyframes typing {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-10px); }
-}
-
-.typing-indicator {
-  animation: typing 1.4s infinite ease-in-out;
-}
-
-.typing-indicator:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-indicator:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-/* Loading dots */
-@keyframes loading-dots {
-  0%, 20% { opacity: 0; }
-  50% { opacity: 1; }
-  80%, 100% { opacity: 0; }
-}
-
-.loading-dots span {
-  animation: loading-dots 1.4s infinite ease-in-out;
-}
-
-.loading-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.loading-dots span:nth-child(3) {
-  animation-delay: 0.4s;
 }
 
 /* Responsive design */
@@ -970,8 +879,8 @@ select:focus-visible {
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .border-slate-700 {
-    border-color: rgb(100, 116, 139);
+  .border-pink-200 {
+    border-color: #ec4899;
   }
   
   button {

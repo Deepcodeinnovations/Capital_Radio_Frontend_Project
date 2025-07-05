@@ -1,158 +1,208 @@
 <template>
-  <section class="py-20 bg-white relative overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 opacity-10">
-      <div class="absolute top-0 right-0 w-72 h-72 bg-[#F8CB00] rounded-full blur-3xl"></div>
-      <div class="absolute bottom-0 left-0 w-96 h-96 bg-red-500 rounded-full blur-3xl"></div>
-      <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
+  <section class="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-purple-50">
+    <!-- Background decoration with KIIS colors -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full blur-3xl"></div>
     </div>
     
-    <div class="container mx-auto px-6 relative">
-      <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-        <!-- Header with icon and navigation -->
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-[#F8CB00]/20 flex items-center justify-center">
-              <Calendar class="h-5 w-5 text-[#F8CB00]" />
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-gray-900">Upcoming Events</h3>
-              <p class="text-sm text-gray-600">Next events coming up</p>
-            </div>
-          </div>
 
-          <!-- Carousel Navigation -->
-          <div v-if="upcomingEvents.length > 0" class="flex items-center gap-2">
+
+    <div class="container mx-auto px-4 md:px-6 relative z-20 pt-16 pb-20">
+      <!-- Section Header -->
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center justify-center mb-6">
+          <div class="h-px w-12 bg-gradient-to-r from-pink-500 to-purple-500"></div>
+          <span class="mx-4 text-gray-800 font-bold tracking-wider text-sm uppercase">What's Coming Up</span>
+          <div class="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+        </div>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6">
+          Exciting <span class="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">Events</span>
+        </h2>
+        <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+          Don't miss out on Uganda's hottest entertainment events - from concerts to festivals, we've got it all
+        </p>
+      </div>
+
+      <!-- Main Events Container -->
+      <div class="relative">
+        <!-- Navigation Header -->
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h3 class="text-2xl font-black text-gray-900 mb-2">
+              Featured Events
+            </h3>
+            <p class="text-gray-600">{{ upcomingEvents.length }} events you won't want to miss</p>
+          </div>
+          
+          <!-- Carousel Controls -->
+          <div v-if="upcomingEvents.length > 0" class="flex items-center gap-3">
             <button 
               @click="previousSlide"
               :disabled="currentSlide === 0"
-              class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="p-3 rounded-2xl bg-white/80 backdrop-blur-sm hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600 hover:text-white text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 border border-pink-200/50 shadow-lg"
             >
-              <ChevronLeft class="h-4 w-4 text-gray-600" />
+              <ChevronLeft class="h-5 w-5" />
             </button>
-            <span class="text-sm text-gray-500 px-2">
+            <span class="text-sm text-gray-600 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl font-semibold border border-pink-200/50">
               {{ currentSlide + 1 }} / {{ Math.ceil(upcomingEvents.length / itemsPerSlide) }}
             </span>
             <button 
               @click="nextSlide"
               :disabled="currentSlide >= Math.ceil(upcomingEvents.length / itemsPerSlide) - 1"
-              class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="p-3 rounded-2xl bg-white/80 backdrop-blur-sm hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600 hover:text-white text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 border border-pink-200/50 shadow-lg"
             >
-              <ChevronRight class="h-4 w-4 text-gray-600" />
+              <ChevronRight class="h-5 w-5" />
             </button>
           </div>
         </div>
 
+        <!-- Loading State -->
+        <div v-if="isLoadingEvents" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-for="i in 3" :key="i" class="animate-pulse">
+            <div class="h-96 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl"></div>
+          </div>
+        </div>
+
         <!-- Events Carousel -->
-        <div v-if="upcomingEvents.length > 0" class="relative overflow-hidden">
-          <div 
-            class="flex transition-transform duration-500 ease-in-out"
-            :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
-          >
+        <div v-else-if="upcomingEvents.length > 0" class="relative">
+          <div class="overflow-hidden rounded-3xl">
             <div 
-              v-for="slideIndex in Math.ceil(upcomingEvents.length / itemsPerSlide)" 
-              :key="slideIndex"
-              class="w-full flex-shrink-0"
+              class="flex transition-transform duration-500 ease-in-out"
+              :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
             >
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div 
-                  v-for="(event, index) in getSlideEvents(slideIndex - 1)" 
-                  :key="event.id || index"
-                  class="relative p-4 rounded-lg border border-gray-200 hover:border-[#F8CB00] transition-all duration-300 group cursor-pointer hover:shadow-sm bg-gray-50/50 hover:bg-white"
-                  @click="viewEventDetails(event)"
-                >
-                  
-                  <div class="flex flex-col h-full">
-                    <!-- Event Image -->
-                    <div class="relative mb-4">
-                      <div class="aspect-video w-full rounded-lg overflow-hidden bg-gray-100">
+              <div 
+                v-for="slideIndex in Math.ceil(upcomingEvents.length / itemsPerSlide)" 
+                :key="slideIndex"
+                class="w-full flex-shrink-0"
+              >
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div 
+                    v-for="(event, index) in getSlideEvents(slideIndex - 1)" 
+                    :key="event.id || index"
+                    class="relative group cursor-pointer"
+                    @click="viewEventDetails(event)"
+                  >
+                    <!-- Gradient Border Effect -->
+                    <div class="absolute -inset-0.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></div>
+                    
+                    <div class="relative bg-white/80 backdrop-blur-sm rounded-3xl border border-pink-200/30 overflow-hidden transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20 h-full">
+                      
+                      <!-- Event Image -->
+                      <div class="relative h-48 overflow-hidden">
                         <img 
                           :src="event.featured_image_url || '/placeholder-event.jpg'" 
                           :alt="event.title"
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                           @error="$event.target.src = '/placeholder-event.jpg'"
                         />
-                      </div>
-                      
-                      <!-- Overlay badges -->
-                      <div class="absolute top-3 left-3">
-                        <div class="bg-gradient-to-br from-[#F8CB00] to-red-500 rounded-lg p-2 text-center shadow-sm">
-                          <div class="text-xs text-black font-semibold uppercase tracking-wider">{{ formatMonth(event.start_date) }}</div>
-                          <div class="text-lg text-black font-bold">{{ formatDay(event.start_date) }}</div>
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        
+                        <!-- Date Badge -->
+                        <div class="absolute top-4 left-4">
+                          <div class="bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl p-3 text-center shadow-lg border border-pink-300/30">
+                            <div class="text-xs text-white font-black tracking-wider">{{ formatMonth(event.start_date) }}</div>
+                            <div class="text-xl text-white font-black">{{ formatDay(event.start_date) }}</div>
+                          </div>
+                        </div>
+                        
+                        <!-- Event Type Badge -->
+                        <div class="absolute top-4 right-4">
+                          <span v-if="event.event_type === 'paid'" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg">
+                            <span class="mr-1">💰</span>
+                            PAID EVENT
+                          </span>
+                          <span v-else-if="event.is_virtual" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-blue-500 to-cyan-600 text-white shadow-lg">
+                            <span class="mr-1">🌐</span>
+                            VIRTUAL
+                          </span>
+                          <span v-else class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg">
+                            <span class="mr-1">🎉</span>
+                            FREE EVENT
+                          </span>
+                        </div>
+                        
+                        <!-- Featured Indicator -->
+                        <div v-if="event.is_featured" class="absolute bottom-4 left-4">
+                          <div class="bg-gradient-to-r from-yellow-400 to-orange-500 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-lg">
+                            <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                            <span class="text-black text-xs font-black tracking-wide">FEATURED</span>
+                          </div>
+                        </div>
+                        
+                        <!-- Days Until Event -->
+                        <div class="absolute bottom-4 right-4">
+                          <div class="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-pink-200/50">
+                            <span v-if="getDaysUntilEvent(event.start_date) === 0" class="text-red-600 text-xs font-black">
+                              TODAY
+                            </span>
+                            <span v-else-if="getDaysUntilEvent(event.start_date) === 1" class="text-orange-600 text-xs font-black">
+                              TOMORROW
+                            </span>
+                            <span v-else class="text-gray-900 text-xs font-black">
+                              {{ getDaysUntilEvent(event.start_date) }} DAYS
+                            </span>
+                          </div>
                         </div>
                       </div>
                       
-                      <!-- Featured indicator -->
-                      <div v-if="event.is_featured" class="absolute top-3 right-3 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                      
-                      <!-- Event type badge -->
-                      <div class="absolute bottom-3 right-3">
-                        <span v-if="event.event_type === 'paid'" class="text-xs px-2 py-1 bg-green-500/90 text-white rounded-full backdrop-blur-sm">
-                          Paid Event
-                        </span>
-                        <span v-else class="text-xs px-2 py-1 bg-blue-500/90 text-white rounded-full backdrop-blur-sm">
-                          {{ formatEventType(event.event_type) }} Event
-                        </span>
-                      </div>
-                      
-                      <!-- Virtual badge -->
-                      <div v-if="event.is_virtual" class="absolute bottom-3 left-3">
-                        <span class="text-xs px-2 py-1 bg-purple-500/90 text-white rounded-full backdrop-blur-sm">
-                          Virtual
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <!-- Event details -->
-                    <div class="flex-1">
-                      <h4 class="text-gray-900 font-semibold text-base group-hover:text-[#F8CB00] transition-colors leading-tight line-clamp-2 mb-3">
-                        {{ event.title }}
-                      </h4>
-                      
-                      <!-- Description preview -->
-                      <p class="text-gray-600 text-sm mb-3 line-clamp-2">
-                        {{ event.description || 'No description available' }}
-                      </p>
-                      
-                      <div class="space-y-2 text-sm mb-4">
-                        <div class="text-gray-600 flex items-center">
-                          <MapPin class="h-3.5 w-3.5 mr-2 text-[#F8CB00] flex-shrink-0" /> 
-                          <span class="truncate">{{ event.venue_name || 'Venue TBA' }}</span>
+                      <!-- Event Info -->
+                      <div class="p-6">
+                        <div class="mb-4">
+                          <h4 class="text-lg md:text-xl font-black text-gray-900 mb-3 group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300 line-clamp-2">
+                            {{ event.title }}
+                          </h4>
+                          
+                          <p class="text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+                            {{ event.description || 'An exciting event you won\'t want to miss!' }}
+                          </p>
                         </div>
-                        <div class="text-gray-600 flex items-center">
-                          <Clock class="h-3.5 w-3.5 mr-2 text-red-500 flex-shrink-0" /> 
-                          <span>{{ formatTime(event.start_time) }} - {{ formatTime(event.end_time) }}</span>
+
+                        <!-- Event Details -->
+                        <div class="space-y-3 mb-4">
+                          <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
+                              <MapPin class="h-4 w-4 text-pink-600" />
+                            </div>
+                            <div>
+                              <p class="text-sm font-bold text-gray-900">{{ event.venue_name || 'Venue TBA' }}</p>
+                              <p class="text-xs text-gray-500">{{ event.city || 'Location' }}, {{ event.country || 'Uganda' }}</p>
+                            </div>
+                          </div>
+                          
+                          <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                              <Clock class="h-4 w-4 text-purple-600" />
+                            </div>
+                            <div>
+                              <p class="text-sm font-bold text-gray-900">{{ formatTime(event.start_time) }} - {{ formatTime(event.end_time) }}</p>
+                              <p class="text-xs text-gray-500">Event Duration</p>
+                            </div>
+                          </div>
                         </div>
-                        <div v-if="event.city && event.country" class="text-gray-600 flex items-center">
-                          <Globe class="h-3.5 w-3.5 mr-2 text-blue-500 flex-shrink-0" /> 
-                          <span class="truncate">{{ event.city }}, {{ event.country }}</span>
+
+                        <!-- Category Badge -->
+                        <div class="mb-4">
+                          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider"
+                                :class="getCategoryStyle(event.category)">
+                            {{ formatCategoryName(event.category) }}
+                          </span>
                         </div>
-                      </div>
-                      
-                      <!-- Days until event -->
-                      <div class="mb-3">
-                        <span v-if="getDaysUntilEvent(event.start_date) === 0" class="inline-block px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full font-medium">
-                          Today
-                        </span>
-                        <span v-else-if="getDaysUntilEvent(event.start_date) === 1" class="inline-block px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded-full font-medium">
-                          Tomorrow
-                        </span>
-                        <span v-else class="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
-                          In {{ getDaysUntilEvent(event.start_date) }} days
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <!-- Event category and virtual badge -->
-                    <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-                      <span class="inline-block px-2 py-1 text-xs rounded-full" 
-                            :class="getCategoryStyle(event.category)">
-                        {{ formatCategoryName(event.category) }}
-                      </span>
-                      <div class="flex items-center gap-2">
-                        <button class="text-xs text-[#F8CB00] hover:text-red-500 transition-colors flex items-center gap-1 hover:gap-2">
-                          <span>View Details</span>
-                          <ArrowRight class="h-3 w-3" />
+
+                        <!-- Action Button -->
+                        <button 
+                          @click.stop="viewEventDetails(event)"
+                          class="w-full relative group/btn overflow-hidden"
+                        >
+                          <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-60 group-hover/btn:opacity-100 transition duration-500"></div>
+                          <div class="relative bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black px-4 py-3 rounded-2xl transition-all duration-300 transform hover:scale-105">
+                            <div class="flex items-center justify-center space-x-2">
+                              <span class="tracking-wide">VIEW EVENT</span>
+                              <ArrowRight class="w-4 h-4" />
+                            </div>
+                          </div>
                         </button>
                       </div>
                     </div>
@@ -161,52 +211,86 @@
               </div>
             </div>
           </div>
-
-          <!-- Slide indicators -->
-          <div v-if="Math.ceil(upcomingEvents.length / itemsPerSlide) > 1" class="flex justify-center mt-4 gap-2">
-            <button 
-              v-for="slideIndex in Math.ceil(upcomingEvents.length / itemsPerSlide)" 
+          
+          <!-- Carousel Indicators -->
+          <div v-if="Math.ceil(upcomingEvents.length / itemsPerSlide) > 1" class="flex justify-center mt-8 space-x-3">
+            <button
+              v-for="slideIndex in Math.ceil(upcomingEvents.length / itemsPerSlide)"
               :key="slideIndex"
               @click="goToSlide(slideIndex - 1)"
-              class="w-2 h-2 rounded-full transition-colors"
-              :class="currentSlide === slideIndex - 1 ? 'bg-[#F8CB00]' : 'bg-gray-300'"
-            ></button>
+              :class="[
+                'h-3 rounded-full transition-all duration-300',
+                currentSlide === (slideIndex - 1)
+                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 w-8 shadow-lg' 
+                  : 'bg-gray-300 hover:bg-pink-300 w-3'
+              ]"
+            />
           </div>
         </div>
 
-        <!-- Empty state -->
-        <div v-else-if="!isLoadingEvents" class="text-center py-8">
-          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Calendar class="w-8 h-8 text-gray-400" />
+        <!-- Empty State -->
+        <div v-else class="text-center py-16">
+          <div class="w-20 h-20 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Calendar class="w-10 h-10 text-pink-400" />
           </div>
-          <h4 class="text-lg font-semibold text-gray-900 mb-2">No Upcoming Events</h4>
-          <p class="text-gray-600 mb-4">Check back soon for exciting new events!</p>
-          <button @click="viewAllEvents" 
-                  class="px-4 py-2 bg-[#F8CB00] text-black rounded-lg hover:bg-[#F8CB00]/80 transition-colors font-medium">
-            View All Events
+          <h3 class="text-2xl font-black text-gray-900 mb-4">No Events Scheduled Yet</h3>
+          <p class="text-gray-600 mb-6">Stay tuned for amazing events coming your way!</p>
+          <button 
+            @click="viewAllEvents"
+            class="relative group overflow-hidden"
+          >
+            <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+            <div class="relative bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black px-8 py-4 rounded-2xl transition-all duration-300 transform hover:scale-105">
+              <div class="flex items-center space-x-2">
+                <span class="tracking-wide">EXPLORE ALL EVENTS</span>
+                <ArrowRight class="w-5 h-5" />
+              </div>
+            </div>
           </button>
         </div>
-
-        <!-- Loading state -->
-        <div v-else class="text-center py-8">
-          <div class="w-8 h-8 border-2 border-gray-300 border-t-[#F8CB00] rounded-full animate-spin mx-auto mb-4"></div>
-          <p class="text-gray-600">Loading events...</p>
-        </div>
-
-        <!-- Footer -->
-        <div v-if="upcomingEvents.length > 0" class="mt-6 pt-4 border-t border-gray-200">
-          <div class="flex items-center justify-between">
-            <div class="text-xs text-gray-500">
-              {{ upcomingEvents.length }} upcoming {{ upcomingEvents.length === 1 ? 'event' : 'events' }}
-            </div>
-            <button @click="viewAllEvents"
-                    class="inline-flex items-center gap-2 text-[#F8CB00] hover:text-red-500 text-sm font-medium transition-all duration-300 hover:gap-3">
-              <span>See All Events</span>
-              <ArrowRight class="h-4 w-4" />
-            </button>
-          </div>
-        </div>
       </div>
+
+      <!-- Call to Action Section -->
+      <div class="text-center mt-16">
+        <div class="relative inline-block group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+          <button 
+            @click="viewAllEvents"
+            class="relative bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black px-12 py-6 rounded-3xl transition-all duration-500 transform hover:scale-105 shadow-2xl"
+          >
+            <div class="flex items-center space-x-3">
+              <Calendar class="w-6 h-6" />
+              <span class="text-lg tracking-wide">VIEW ALL EVENTS</span>
+              <ArrowRight class="w-6 h-6" />
+            </div>
+          </button>
+        </div>
+        
+        <p class="text-gray-600 mt-4 font-medium">
+          Discover {{ upcomingEvents.length }}+ exciting events happening in Uganda
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom Curved Border -->
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden z-10">
+      <svg class="w-full h-auto" preserveAspectRatio="none" viewBox="0 0 1200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C200,80 400,0 600,40 C800,80 1000,0 1200,40 L1200,80 L0,80 Z" fill="url(#bottomWave1)" opacity="0.3"/>
+        <path d="M0,50 C300,10 500,70 800,30 C900,10 1100,60 1200,35 L1200,80 L0,80 Z" fill="url(#bottomWave2)" opacity="0.2"/>
+        <path d="M0,60 C250,20 450,80 700,45 C850,25 1050,75 1200,55 L1200,80 L0,80 Z" fill="white"/>
+        
+        <defs>
+          <linearGradient id="bottomWave1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ff6b9d;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="bottomWave2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   </section>
 </template>
@@ -214,7 +298,7 @@
 <script setup>
 import { computed, onMounted, ref, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
-import { MapPin, Clock, Calendar, ArrowRight, Globe, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { MapPin, Clock, Calendar, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 const store = useStore();
 const isLoadingEvents = ref(false);
@@ -305,11 +389,6 @@ const formatCategoryName = (category) => {
   return category.charAt(0).toUpperCase() + category.slice(1);
 };
 
-const formatEventType = (eventType) => {
-  if (!eventType) return 'Event';
-  return eventType.charAt(0).toUpperCase() + eventType.slice(1);
-};
-
 const formatTime = (timeString) => {
   if (!timeString) return '';
   // Convert 24-hour format to 12-hour format
@@ -333,14 +412,14 @@ const getDaysUntilEvent = (dateString) => {
 
 const getCategoryStyle = (category) => {
   const styles = {
-    'concert': 'bg-[#F8CB00]/20 text-[#F8CB00]',
-    'festival': 'bg-red-100 text-red-700',
-    'workshop': 'bg-blue-100 text-blue-700',
-    'conference': 'bg-purple-100 text-purple-700',
-    'comedy': 'bg-green-100 text-green-700',
-    'sports': 'bg-orange-100 text-orange-700'
+    'concert': 'bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-600 border border-pink-200',
+    'festival': 'bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-600 border border-red-200',
+    'workshop': 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-600 border border-blue-200',
+    'conference': 'bg-gradient-to-r from-purple-500/20 to-indigo-500/20 text-purple-600 border border-purple-200',
+    'comedy': 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-600 border border-green-200',
+    'sports': 'bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-600 border border-orange-200'
   };
-  return styles[category] || 'bg-gray-100 text-gray-700';
+  return styles[category] || 'bg-gradient-to-r from-gray-500/20 to-slate-500/20 text-gray-600 border border-gray-200';
 };
 
 // Methods
@@ -387,20 +466,35 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
+/* Custom gradient text effects */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Enhanced backdrop blur for better glass effect */
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+}
+
 /* Smooth transitions */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hover effects */
-.group:hover .group-hover\:text-\[\#F8CB00\] {
-  color: #F8CB00;
+/* Enhanced hover effects */
+button:hover, .group:hover {
+  transform: translateY(-2px);
 }
 
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+/* Professional shadows */
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(244, 114, 182, 0.25);
 }
 
 /* Loading animation */
@@ -412,7 +506,7 @@ onUnmounted(() => {
   animation: spin 1s linear infinite;
 }
 
-/* Responsive grid adjustments */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .container {
     padding-left: 1rem;
