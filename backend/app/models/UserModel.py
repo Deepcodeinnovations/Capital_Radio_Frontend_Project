@@ -80,7 +80,48 @@ class User(Base):
     
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
+            from app.models.StationListenersModel import StationListeners
+            from app.models.LiveChatMessageModel import LiveChatMessage
+            from app.models.UserTokenModel import Usertoken
+            from app.models.ForumModel import Forum
+            from app.models.ForumCommentModel import ForumComment
+            from app.models.NewsModel import News, NewsComment
+            from app.models.EventModel import Event
+            from app.models.RadioProgramModel import RadioProgram
+            from app.models.HostModel import Host
+            from app.models.AdvertModel import Advert
+            from app.models.StationModel import Station
+            from app.models.RadioSessionRecordingModel import RadioSessionRecording
+            
+            # Delete all user tokens
+            await db.execute(delete(Usertoken).where(Usertoken.user_id == self.id))
+            
+            # Delete station listeners records
+            await db.execute(delete(StationListeners).where(StationListeners.user_id == self.id))
+            
+            # Delete live chat messages
+            await db.execute(delete(LiveChatMessage).where(LiveChatMessage.user_id == self.id))
+            
+            # Delete forum comments
+            await db.execute(delete(ForumComment).where(ForumComment.created_by == self.id))
+            
+            # Delete news comments
+            await db.execute(delete(NewsComment).where(NewsComment.user_id == self.id))
+            
+            # Delete content created by user
+            await db.execute(delete(Forum).where(Forum.created_by == self.id))
+            await db.execute(delete(News).where(News.author_id == self.id))
+            await db.execute(delete(Event).where(Event.created_by == self.id))
+            await db.execute(delete(RadioProgram).where(RadioProgram.created_by == self.id))
+            await db.execute(delete(Host).where(Host.created_by == self.id))
+            await db.execute(delete(Advert).where(Advert.created_by == self.id))
+            await db.execute(delete(Station).where(Station.created_by == self.id))
+            await db.execute(delete(RadioSessionRecording).where(RadioSessionRecording.created_by == self.id))
+            
+            # Finally delete the user
             await db.execute(delete(User).where(User.id == self.id))
+            
+            await db.commit()
             return True
             
         except Exception as e:
