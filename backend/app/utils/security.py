@@ -125,23 +125,33 @@ async def decode_and_validate_token(token: str, db: AsyncSession) -> Dict[str, A
 async def get_user_from_token(payload: Dict[str, Any], db: AsyncSession) -> Dict[str, Any]:
    try:
        user_id = payload.get("sub")
-       stmt = select(User).where(and_(User.id == user_id,User.state == True,User.status == True))
+       stmt = select(User).where(and_(User.id == user_id, User.status == True))
        result = await db.execute(stmt)
        user = result.scalar_one_or_none()
        
        if not user:
-           return returnsdata.error_msg("User not found or inactive", ERROR)
+           raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail="User not found or inactive")
        user.last_seen = datetime.now(timezone.utc)
        await db.commit()
-       return await user.to_dict_with_relations(db)
+       user_data = await user.to_dict()
+       print("===============================user data=======================================================================")
+       print(user_data)
+       return user_data
    except Exception as e:
       return returnsdata.error_msg(f"Something Wrong Has Happened: {str(e)}", ERROR)
 
 async def get_current_user_details(authorization: Optional[str] = Header(None),db: AsyncSession = Depends(get_database)) -> Dict[str, Any]:
    token = await extract_token_from_header(authorization)
+   print("======================================================================================================")
+   print(token)
    payload = await decode_and_validate_token(token, db)
+   print("======================================================================================================")
+   print(payload)
    user_data = await get_user_from_token(payload, db)
+   print("======================================================================================================")
+   print(user_data)
    return user_data
+
 
 async def invalidate_user_tokens(user_id: str,device_fingerprint: str,db: AsyncSession) -> None:
    try:

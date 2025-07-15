@@ -13,16 +13,16 @@ const router = createRouter({
 
 // Navigation guard to handle page titles and meta information
 router.beforeEach((to, from, next) => {
- const pageTitle = to.meta.title || 'Dashboard'
- const appName = to.meta.appName || 'Capital Radio'
- const description = to.meta.description || 'Capital Radio - Uganda\'s Premier Radio Network'
- const keywords = to.meta.keywords || 'capital radio, uganda radio, music, news, entertainment'
+ const pageTitle = to.meta.title || 'Fresh Hits for Uganda'
+ const appName = to.meta.appName || '100.9 KIIS FM'
+ const description = to.meta.description || '100.9 KIIS FM - Uganda\'s Premium Hit Station playing the freshest hits, latest music, and live shows. Listen live now!'
+ const keywords = to.meta.keywords || 'KIIS FM, Uganda radio, 100.9 FM, fresh hits, music, live radio, Uganda entertainment, hit songs, radio station'
  
  // Set document title
  if (to.meta.appendAppName === false) {
    document.title = pageTitle
  } else {
-   document.title = `${appName} | ${pageTitle}`
+   document.title = `${pageTitle} | ${appName}`
  }
  
  // Update meta description
@@ -32,35 +32,32 @@ router.beforeEach((to, from, next) => {
  updateMetaTag('keywords', keywords)
  
  // Update Open Graph meta tags
- if (to.meta.ogTitle) {
-   updateMetaTag('og:title', to.meta.ogTitle)
- }
+ const ogTitle = to.meta.ogTitle || `${pageTitle} | ${appName}`
+ const ogDescription = to.meta.ogDescription || description
+ const ogImage = to.meta.ogImage || 'https://kiisfm.ug/og-image.jpg'
  
- if (to.meta.ogDescription) {
-   updateMetaTag('og:description', to.meta.ogDescription)
- }
- 
- if (to.meta.ogImage) {
-   updateMetaTag('og:image', to.meta.ogImage)
- }
+ updateMetaTag('og:title', ogTitle)
+ updateMetaTag('og:description', ogDescription)
+ updateMetaTag('og:image', ogImage)
+ updateMetaTag('og:url', window.location.origin + to.fullPath)
  
  // Update Twitter Card meta tags
- if (to.meta.twitterTitle) {
-   updateMetaTag('twitter:title', to.meta.twitterTitle)
- }
+ const twitterTitle = to.meta.twitterTitle || ogTitle
+ const twitterDescription = to.meta.twitterDescription || ogDescription
+ const twitterImage = to.meta.twitterImage || 'https://kiisfm.ug/twitter-image.jpg'
  
- if (to.meta.twitterDescription) {
-   updateMetaTag('twitter:description', to.meta.twitterDescription)
- }
- 
- if (to.meta.twitterImage) {
-   updateMetaTag('twitter:image', to.meta.twitterImage)
- }
+ updateMetaTag('twitter:title', twitterTitle)
+ updateMetaTag('twitter:description', twitterDescription)
+ updateMetaTag('twitter:image', twitterImage)
+ updateMetaTag('twitter:url', window.location.origin + to.fullPath)
  
  // Set canonical URL
  if (to.meta.canonical !== false) {
    updateLinkTag('canonical', window.location.origin + to.fullPath)
  }
+ 
+ // Update structured data for radio station
+ updateStructuredData(pageTitle, description, to.fullPath)
  
  next()
 })
@@ -92,6 +89,41 @@ function updateLinkTag(rel, href) {
  }
  
  element.setAttribute('href', href)
+}
+
+// Helper function to update structured data
+function updateStructuredData(pageTitle, description, path) {
+ let script = document.querySelector('script[type="application/ld+json"]')
+ 
+ if (!script) {
+   script = document.createElement('script')
+   script.type = 'application/ld+json'
+   document.head.appendChild(script)
+ }
+ 
+ const structuredData = {
+   "@context": "https://schema.org",
+   "@type": "RadioStation",
+   "name": "KIIS FM",
+   "alternateName": "100.9 KIIS FM",
+   "description": description,
+   "url": `https://kiisfm.ug${path}`,
+   "logo": "https://kiisfm.ug/logokiis.png",
+   "image": "https://kiisfm.ug/og-image.jpg",
+   "broadcastFrequency": "100.9 FM",
+   "address": {
+     "@type": "PostalAddress",
+     "addressCountry": "UG",
+     "addressLocality": "Kampala"
+   },
+   "sameAs": [
+     "https://facebook.com/KIISFMUganda",
+     "https://twitter.com/KIISFMUganda",
+     "https://instagram.com/KIISFMUganda"
+   ]
+ }
+ 
+ script.textContent = JSON.stringify(structuredData)
 }
 
 export default router

@@ -1,1 +1,0 @@
-import{c as o}from"./createLucideIcon-0e9853d2.js";const n=o("ChevronLeftIcon",[["polyline",{points:"15 18 9 12 15 6",key:"kvxz59"}]]),t=o("ChevronRightIcon",[["polyline",{points:"9 18 15 12 9 6",key:"1rtp27"}]]);export{t as C,n as a};

@@ -12,7 +12,7 @@ from app.apiv1.services.admin.AdminRecordingBackgroundService import (
     get_radio_session_by_id,
     delete_radio_session,
     toggle_radio_session_status,
-    update_radio_session_recording_status
+    update_radio_session_recording
 )
 from datetime import datetime
 from app.utils.RecordingBackgroundUtil import recording_service
@@ -70,6 +70,19 @@ async def get_radio_session_endpoint(session_id: str,request: Request,db: AsyncS
         return returnsdata.error_msg(f"Failed to get radio session: {str(e)}", ERROR)
 
 
+@router.post("/update/{session_id}")
+async def update_radio_session_endpoint(session_id: str, request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
+    try:
+        verify_admin_access(current_user)
+        form_data = await request.form()
+        data = dict(form_data)
+        recording_file = data.pop('recording_file', None)
+        updated_recording = await update_radio_session_recording(db, data, session_id, recording_file)
+        return returnsdata.success(data=updated_recording, msg="Recording updated successfully", status=SUCCESS)
+    except Exception as e:
+        return returnsdata.error_msg(f"Update failed: {str(e)}", ERROR)
+
+        
 @router.post("/delete/{session_id}")
 async def delete_radio_session_endpoint(session_id: str,request: Request,db: AsyncSession = Depends(get_database),current_user = Depends(get_current_user_details)):
     try:
@@ -104,7 +117,7 @@ async def update_recording_status_endpoint(session_id: str,request: Request,db: 
         if recording_status not in ['scheduled', 'recording', 'completed', 'failed']:
             return returnsdata.error_msg("Invalid recording status", ERROR)
         
-        radio_session = await update_radio_session_recording_status(db, session_id, recording_status)
+        radio_session = (db, data, session_id)
         return returnsdata.success(data=radio_session, msg="Recording status updated successfully", status=SUCCESS)
     except Exception as e:
         return returnsdata.error_msg(f"Failed to update recording status: {str(e)}", ERROR)

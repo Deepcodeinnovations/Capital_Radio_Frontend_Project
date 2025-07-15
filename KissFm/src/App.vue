@@ -223,9 +223,7 @@ const initializeApp = async () => {
     };
     await store.dispatch('fetch_station_details', radioData);
     
-    // Connect WebSocket
-    await store.dispatch('connectWebSocket');
-    
+
     // Check station access
     if (stationData.value?.radio_access_status === false) {
       isLoading.value = false;
@@ -233,12 +231,7 @@ const initializeApp = async () => {
       return;
     }
 
-    // Step 5: Audio player initialization
-    console.log('Initializing audio player...');
-    if (stationData.value) {
-      await store.dispatch('loadStation', stationData.value);
-    }
-    
+
     // Load live chat
     await store.dispatch('fetch_livechat', {
       station_id: stationData.value.id

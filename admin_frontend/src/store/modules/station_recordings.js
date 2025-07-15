@@ -174,6 +174,33 @@ export default {
             });
         },
 
+
+        async update_session_recording({ commit }, { data, id}) {
+            commit('seterror', '', { root: true })
+            commit('setmsg', '', { root: true })
+            commit('setloader', 'update_session_recording', { root: true })
+            return new Promise((resolve, reject) => {
+                axios.post(`/admin/radio_sessions/update/${id}`, data).then(async response => {
+                        commit('setloader', false, { root: true })
+                        commit('updatesessionRecording', response.data.data)
+                        resolve(response)
+                    })
+                    .catch(async error => {
+                        commit('setloader', false, { root: true })
+                        if (error.response) {
+                            if (error.response.data) {
+                                if (error.response.data.msg) {
+                                    commit('seterror', error.response.data.msg, { root: true })
+                                } else if (error.response.data.message) {   
+                                    commit('seterrors', error.response.data.message, { root: true })
+                                }
+                            }
+                        }
+                        reject(error)
+                    });
+            });
+        },
+
         async delete_session_recording({ commit }, { data, id}) {
             commit('seterror', '', { root: true })
             commit('setmsg', '', { root: true })

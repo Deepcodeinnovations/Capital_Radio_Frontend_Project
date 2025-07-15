@@ -1,11 +1,15 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_, desc
+from sqlalchemy import select, func, and_, desc, or_
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, Optional
+from app.utils.file_upload import save_upload_file, remove_file
 from app.models.RadioSessionRecordingModel import RadioSessionRecording
 from app.utils.advanced_paginator import paginate_query, QueryOptimizer
 import math
+import os
+import json
+
 
 
 
@@ -50,6 +54,43 @@ async def get_radio_session_by_id(db: AsyncSession, session_id: str) -> Dict[str
         return await session.to_dict_with_relations(db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get radio session: {str(e)}")
+
+
+
+async def update_radio_session_recording(db: AsyncSession, data: Dict[str, Any], session_id: str, recording_file: Optional[UploadFile] = None) -> Dict[str, Any]:
+    try:
+        result = await db.execute(select(RadioSessionRecording).where(and_(RadioSessionRecording.id == session_id, RadioSessionRecording.state == True)))
+        session = result.scalar_one_or_none()
+        if not session:
+            raise HTTPException(status_code=404, detail="Recording not found")
+        
+        # Handle file upload
+        if recording_file and recording_file.filename:
+            if session.recording_file_path:
+                remove_file(session.recording_file_path)
+            file_path, file_url = await save_upload_file(recording_file, "recordings/sessions")
+            session.recording_file_path = file_path
+            session.recording_file_url = file_url
+            if os.path.exists(file_path):
+                session.file_size_mb = round(os.path.getsize(file_path) / (1024 * 1024), 2)
+        
+        # Handle status timestamps
+        if data.get('recording_status') == 'recording' and not session.actual_start_time:
+            session.actual_start_time = datetime.utcnow()
+        elif data.get('recording_status') in ['completed', 'failed'] and not session.actual_end_time:
+            session.actual_end_time = datetime.utcnow()
+            if session.actual_start_time:
+                session.duration_minutes = int((session.actual_end_time - session.actual_start_time).total_seconds() / 60)
+        
+        session.updated_at = datetime.utcnow()
+        await db.commit()
+        await db.refresh(session)
+        return await session.to_dict_with_relations(db)
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Update failed: {str(e)}")
+
+
 
 
 async def delete_radio_session(db: AsyncSession, session_id: str) -> bool:

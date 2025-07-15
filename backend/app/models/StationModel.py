@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship, backref
 from app.models.BaseModel import Base
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any, List
+import urllib.parse
 
 class Station(Base):
     __tablename__ = "stations"
@@ -33,7 +34,42 @@ class Station(Base):
     # Meta Information
     created_by = Column(String(36), ForeignKey('users.id'), nullable=True)
     programs = relationship("RadioProgram", back_populates="station")
-    schedule = relationship("StationSchedule", back_populates="station", uselist=False)    
+    schedule = relationship("StationSchedule", back_populates="station", uselist=False)
+    
+    def get_secure_streaming_url(self) -> Optional[str]:
+        """Get streaming URL that works with HTTPS"""
+        if not self.streaming_link:
+            return None
+        
+        # If it's already HTTPS, return as is
+        if self.streaming_link.startswith('https://'):
+            return self.streaming_link
+        
+        # If it's HTTP, create proxy URL
+        if self.streaming_link.startswith('http://'):
+            from app.utils.constants import BASE_URL
+            encoded_url = urllib.parse.quote(self.streaming_link, safe='')
+            return f"{BASE_URL}api/v1/user/streaming/proxy?url={encoded_url}"
+        
+        return self.streaming_link
+    
+    def get_secure_backup_streaming_url(self) -> Optional[str]:
+        """Get backup streaming URL that works with HTTPS"""
+        if not self.backup_streaming_link:
+            return None
+        
+        # If it's already HTTPS, return as is
+        if self.backup_streaming_link.startswith('https://'):
+            return self.backup_streaming_link
+        
+        # If it's HTTP, create proxy URL
+        if self.backup_streaming_link.startswith('http://'):
+            from app.utils.constants import BASE_URL
+            encoded_url = urllib.parse.quote(self.backup_streaming_link, safe='')
+            return f"{BASE_URL}api/v1/user/streaming/proxy?url={encoded_url}"
+        
+        return self.backup_streaming_link
+    
     async def to_dict(self) -> Dict[str, Any]:
         return {
             'id': self.id,
@@ -43,7 +79,10 @@ class Station(Base):
             'tagline': self.tagline,
             'about': self.about,
             'access_link': self.access_link,
-            'streaming_link': self.streaming_link,
+            'streaming_link': self.get_secure_streaming_url(),  # Always return secure URL
+            'streaming_link_original': self.streaming_link,  # Keep original for admin reference
+            'backup_streaming_link': self.get_secure_backup_streaming_url(),
+            'backup_streaming_link_original': self.backup_streaming_link,
             'streaming_status': self.streaming_status,
             'radio_access_status': self.radio_access_status,
             'logo_path': self.logo_path,
@@ -106,7 +145,6 @@ class Station(Base):
         except Exception as e:
             raise Exception(f"Failed to convert station to dictionary with relations: {str(e)}")
 
-
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
             self.state = False
@@ -119,7 +157,6 @@ class Station(Base):
         except Exception as e:
             await db.rollback()
             raise Exception(f"Failed to delete station with relations: {str(e)}")
-
 
     async def get_listeners(self, db: AsyncSession) -> int:
         from app.models.StationListenersModel import StationListeners

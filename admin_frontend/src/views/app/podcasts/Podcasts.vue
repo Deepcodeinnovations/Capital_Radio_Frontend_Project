@@ -95,7 +95,7 @@
               class="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
             >
               <option value="">All Stations</option>
-              <option v-for="station in stations?.data" :key="station.id" :value="station.id">
+              <option v-for="station in stations" :key="station.id" :value="station.id">
                 {{ station.name }}
               </option>
             </select>
@@ -285,10 +285,18 @@
                   <a 
                     :href="recording.recording_file_url" 
                     download
+                    target="_blank"
                     class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     <DownloadIcon class="w-5 h-5" />
                   </a>
+
+                  <button
+                    @click="showUpdateRecordingModal(recording)"
+                    class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 text-white transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    <EditIcon class="w-5 h-5" />
+                  </button>
 
                   <button
                     @click="deleteRecording(recording)"
@@ -390,11 +398,19 @@
       </div>
     </div>
   </div>
+
+  <UpdateRecordingModal 
+    :show="updateRecordingModal"
+    :recording="selectedRecording"
+    @close="closeUpdateModal"
+    @updated="onRecordingUpdated"
+  />
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, reactive } from 'vue';
 import { useStore } from 'vuex';
+import UpdateRecordingModal from './UpdateRecordingModal.vue';
 import {
   Radio as RadioIcon,
   Mic as MicIcon,
@@ -407,6 +423,7 @@ import {
   Volume1 as Volume1Icon,
   VolumeX as VolumeXIcon,
   Trash as TrashIcon,
+  Edit as EditIcon,
 } from 'lucide-vue-next';
 
 const store = useStore();
@@ -433,6 +450,8 @@ const filters = reactive({
 
 // Audio player state
 const audioPlayer = ref(null);
+const updateRecordingModal = ref(false);
+const selectedRecording = ref(null);
 const currentPlayingId = ref(null);
 const isPlaying = ref(false);
 const currentTime = ref(0);
@@ -463,6 +482,21 @@ const visiblePages = computed(() => {
   
   return pages
 });
+
+// Update recording modal
+const showUpdateRecordingModal = (recording) => {
+  updateRecordingModal.value = true;
+  selectedRecording.value = recording;
+};
+
+const closeUpdateModal = () => {
+  updateRecordingModal.value = false;
+  selectedRecording.value = null;
+};
+
+const onRecordingUpdated = () => {
+  fetchSessionRecordings(); // Refresh the list
+};
 
 // Auto-refresh functions
 const startAutoRefresh = () => {

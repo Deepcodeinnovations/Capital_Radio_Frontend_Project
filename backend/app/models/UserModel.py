@@ -46,6 +46,8 @@ class User(Base):
             'provider_id': self.provider_id,
             'allow_login': self.allow_login,
             'remember_token': self.remember_token,
+            'device_fingerprint': self.device_fingerprint,
+            'station_id': self.station_id,
             'name': self.name,
             'email': self.email,
             'phone': self.phone,
@@ -78,8 +80,6 @@ class User(Base):
     
     async def delete_with_relations(self, db: AsyncSession) -> bool:
         try:
-
-
             await db.execute(delete(User).where(User.id == self.id))
             return True
             

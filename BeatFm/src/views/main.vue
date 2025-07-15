@@ -31,6 +31,7 @@ const fetch_initial_data = () => {
   const data = {
     station_id: currentStation.id,
   }
+  store.dispatch('connectWebSocket');
   store.dispatch('fetch_adverts', data)
   store.dispatch('fetch_breaking_news', data)
 }

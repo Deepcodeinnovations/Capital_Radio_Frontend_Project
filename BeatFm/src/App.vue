@@ -187,9 +187,6 @@ const initializeApp = async () => {
     };
     await store.dispatch('fetch_station_details', radioData);
     
-    // Connect WebSocket
-    await store.dispatch('connectWebSocket');
-    
     // Check station access
     if (stationData.value?.radio_access_status === false) {
       isLoading.value = false;

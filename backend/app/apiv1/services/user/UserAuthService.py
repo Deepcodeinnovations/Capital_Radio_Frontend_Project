@@ -34,6 +34,8 @@ async def authenticate_or_create_open_user(db: AsyncSession, device_fingerprint:
                role="open_user",
                device_fingerprint=device_fingerprint,
                station_id=station_id,
+               state=True,
+               status=True,
                last_seen=datetime.now(),
            )
            
@@ -85,7 +87,7 @@ async def update_user_information(db: AsyncSession, name: str, email: str, user_
            await invalidate_user_tokens(user_id, user.device_fingerprint or "", db)
            
            # Soft delete the old user
-           user.state = False
+           await user.delete_with_relations(db)
            
            await db.commit()
            await db.refresh(email_user)

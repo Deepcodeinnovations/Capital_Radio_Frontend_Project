@@ -21,12 +21,14 @@ async def get_access_station(request: Request, db: AsyncSession = Depends(get_da
         form_data = await request.form()
         access_link = form_data.get("access_link")
         user_id = authuser.get("id")
+        print("======================================================================================================")
+        print(user_id)
         if not access_link:
             return  returnsdata.error_msg("Station Access Link is required", ERROR)
         data = await get_station_by_access_link(db, access_link, user_id)
         return  returnsdata.success(data=data,msg="Station data retrieved successfully",status=SUCCESS)
     except Exception as e:
-        return returnsdata.error_msg( f"Logout failed: {str(e)}", ERROR )
+        return returnsdata.error_msg( f"Station data retrieval failed: {str(e)}", ERROR )
 
 
 ##news

@@ -1,4 +1,3 @@
-
 <template>
   <div class=" ">
     <!-- Header -->
@@ -12,7 +11,6 @@
           <p class="text-gray-600 dark:text-gray-300">Real-time conversations across all Capital Radio stations</p>
         </div>
       </div>
-
     </div>
 
     <!-- Live Chat Grid -->
@@ -72,18 +70,15 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useStore } from 'vuex';
 import LiveChatCard from './LiveChatCard.vue';
 import { 
   MessageCircle as MessageCircleIcon,
-  Users as UsersIcon,
-  MessageSquare as MessageSquareIcon,
   Radio as RadioIcon,
-  TrendingUp as TrendingUpIcon,
-  RefreshCw as RefreshCwIcon,
-  Search as SearchIcon
+  RefreshCw as RefreshCwIcon
 } from 'lucide-vue-next';
 
 const store = useStore();
@@ -91,22 +86,20 @@ const store = useStore();
 // State
 const loading = ref(false);
 const isRefreshing = ref(false);
-const refreshInterval = ref(null);
+const messagesInterval = ref(null);
 const isConnected = ref(true);
 const searchQuery = ref('');
-const filterType = ref('all'); // 'all' or 'active'
+const filterType = ref('all');
 const currentPage = ref(1);
 
 // Computed properties from store
 const stations = computed(() => store.getters.stations || []);
 const allMessages = computed(() => store.getters.liveChatmessages || []);
-const pagination = computed(() => store.getters.pagination);
 
 // Filter stations based on search and filter type
 const filteredStations = computed(() => {
   let filtered = stations.value;
   
-  // Apply search filter
   if (searchQuery.value.trim()) {
     const query = searchQuery.value.toLowerCase();
     filtered = filtered.filter(station => 
@@ -116,7 +109,6 @@ const filteredStations = computed(() => {
     );
   }
   
-  // Apply type filter
   if (filterType.value === 'active') {
     const activeStationIds = new Set(
       allMessages.value
@@ -129,58 +121,14 @@ const filteredStations = computed(() => {
   return filtered;
 });
 
-// Stats computed from real data
-const totalOnlineUsers = computed(() => {
-  // Estimate based on message activity
-  const uniqueUsers = new Set(allMessages.value.map(msg => msg.user_id));
-  return uniqueUsers.size + Math.floor(Math.random() * 100) + 50;
-});
-
-const activeStations = computed(() => stations.value.filter(station => station.status).length);
-
-const liveStations = computed(() => {
-  const activeStationIds = new Set(
-    allMessages.value
-      .filter(msg => msg.is_visible && isRecentMessage(msg.created_at))
-      .map(msg => msg.station_id)
-  );
-  return activeStationIds.size;
-});
-
-const stationsWithMessages = computed(() => {
-  const stationIds = new Set(allMessages.value.map(msg => msg.station_id));
-  return stationIds.size;
-});
-
-const messagesToday = computed(() => {
-  const today = new Date().toDateString();
-  return allMessages.value.filter(message => {
-    const messageDate = new Date(message.created_at).toDateString();
-    return messageDate === today && message.is_visible;
-  }).length;
-});
-
-// Helper function to check if message is recent (within last hour)
-const isRecentMessage = (timestamp) => {
-  if (!timestamp) return false;
-  const messageTime = new Date(timestamp);
-  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-  return messageTime > oneHourAgo;
-};
-
 // Methods
 const fetchStations = async () => {
-  const data = {
-    per_page: 50 // Get more stations for live chat
-  };
+  const data = { per_page: 50 };
   const page = currentPage.value;
   
   try {
     loading.value = true;
-    await store.dispatch('fetch_stations', {
-      data,
-      page
-    });
+    await store.dispatch('fetch_stations', { data, page });
   } catch (error) {
     console.error('Failed to fetch stations:', error);
     store.dispatch('template_play_error_file', 'Failed to load stations');
@@ -191,10 +139,26 @@ const fetchStations = async () => {
 
 const loadMessages = async () => {
   try {
-    // Load recent messages for all stations
     await store.dispatch('fetchAllMessages');
   } catch (error) {
     console.error('Failed to load messages:', error);
+  }
+};
+
+const startMessagesAutoRefresh = () => {
+  messagesInterval.value = setInterval(async () => {
+    try {
+      await loadMessages();
+    } catch (error) {
+      console.error('Auto-refresh messages failed:', error);
+    }
+  }, 4000); // Fetch messages every 4 seconds
+};
+
+const stopMessagesAutoRefresh = () => {
+  if (messagesInterval.value) {
+    clearInterval(messagesInterval.value);
+    messagesInterval.value = null;
   }
 };
 
@@ -204,7 +168,6 @@ const refreshAll = async () => {
   isRefreshing.value = true;
   
   try {
-    // Refresh both stations and messages
     await Promise.all([
       fetchStations(),
       loadMessages()
@@ -216,14 +179,6 @@ const refreshAll = async () => {
     store.dispatch('template_play_error_file', 'Failed to refresh data');
   } finally {
     isRefreshing.value = false;
-  }
-};
-
-
-const stopAutoRefresh = () => {
-  if (refreshInterval.value) {
-    clearInterval(refreshInterval.value);
-    refreshInterval.value = null;
   }
 };
 
@@ -245,20 +200,21 @@ watch(filterType, () => {
   searchQuery.value = '';
 });
 
-
 // Lifecycle
 onMounted(async () => {
   try {
     await fetchStations();
     await loadMessages();
     initializeWebSocket();
+    startMessagesAutoRefresh(); // Start auto-refresh for messages
   } catch (error) {
     console.error('Failed to initialize live chats:', error);
-    store.dispatch('utils/template_play_error_file', 'Failed to initialize live chats');
+    store.dispatch('template_play_error_file', 'Failed to initialize live chats');
   }
 });
 
 onUnmounted(() => {
+  stopMessagesAutoRefresh(); // Stop auto-refresh
   disconnectWebSocket();
 });
 </script>
