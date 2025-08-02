@@ -40,6 +40,7 @@ class RadioProgram(Base):
             'image_url': self.image_url,
             'created_by': self.created_by,
             'state': self.state,
+            'status': self.status,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }

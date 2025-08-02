@@ -105,18 +105,21 @@
             </div>
 
             <!-- Frequency Grid for Different Districts -->
-            <div class="max-w-3xl mx-auto">
-              <h3 class="text-white font-bold text-lg md:text-xl mb-4">Broadcasting Across Uganda</h3>
-              <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div v-for="(freq, index) in frequencies" :key="index" class="group relative">
-                  <div class="absolute -inset-1 bg-white   group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div class="relative bg-white/20 p-3 transition-all duration-300 transform hover:scale-105">
-                    <div class="text-lg font-bold text-red-600 mb-1">{{ freq.freq }}</div>
-                    <div class="text-xs text-red-600 font-medium">{{ freq.location }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- Frequency Grid for Different Districts -->
+<div class="max-w-3xl mx-auto">
+  <h3 class="text-white font-bold text-lg md:text-xl mb-4 text-center">Broadcasting Across Uganda</h3>
+  <div class="flex justify-center">
+    <div class="grid grid-cols-2 gap-3">
+      <div v-for="(freq, index) in frequencies" :key="index" class="group relative">
+        <div class="absolute -inset-1 bg-white group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div class="relative bg-white/20 p-3 transition-all duration-300 transform hover:scale-105">
+          <div class="text-lg font-bold text-red-600 mb-1">{{ freq.freq }}</div>
+          <div class="text-xs text-red-600 font-medium">{{ freq.location }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>
@@ -198,11 +201,7 @@ const newsItems = computed(() => store.getters.breakingnews?.data || [])
 // Beat FM Frequency data
 const frequencies = [
   { freq: '96.3', location: 'Kampala' },
-  { freq: '95.1', location: 'Mbale' },
-  { freq: '94.7', location: 'Mbarara' },
-  { freq: '97.2', location: 'Fort Portal' },
-  { freq: '98.5', location: 'Gulu' },
-  { freq: '93.9', location: 'Arua' },
+  { freq: '91.0', location: 'Masaka' },
 ]
 
 // Carousel items

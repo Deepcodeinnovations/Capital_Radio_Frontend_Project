@@ -118,18 +118,14 @@
             <!-- Streaming Status Badge -->
             <span :class="[
               'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium shadow-sm',
-              station.streaming_status === 'live' 
-                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' 
-                : station.streaming_status === 'offline'
-                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+              station.radio_access_status == 1
+                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
             ]">
               <div :class="[
                 'w-2 h-2 rounded-full mr-2',
-                station.streaming_status === 'live' ? 'bg-green-500 animate-pulse' : 
-                station.streaming_status === 'offline' ? 'bg-red-500' : 'bg-yellow-500'
+                station.radio_access_status == 1 ? 'bg-green-500 animate-pulse' : 'bg-red-500'
               ]"></div>
-              {{ station.streaming_status?.charAt(0).toUpperCase() + station.streaming_status?.slice(1) }}
+              {{ station.radio_access_status == 1 ? 'Active' : 'Inactive' }}
             </span>
           </div>
           

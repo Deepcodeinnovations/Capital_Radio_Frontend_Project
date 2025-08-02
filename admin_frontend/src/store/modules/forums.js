@@ -112,7 +112,7 @@ export default {
                 .then(async response => {
                     commit('setloader', false, { root: true })
                     if (response.data.data) {
-                        commit('addForum', response.data.data)
+                        commit('setForums', response.data.data)
                         toast.success(response.data.msg)
                         await comp_play_success_file('Forum Created Successfully')
                         resolve(response)

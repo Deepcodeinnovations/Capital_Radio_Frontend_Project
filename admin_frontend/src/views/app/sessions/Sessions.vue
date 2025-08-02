@@ -98,7 +98,7 @@
               :disabled="loading === 'toggle_program_status'"
               :class="[
                 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium disabled:opacity-50 transition-colors',
-                program.status === 'active' 
+                program.status == 1 
                   ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50' 
                   : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
               ]"
@@ -107,10 +107,10 @@
               <div v-else
                 :class="[
                   'w-1.5 h-1.5 rounded-full mr-1.5',
-                  program.status === 'active' ? 'bg-green-500' : 'bg-slate-400'
+                  program.status == 1 ? 'bg-green-500' : 'bg-slate-400'
                 ]"
               ></div>
-              {{ program.status === 'active' ? 'Active' : 'Inactive' }}
+              {{ program.status == 1 ? 'Active' : 'Inactive' }}
             </button>
             
             <div class="flex items-center gap-1">

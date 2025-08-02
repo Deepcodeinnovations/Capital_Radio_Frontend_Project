@@ -39,7 +39,7 @@ async def fetch_events(request: Request, db: AsyncSession = Depends(get_database
 
 
 @router.post("/create", status_code=status.HTTP_201_CREATED)
-async def create_new_event(request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
+async def create_new_event_endpoint(request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
     try:
         if hasattr(current_user, 'status_code'):
             import json
@@ -70,7 +70,7 @@ async def fetch_event(event_id: str, db: AsyncSession = Depends(get_database), c
 
 
 @router.post("/update/{event_id}", status_code=status.HTTP_200_OK)
-async def update_existing_event(event_id: str, request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
+async def update_existing_event_endpoint(event_id: str, request: Request, db: AsyncSession = Depends(get_database), current_user = Depends(get_current_user_details)):
     try:
         if hasattr(current_user, 'status_code'):
             import json
