@@ -1,1 +1,0 @@
-{"version":3,"file":"main-B0W3JNwk.js","sources":["../../src/views/app/forums/main.vue"],"sourcesContent":["<template>\r\n    <div>\r\n        <router-view />\r\n    </div>\r\n</template>\r\n\r\n"],"names":["_createElementBlock","_createVNode","_component_router_view"],"mappings":"8HACIA,EAEM,MAAA,KAAA,CADFC,EAAeC,CAAA"}
