@@ -1,7 +1,7 @@
 import axios from "axios";
-import Nprogress from 'nprogress';
-import 'nprogress/nprogress.css';
-import store from './store';
+import Nprogress from "nprogress";
+import "nprogress/nprogress.css";
+import store from "./store";
 
 // Optimized cache implementation
 const cache = new Map();
@@ -16,44 +16,46 @@ const setCacheData = (key, response, maxAge = 15 * 60 * 1000) => {
   cache.set(key, {
     data: response,
     timestamp: Date.now(),
-    maxAge
+    maxAge,
   });
 };
 
 const getCacheData = (key) => {
   const entry = cache.get(key);
   if (!entry) return null;
-  
+
   const isStale = Date.now() - entry.timestamp > entry.maxAge;
   return {
     ...entry.data,
     isStale,
-    fromCache: true
+    fromCache: true,
   };
 };
-
-const apidirecturl = window.location.href.includes('localhost') || window.location.href.includes('192.168.100.10')
-? 'http://127.0.0.1:8000/api/v1/user/'
-: 'https://capitalradio.deepcodegroup.com/api/v1/user/';
+const onlineaccess = "https://capitalradio.deepcodegroup.com/api/v1/user/";
+const apidirecturl =
+  window.location.href.includes("localhost") ||
+  window.location.href.includes("192.168.100.10")
+    ? "http://127.0.0.1:8000/api/v1/user/"
+    : onlineaccess;
 
 const axiosInstance = axios.create({
-  baseURL:apidirecturl,
+  baseURL: onlineaccess,
   timeout: 30000,
   withCredentials: true,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'crossDomain': true,
-    'Accept-Encoding': 'gzip, deflate, br'
-  }
+    "X-Requested-With": "XMLHttpRequest",
+    "Content-Type": "application/x-www-form-urlencoded",
+    crossDomain: true,
+    "Accept-Encoding": "gzip, deflate, br",
+  },
 });
 
 // Optimized progress bar configuration
-Nprogress.configure({ 
+Nprogress.configure({
   minimum: 0.1,
   showSpinner: false,
   speed: 200,
-  trickleSpeed: 100
+  trickleSpeed: 100,
 });
 
 let requestsCounter = 0;
@@ -64,9 +66,8 @@ axiosInstance.interceptors.request.use(
   async (config) => {
     // CRITICAL FIX: Preserve the original method and ensure it's never undefined
     // Default to POST since most API calls are POST requests (especially file uploads)
-    const originalMethod = config.method || 'post';
+    const originalMethod = config.method || "post";
     config.method = originalMethod.toLowerCase();
-    
 
     if (requestsCounter === 0) {
       if (progressTimeout) clearTimeout(progressTimeout);
@@ -77,30 +78,31 @@ axiosInstance.interceptors.request.use(
     // Token handling
     const authuser = store.getters.authuser;
     if (authuser) {
-      config.headers.Authorization = 'Bearer ' + localStorage.getItem('capital_radio_token' + authuser.id);
+      config.headers.Authorization =
+        "Bearer " + localStorage.getItem("capital_radio_token" + authuser.id);
     } else {
-      config.headers.Authorization = 'Bearer ';
+      config.headers.Authorization = "Bearer ";
     }
 
     // Add clientData to request data
     let client_Data = store.getters.clientdata;
-    
+
     // Provide fallback if clientdata is null/undefined
-    if (!client_Data || typeof client_Data !== 'object') {
+    if (!client_Data || typeof client_Data !== "object") {
       client_Data = {
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent,
-        url: window.location.href
+        url: window.location.href,
       };
     }
-    
+
     const clientDataString = JSON.stringify(client_Data);
-    console.log('Client Data:', client_Data);
-    console.log('Client Data String:', clientDataString);
-    
+    console.log("Client Data:", client_Data);
+    console.log("Client Data String:", clientDataString);
+
     if (clientDataString) {
       // Handle different types of request data formats
-      if (config.method === 'get') {
+      if (config.method === "get") {
         // For GET requests, append to params
         config.params = config.params || {};
         config.params.clientData = clientDataString;
@@ -109,41 +111,44 @@ axiosInstance.interceptors.request.use(
         if (config.data) {
           // If data is FormData
           if (config.data instanceof FormData) {
-            console.log('Processing FormData request');
-            config.data.append('clientData', clientDataString);
+            console.log("Processing FormData request");
+            config.data.append("clientData", clientDataString);
             // Remove Content-Type for FormData
-            if (config.headers['Content-Type']) {
-              delete config.headers['Content-Type'];
+            if (config.headers["Content-Type"]) {
+              delete config.headers["Content-Type"];
             }
-          } 
+          }
           // If data is JSON object
-          else if (typeof config.data === 'object' && !(config.data instanceof ArrayBuffer)) {
-            if (typeof config.data === 'string') {
+          else if (
+            typeof config.data === "object" &&
+            !(config.data instanceof ArrayBuffer)
+          ) {
+            if (typeof config.data === "string") {
               try {
                 const parsedData = JSON.parse(config.data);
                 config.data = {
                   ...parsedData,
-                  clientData: clientDataString
+                  clientData: clientDataString,
                 };
               } catch (e) {
                 // If not valid JSON, append as is
-                config.data = config.data + '&clientData=' + clientDataString;
+                config.data = config.data + "&clientData=" + clientDataString;
               }
             } else {
               // Direct object
               config.data = {
                 ...config.data,
-                clientData: clientDataString
+                clientData: clientDataString,
               };
             }
-          } 
+          }
           // Handle other data formats if needed
           else {
-            console.warn('Unable to append clientData to request', config);
+            console.warn("Unable to append clientData to request", config);
           }
         } else {
           console.log("no data");
-          let clientData = clientDataString
+          let clientData = clientDataString;
           // If no data exists, create it
           config.data = { clientData };
         }
@@ -187,16 +192,16 @@ axiosInstance.interceptors.request.use(
     */
 
     config.requestId = Math.random().toString(36).slice(7);
-    
+
     // Final check before returning config
     if (!config.method) {
-      console.error('CRITICAL: config.method is still undefined!');
-      config.method = 'post'; // Default to POST
+      console.error("CRITICAL: config.method is still undefined!");
+      config.method = "post"; // Default to POST
     }
-    
-    console.log('Final config method before return:', config.method);
-    console.log('=== END AXIOS REQUEST DEBUG ===');
-    
+
+    console.log("Final config method before return:", config.method);
+    console.log("=== END AXIOS REQUEST DEBUG ===");
+
     return config;
   },
   (error) => {
@@ -236,8 +241,8 @@ axiosInstance.interceptors.response.use(
     }
 
     if (!error.response) {
-      console.error('Network Error:', error);
-      throw new Error('Network error occurred. Please check your connection.');
+      console.error("Network Error:", error);
+      throw new Error("Network error occurred. Please check your connection.");
     }
 
     // if (error.response.status === 401) {
@@ -263,8 +268,8 @@ axiosInstance.interceptors.response.use(
       config.retryDelay * Math.pow(1, config.retryCount - 1),
       30000 // Max delay of 30 seconds
     );
-    
-    await new Promise(resolve => setTimeout(resolve, backoffDelay));
+
+    await new Promise((resolve) => setTimeout(resolve, backoffDelay));
     return axiosInstance(config);
   }
 );
@@ -286,7 +291,8 @@ window.axios = axiosInstance;
 
 axiosInstance.defaults.retry = 1;
 axiosInstance.defaults.retryDelay = 1000;
-axiosInstance.defaults.timeoutErrorMessage = 'Request timed out. Please try again.';
+axiosInstance.defaults.timeoutErrorMessage =
+  "Request timed out. Please try again.";
 
 const CancelToken = axios.CancelToken;
 axiosInstance.cancelToken = CancelToken;
