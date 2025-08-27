@@ -24,6 +24,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="KIIS FM" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,13 +35,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://kiisfm.ug/" />
+    <meta property="og:url" content="https://kiis1009.co.ug/" />
     <meta property="og:title" content="100.9 KIIS FM - Fresh Hits for Uganda" />
     <meta
       property="og:description"
       content="Uganda's Premium Hit Station playing the freshest hits, latest music, and live shows. Listen live now!"
     />
-    <meta property="og:image" content="https://kiisfm.ug/og-image.jpg" />
+    <meta property="og:image" content="https://kiis1009.co.ug/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="KIIS FM Uganda" />
@@ -48,7 +49,7 @@
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://kiisfm.ug/" />
+    <meta property="twitter:url" content="https://kiis1009.co.ug/" />
     <meta
       property="twitter:title"
       content="100.9 KIIS FM - Fresh Hits for Uganda"
@@ -59,7 +60,7 @@
     />
     <meta
       property="twitter:image"
-      content="https://kiisfm.ug/twitter-image.jpg"
+      content="https://kiis1009.co.ug/twitter-image.jpg"
     />
     <meta property="twitter:site" content="@KIISFMUganda" />
     <meta property="twitter:creator" content="@KIISFMUganda" />
@@ -82,7 +83,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ec4899" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://kiisfm.ug/" />
+    <link rel="canonical" href="https://kiis1009.co.ug/" />
 
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -92,6 +93,11 @@
       rel="stylesheet"
     />
 
+    <!-- Logo Preload for Better Visibility -->
+    <link rel="preload" href="/logokiis.png" as="image" type="image/png" />
+    <link rel="preload" href="/logo.png" as="image" type="image/png" />
+    <link rel="preload" href="/assets/logokiis.png" as="image" type="image/png" />
+
     <!-- Structured Data -->
     <script type="application/ld+json">
       {
@@ -100,9 +106,9 @@
         "name": "KIIS FM",
         "alternateName": "100.9 KIIS FM",
         "description": "Uganda's Premium Hit Station playing the freshest hits, latest music, and live shows",
-        "url": "https://kiisfm.ug/",
-        "logo": "https://kiisfm.ug/logokiis.png",
-        "image": "https://kiisfm.ug/og-image.jpg",
+        "url": "https://kiis1009.co.ug/",
+        "logo": "https://kiis1009.co.ug/logokiis.png",
+        "image": "https://kiis1009.co.ug/og-image.jpg",
         "broadcastFrequency": "100.9 FM",
         "address": {
           "@type": "PostalAddress",
@@ -116,9 +122,78 @@
         ]
       }
     </script>
+
+    <!-- Additional CSS to ensure logo visibility -->
+    <style>
+      /* Ensure logos are visible and properly loaded */
+      img[src*="logo"] {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+      
+      /* Prevent flash of unstyled content for logos */
+      .logo-container {
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* Fallback for missing logos */
+      .logo-fallback {
+        background: linear-gradient(45deg, #ec4899, #f472b6);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-align: center;
+      }
+    </style>
   </head>
   <body id="body">
     <div id="app"></div>
+    
+    <!-- Logo loading verification script -->
+    <script>
+      // Ensure logo images are properly loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        const logoImages = document.querySelectorAll('img[src*="logo"]');
+        
+        logoImages.forEach(img => {
+          img.onerror = function() {
+            console.warn('Logo failed to load:', this.src);
+            // Try alternative paths
+            const alternatives = [
+              '/logokiis.png',
+              '/logo.png', 
+              '/assets/logokiis.png',
+              '/assets/logo.png',
+              '/public/logokiis.png',
+              '/src/assets/logokiis.png'
+            ];
+            
+            let currentIndex = alternatives.indexOf(this.src.split('/').pop());
+            if (currentIndex < alternatives.length - 1) {
+              this.src = alternatives[currentIndex + 1];
+            } else {
+              // Show fallback if all alternatives fail
+              this.style.display = 'none';
+              const fallback = document.createElement('div');
+              fallback.className = 'logo-fallback';
+              fallback.textContent = 'KIIS FM 100.9';
+              this.parentNode.appendChild(fallback);
+            }
+          };
+          
+          img.onload = function() {
+            console.log('Logo loaded successfully:', this.src);
+            this.style.opacity = '1';
+          };
+        });
+      });
+    </script>
+    
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
