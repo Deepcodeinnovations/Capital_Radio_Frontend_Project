@@ -10,15 +10,37 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v2
     
-    # - name: 📂 Sync files to admin
+    - name: 📂 Sync files to admin
+      uses: SamKirkland/FTP-Deploy-Action@4.0.0
+      with:
+        server: ftp.capitalradio.co.ug
+        port: 22
+        username: "capitalradio"
+        password: '-X2i3g6+Agj_'
+        server-dir: /home/capitalradio/admin/
+        local-dir: admin_frontend/dist/
+        exclude: |
+          **/__pycache__/**
+          **/*.pyc
+          **/*.pyo
+          **/.git/**
+          **/.gitignore
+          **/venv/**
+          **/.env
+          **/logs/**
+          **/*.log
+
+    # - name: 📂 Sync files to data dispatch host
     #   uses: SamKirkland/FTP-Deploy-Action@4.0.0
+    #   continue-on-error: true
     #   with:
-    #     server: ftp.capitalradio.co.ug
-    #     port: 22
-    #     username: "capitalradio"
-    #     password: '-X2i3g6+Agj_'
-    #     server-dir: /home/capitalradio/admin/
-    #     local-dir: admin_frontend/dist/
+    #     server: ftp.deepcodegroup.com
+    #     username: 'deepcodegroup'
+    #     password: '@Deepcodein_2024'
+    #     server-dir: /domains/capitalradio.deepcodegroup.com/public_html/
+    #     local-dir: backend/
+    #     dry-run: false
+    #     force-ftps: false
     #     exclude: |
     #       **/__pycache__/**
     #       **/*.pyc
@@ -30,24 +52,3 @@ jobs:
     #       **/logs/**
     #       **/*.log
 
-    - name: 📂 Sync files to data dispatch host
-      uses: SamKirkland/FTP-Deploy-Action@4.0.0
-      continue-on-error: true
-      with:
-        server: ftp.deepcodegroup.com
-        username: 'deepcodegroup'
-        password: '@Deepcodein_2024'
-        server-dir: /domains/capitalradio.deepcodegroup.com/public_html/
-        local-dir: backend/
-        dry-run: false
-        force-ftps: false
-        exclude: |
-          **/__pycache__/**
-          **/*.pyc
-          **/*.pyo
-          **/.git/**
-          **/.gitignore
-          **/venv/**
-          **/.env
-          **/logs/**
-          **/*.log
