@@ -1,365 +1,165 @@
 <template>
-  <div class="relative overflow-hidden">
-    <!-- Main Hero Section -->
-    <div class="relative">
-      <!-- Background Carousel -->
+  <div class="relative bg-gray-50">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden">
+      <!-- Background Image with Overlay -->
       <div class="absolute inset-0">
         <div
           v-for="(slide, index) in carouselItems"
           :key="slide?.id || index"
           :class="[
-            'absolute inset-0 transition-all duration-1000 ease-in-out',
-            index === currentSlide
-              ? 'opacity-100 scale-100'
-              : 'opacity-0 scale-110',
+            'absolute inset-0 transition-opacity duration-1000',
+            index === currentSlide ? 'opacity-100' : 'opacity-0',
           ]"
         >
-          <!-- Background Image -->
-          <div class="absolute inset-0">
-            <img
-              :src="
-                slide?.image_url ||
-                slide?.featured_image_url ||
-                'https://images.unsplash.com/photo-1589903308904-1010c2294adc?w=2000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHJhZGlvfGVufDB8fDB8fHww'
-              "
-              :alt="slide?.title || 'Background'"
-              class="w-full h-full object-cover"
-            />
-            <!-- Enhanced Overlay -->
-            <div
-              class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/70"
-            ></div>
-            <div
-              class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/20"
-            ></div>
-          </div>
+          <img
+            :src="slide?.image_url || slide?.featured_image_url || '/api/placeholder/1920/1080'"
+            :alt="slide?.title || 'Background'"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
         </div>
       </div>
 
-      <!-- hero section -->
-      <div
-        class="relative z-30 flex items-center min-h-[calc(130vh-6rem)] md:min-h-[calc(140vh-2rem)]"
-      >
-        <div class="container mx-auto px-4 md:px-6">
-          <div
-            class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
-          >
-            <!-- Main Content -->
-            <div
-              class="lg:col-span-8 text-center lg:text-left order-2 lg:order-1"
-            >
-              <!-- Content Badge -->
-              <div
-                class="inline-flex items-center rounded-full space-x-2 bg-white/10 backdrop-blur-md px-3 md:px-4 py-2 border border-white/20 mb-4 md:mb-6"
-              >
-                <div class="w-2 h-2 bg-[#F8CB00] animate-pulse"></div>
-                <span
-                  class="text-white/90 font-medium text-xs md:text-sm uppercase tracking-wider"
-                >
-                  {{
-                    currentSlideData?.type === "advert"
-                      ? "Sponsored"
-                      : currentSlideData?.type === "news"
-                      ? "Breaking News"
-                      : "Live Radio"
-                  }}
+      <!-- Content -->
+      <div class="relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32 lg:py-40">
+          <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <!-- Left Content -->
+            <div class="text-white space-y-8 lg:col-span-7">
+              <!-- Live Badge -->
+              <div v-scroll-reveal="{ animation: 'fade', delay: 0 }" class="inline-flex items-center space-x-2 bg-red-600 px-4 py-2 rounded-full">
+                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                <span class="text-xs font-bold uppercase tracking-wider">
+                  {{ currentSlideData?.type === 'news' ? 'Breaking News' : 'Live Now' }}
                 </span>
               </div>
-              <!-- Main Headline -->
-              <h1
-                class="text-4xl sm:text-md md:text-1xl lg:text-3xl xl:text-4xl font-bold mb-4 md:mb-6 leading-tight"
-              >
-                <span
-                  class="bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent"
-                >
-                  {{
-                    truncateText(
-                      currentSlideData?.title || "Capital FM 91.3",
-                      60
-                    )
-                  }}
-                </span>
+
+              <!-- Headline -->
+              <h1 v-scroll-reveal="{ animation: 'fade-up', delay: 100 }" class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight line-clamp-1">
+                {{ currentSlideData?.title || "Uganda's Premier Radio Station" }}
               </h1>
-              <!-- Subtitle -->
-              <p
-                class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 md:mb-8 leading-relaxed max-w-4xl"
-              >
-                {{
-                  truncateText(
-                    currentSlideData?.description ??
-                      currentSlideData?.excerpt ??
-                      "Uganda's Premier Radio Station - Fresh Hits, Breaking News & Entertainment",
-                    140
-                  )
-                }}
+
+              <!-- Description -->
+              <p v-scroll-reveal="{ animation: 'fade-up', delay: 200 }" class="text-lg sm:text-xl text-gray-200 leading-relaxed">
+                {{ truncateText(currentSlideData?.description || currentSlideData?.excerpt || "Fresh Hits, Breaking News & Quality Entertainment 24/7", 150) }}
               </p>
-              <!-- Action Buttons -->
-              <div
-                class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-              >
-                <!-- Primary Action -->
+
+              <!-- Buttons -->
+              <div v-scroll-reveal="{ animation: 'fade-up', delay: 300 }" class="flex flex-col sm:flex-row gap-4">
                 <button
                   @click="togglePlayPause"
                   :disabled="isLoading"
-                  class="relative group overflow-hidden rounded-2xl"
+                  :class="[
+                    'px-8 py-4 text-sm font-bold uppercase tracking-wider transition-all flex items-center justify-center space-x-3 rounded-full',
+                    isPlaying
+                      ? 'bg-red-600 hover:bg-red-700 text-white'
+                      : 'bg-[#F8CB00] hover:bg-yellow-500 text-black',
+                  ]"
                 >
-                  <div
-                    class="absolute -inset-0.5 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-80 transition duration-300"
-                  ></div>
-                  <div
-                    class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-8 py-4 rounded-2xl text-black font-bold flex items-center space-x-3 transition-all duration-300"
-                  >
-                    <div
-                      v-if="isLoading"
-                      class="w-5 h-5 border-2 rounded-full border-black border-t-transparent animate-spin"
-                    ></div>
-                    <Volume2
-                      v-else-if="isPlaying"
-                      :size="20"
-                      class="animate-bounce text-white"
-                    />
-                    <Play class="text-white" v-else :size="20" />
-                    <span class="tracking-wide" v-if="isLoading"
-                      >CONNECTING</span
-                    >
-                    <span class="tracking-wide text-white" v-else-if="isPlaying"
-                      >LISTENING LIVE</span
-                    >
-                    <span class="tracking-wide text-white" v-else
-                      >TUNE IN NOW</span
-                    >
-                  </div>
+                  <div v-if="isLoading" class="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                  <Volume2 v-else-if="isPlaying" :size="20" />
+                  <Play v-else :size="20" />
+                  <span>{{ isLoading ? 'Connecting...' : isPlaying ? 'Listening Live' : 'Listen Live' }}</span>
                 </button>
-                <!-- Secondary Action for Adverts -->
+
                 <button
-                  v-if="
-                    currentSlideData?.type === 'advert' &&
-                    currentSlideData?.target_url
-                  "
-                  @click="handleAdvertClick"
-                  class="group rounded-full flex items-center justify-center space-x-3 px-6 md:px-8 py-3 md:py-4 font-bold text-base md:text-lg transition-all duration-500 transform hover:scale-105 shadow-xl backdrop-blur-md border-2 bg-white/10 border-white/30 text-white hover:bg-white/20"
-                >
-                  <ExternalLink
-                    :size="24"
-                    class="group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <span>{{
-                    currentSlideData?.button_title || "LEARN MORE"
-                  }}</span>
-                </button>
-                <button
-                  v-else
+                  v-if="currentSlideData?.type === 'news'"
                   @click="handleDetailsClick(currentSlideData)"
-                  class="group rounded-full flex items-center justify-center space-x-3 px-6 md:px-8 py-3 md:py-4 font-bold text-base md:text-lg transition-all duration-500 transform hover:scale-105 shadow-xl backdrop-blur-md border-2 bg-white/10 border-white/30 text-white hover:bg-white/20"
+                  class="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full text-sm font-bold uppercase tracking-wider transition-all flex items-center justify-center space-x-2"
                 >
-                  <ExternalLink
-                    :size="24"
-                    class="group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <span>Read Details</span>
+                  <span>Read Story</span>
+                  <ChevronRight :size="18" />
+                </button>
+
+                <button
+                  v-else-if="currentSlideData?.type === 'advert' && currentSlideData?.target_url"
+                  @click="handleAdvertClick"
+                  class="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-full text-sm font-bold uppercase tracking-wider transition-all flex items-center justify-center space-x-2"
+                >
+                  <span>{{ currentSlideData?.button_title || 'Learn More' }}</span>
+                  <ExternalLink :size="18" />
                 </button>
               </div>
-              <!-- Stats Section -->
-              <div
-                class="grid grid-cols-3 gap-4 md:gap-6 mt-8 md:mt-12 max-w-md mx-auto lg:mx-0"
-              >
-                <div class="text-center lg:text-left">
-                  <div class="text-2xl md:text-3xl font-bold text-white mb-1">
-                    91.3
-                  </div>
-                  <div class="text-xs md:text-sm text-white/70">
-                    MHz Frequency
-                  </div>
+
+              <!-- Stats -->
+              <div v-scroll-reveal="{ animation: 'fade-up', delay: 400 }" class="grid grid-cols-3 gap-8 pt-8">
+                <div>
+                  <div class="text-3xl font-bold text-[#F8CB00]">91.3</div>
+                  <div class="text-sm text-gray-300">FM</div>
                 </div>
-                <div class="text-center lg:text-left">
-                  <div class="text-2xl md:text-3xl font-bold text-white mb-1">
-                    24/7
-                  </div>
-                  <div class="text-xs md:text-sm text-white/70">
-                    Broadcasting
-                  </div>
+                <div>
+                  <div class="text-3xl font-bold text-[#F8CB00]">24/7</div>
+                  <div class="text-sm text-gray-300">Live</div>
                 </div>
-                <div class="text-center lg:text-left">
-                  <div class="text-2xl md:text-3xl font-bold text-white mb-1">
-                    {{ currentStation?.listeners || "+" }}+
-                  </div>
-                  <div class="text-xs md:text-sm text-white/70">Listeners</div>
-                </div>
-              </div>
-              <!-- Frequency Grid for Different Districts -->
-              <div class="mt-8 md:mt-12">
-                <h3
-                  class="text-white font-bold text-lg md:text-xl mb-4 text-center lg:text-left"
-                >
-                  Broadcasting Across Uganda
-                </h3>
-                <div class="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
-                  <div
-                    v-for="(freq, index) in frequencies"
-                    :key="index"
-                    class="group relative"
-                  >
-                    <div
-                      class="absolute -inset-1 bg-gradient-to-br from-yellow-500/20 to-red-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    ></div>
-                    <div
-                      class="relative bg-black/30 backdrop-blur-sm p-3 rounded-lg text-center border border-white/20 hover:border-yellow-400/50 transition-all duration-300 transform hover:scale-105"
-                    >
-                      <div class="text-lg font-bold text-yellow-400 mb-1">
-                        {{ freq.freq }}
-                      </div>
-                      <div class="text-xs text-white/70 font-medium">
-                        {{ freq.location }}
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <div class="text-3xl font-bold text-[#F8CB00]">{{ currentStation?.listeners || '10K' }}+</div>
+                  <div class="text-sm text-gray-300">Listeners</div>
                 </div>
               </div>
             </div>
-            <!-- On Air Card -->
-            <div class="lg:col-span-4 order-1 lg:order-2 hidden lg:block">
-              <div
-                class="bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl p-6 md:p-8 shadow-2xl max-w-md mx-auto"
+
+            <!-- Right Content - On Air Card -->
+            <div v-if="getTodaySchedule().length > 0" v-scroll-reveal="{ animation: 'fade-left', delay: 200 }" class="bg-white rounded-2xl shadow-2xl p-8 space-y-6 lg:col-span-5">
+              <!-- On Air Header -->
+              <div class="flex items-center justify-between border-b pb-4">
+                <div class="flex items-center space-x-2">
+                  <div class="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
+                  <span class="text-red-600 font-bold text-sm uppercase">On Air Now</span>
+                </div>
+                <span class="text-gray-500 text-sm">{{ getCurrentTime() }}</span>
+              </div>
+
+              <!-- Current Show -->
+              <div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">
+                  {{ currentShow?.program?.title || 'Live Show' }}
+                </h3>
+                <p class="text-gray-600 mb-3">
+                  with {{ getCurrentSessionHosts(currentShow) }}
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <Clock :size="14" class="mr-1.5" />
+                  {{ currentShow?.start_time || '00:00' }} - {{ currentShow?.end_time || '00:00' }}
+                </div>
+              </div>
+
+              <!-- Listen Button -->
+              <button
+                @click="togglePlayPause"
+                :disabled="isLoading"
+                :class="[
+                  'w-full px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all flex items-center justify-center space-x-2',
+                  isPlaying
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-[#F8CB00] hover:bg-yellow-500 text-black',
+                ]"
               >
-                <!-- Live Indicator -->
-                <div class="flex items-center space-x-3 mb-6">
-                  <div class="relative">
-                    <div class="w-3 h-3 bg-red-500 animate-pulse"></div>
-                    <div
-                      class="absolute inset-0 w-3 h-3 bg-red-500 animate-ping"
-                    ></div>
-                  </div>
-                  <span
-                    class="text-red-400 font-bold text-sm uppercase tracking-wider"
-                    >ON AIR NOW</span
-                  >
-                </div>
-                <!-- Show Info -->
-                <div class="mb-6">
-                  <h3 class="text-white font-bold text-xl md:text-2xl mb-2">
-                    {{ currentShow?.program.title }}
-                  </h3>
-                  <p class="text-white/80 text-base md:text-lg mb-3">
-                    with {{ getCurrentSessionHosts(currentShow) }}
-                  </p>
-                  <div class="flex items-center text-white/60 text-sm">
-                    <Clock :size="16" class="mr-2" />
-                    <span
-                      >{{ currentShow?.start_time }} -
-                      {{ currentShow?.end_time }}</span
-                    >
-                  </div>
-                </div>
-                <!-- Quick Actions -->
-                <div class="space-y-3 mb-6">
-                  <button
-                    @click="togglePlayPause"
-                    :disabled="isLoading"
-                    class="relative group overflow-hidden rounded-2xl w-full"
-                  >
-                    <div
-                      class="absolute -inset-0.5 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-80 transition duration-300"
-                    ></div>
-                    <div
-                      class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-8 py-4 rounded-2xl text-black font-bold flex items-center space-x-3 transition-all duration-300"
-                    >
-                      <div
-                        v-if="isLoading"
-                        class="w-5 h-5 border-2 rounded-full border-black border-t-transparent animate-spin"
-                      ></div>
-                      <Volume2
-                        v-else-if="isPlaying"
-                        :size="20"
-                        class="animate-bounce"
-                      />
-                      <Play class="text-white" v-else :size="20" />
-                      <span class="tracking-wide" v-if="isLoading"
-                        >CONNECTING</span
-                      >
-                      <span class="tracking-wide" v-else-if="isPlaying"
-                        >LISTENING LIVE</span
-                      >
-                      <span class="tracking-wide text-white" v-else
-                        >TUNE IN NOW</span
-                      >
-                    </div>
-                  </button>
-                </div>
-                <!-- Today's Programs -->
-                <div class="border-t border-white/20 pt-6">
-                  <h4 class="text-white font-bold text-lg mb-4">
-                    Today's Programs
-                  </h4>
+                <Volume2 v-if="isPlaying" :size="16" />
+                <Play v-else :size="16" />
+                <span>{{ isPlaying ? 'Live Now' : 'Tune In' }}</span>
+              </button>
+
+              <!-- Today's Schedule -->
+              <div class="border-t pt-6">
+                <h4 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Today's Schedule</h4>
+                <div class="space-y-2 max-h-64 overflow-y-auto">
                   <div
-                    class="space-y-3 max-h-64 overflow-y-auto custom-scrollbar"
+                    v-for="(session, index) in getTodaySchedule().slice(0, 6)"
+                    :key="index"
+                    :class="[
+                      'flex items-center justify-between p-3 rounded-lg transition-all',
+                      isCurrentSession(session) ? 'bg-yellow-50 border-l-4 border-[#F8CB00]' : 'hover:bg-gray-50',
+                    ]"
                   >
-                    <div
-                      v-for="(session, index) in getTodaySchedule()"
-                      :key="index"
-                      @click="selectProgram(session)"
-                      class="flex items-center p-3 rounded-xl transition-all duration-300 cursor-pointer group/session transform hover:scale-[1.02]"
-                      :class="[
-                        isCurrentSession(session)
-                          ? 'bg-gradient-to-r from-red-500/20 to-red-600/20 border-l-4 border-red-500 shadow-lg shadow-red-500/10'
-                          : selectedProgram?.id === session.program_id
-                          ? 'bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border border-yellow-500/30 shadow-lg shadow-yellow-500/10'
-                          : 'hover:bg-white/10 border border-transparent hover:border-white/30',
-                      ]"
-                    >
-                      <!-- Time display -->
-                      <div class="w-16 text-right mr-3">
-                        <span
-                          class="text-sm font-bold"
-                          :class="
-                            isCurrentSession(session)
-                              ? 'text-yellow-400'
-                              : 'text-white/60'
-                          "
-                        >
-                          {{ session.start_time }}
-                        </span>
+                    <div class="flex-1">
+                      <div :class="isCurrentSession(session) ? 'text-gray-900 font-semibold' : 'text-gray-700'" class="text-sm">
+                        {{ session.program?.title || 'Live Show' }}
                       </div>
-                      <!-- Show details -->
-                      <div class="flex-1">
-                        <p
-                          class="font-bold text-sm"
-                          :class="
-                            isCurrentSession(session)
-                              ? 'text-white'
-                              : 'text-white/80 group-hover/session:text-white'
-                          "
-                        >
-                          {{ session.program?.title || "Live Show" }}
-                        </p>
-                        <p class="text-xs text-white/50 font-medium">
-                          {{ getSessionHosts(session) }}
-                        </p>
-                      </div>
-                      <!-- Status indicators -->
-                      <div class="flex items-center gap-2">
-                        <div
-                          v-if="isCurrentSession(session)"
-                          class="flex items-center gap-2"
-                        >
-                          <div
-                            class="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg"
-                          ></div>
-                          <span class="text-xs text-red-400 font-bold"
-                            >LIVE</span
-                          >
-                        </div>
-                        <div
-                          v-else-if="isUpcoming(session)"
-                          class="flex items-center gap-2"
-                        >
-                          <div
-                            class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"
-                          ></div>
-                          <span class="text-xs text-blue-400 font-bold"
-                            >NEXT</span
-                          >
-                        </div>
-                      </div>
+                      <div class="text-xs text-gray-500">{{ getSessionHosts(session) }}</div>
+                    </div>
+                    <div class="text-xs font-mono text-gray-500">
+                      {{ session.start_time }}
                     </div>
                   </div>
                 </div>
@@ -367,63 +167,43 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Carousel Controls -->
-      <div
-        v-if="carouselItems && carouselItems.length > 1"
-        class="absolute rounded-full bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 z-30"
-      >
-        <div
-          class="flex items-center space-x-3 bg-black/20 backdrop-blur-md px-4 py-3 rounded-full border border-white/20"
-        >
-          <button
-            @click="prevSlide"
-            class="p-2 bg-white/10 text-white hover:bg-white/20 transition-all duration-300 rounded-lg"
-          >
-            <ChevronLeft :size="18" />
-          </button>
-
-          <div class="flex space-x-2">
+        <!-- Carousel Indicators -->
+        <div v-if="carouselItems && carouselItems.length > 1" class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div class="flex items-center space-x-2">
             <button
               v-for="(slide, index) in carouselItems"
               :key="slide?.id || index"
               @click="setCurrentSlide(index)"
               :class="[
-                'w-2 h-2 rounded-full transition-all duration-300',
-                index === currentSlide
-                  ? 'bg-white w-6'
-                  : 'bg-white/50 hover:bg-white/75',
+                'transition-all rounded-full',
+                index === currentSlide ? 'w-8 h-2 bg-[#F8CB00]' : 'w-2 h-2 bg-white/50 hover:bg-white/80',
               ]"
             />
           </div>
-
-          <button
-            @click="nextSlide"
-            class="p-2 bg-white/10 text-white hover:bg-white/20 transition-all duration-300 rounded-lg"
-          >
-            <ChevronRight :size="18" />
-          </button>
         </div>
       </div>
+    </div>
 
-      <!-- Bottom Wave Divider -->
-      <div
-        class="absolute bottom-0 left-0 w-full overflow-hidden"
-        style="transform: translateY(1px)"
-      >
-        <svg
-          class="w-full h-auto"
-          preserveAspectRatio="none"
-          viewBox="0 0 1200 120"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0,60 C400,120 800,0 1200,60 L1200,120 L0,120 Z"
-            fill="white"
-          ></path>
-        </svg>
+    <!-- Frequencies Section -->
+    <div class="bg-white border-t">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div v-scroll-reveal="{ animation: 'fade-up', delay: 0 }" class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-900">Broadcasting Across Uganda</h2>
+          <p class="text-gray-600 mt-2">Tune in to your nearest frequency</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div
+            v-for="(freq, index) in frequencies"
+            :key="index"
+            class="text-center p-6 rounded-xl border border-gray-200 hover:border-[#F8CB00] hover:shadow-md transition-all group"
+          >
+            <div class="text-3xl font-bold text-gray-900 group-hover:text-[#F8CB00] transition-colors">
+              {{ freq.freq }}
+            </div>
+            <div class="text-sm text-gray-500 mt-1">{{ freq.location }}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -433,33 +213,22 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import {
-  Play,
-  Pause,
-  ChevronLeft,
-  ChevronRight,
-  Volume2,
-  Waves,
-  Clock,
-  ExternalLink,
-} from "lucide-vue-next";
+import { Play, Volume2, Clock, ExternalLink, ChevronRight } from "lucide-vue-next";
 
 const store = useStore();
 const router = useRouter();
 
-// State
 const currentSlide = ref(0);
 const carouselTimer = ref(null);
-const selectedProgram = ref(null);
+const windowWidth = ref(window.innerWidth);
 
-// Computed
 const isPlaying = computed(() => store.getters.isPlaying);
 const isLoading = computed(() => store.getters.isLoading);
 const currentStation = computed(() => store.getters.station);
 const adverts = computed(() => store.getters.adverts?.data || []);
 const newsItems = computed(() => store.getters.breakingnews?.data || []);
+const isMobile = computed(() => windowWidth.value < 640);
 
-// Frequency data
 const frequencies = [
   { freq: "91.3", location: "Kampala" },
   { freq: "90.9", location: "Mbale" },
@@ -469,7 +238,6 @@ const frequencies = [
   { freq: "92.7", location: "Arua" },
 ];
 
-// Today's schedule
 const todaySchedule = computed(() => {
   if (!currentStation.value?.schedule?.sessions) return [];
   const today = getCurrentDay();
@@ -482,7 +250,6 @@ const getTodaySchedule = () => {
   return currentStation.value.schedule.sessions[today] || [];
 };
 
-// Current show
 const currentShow = computed(() => {
   const currentTime = getCurrentTime();
   return todaySchedule.value.find((show) =>
@@ -490,18 +257,13 @@ const currentShow = computed(() => {
   );
 });
 
-// Carousel items
 const carouselItems = computed(() => {
   const items = [];
 
   if (adverts.value && Array.isArray(adverts.value)) {
     adverts.value.forEach((advert) => {
       if (advert) {
-        items.push({
-          ...advert,
-          type: "advert",
-          image: advert.image_url,
-        });
+        items.push({ ...advert, type: "advert" });
       }
     });
   }
@@ -509,11 +271,7 @@ const carouselItems = computed(() => {
   if (newsItems.value && Array.isArray(newsItems.value)) {
     newsItems.value.forEach((news) => {
       if (news && news.status && news.state) {
-        items.push({
-          ...news,
-          type: "news",
-          image: news.image_url || "/api/placeholder/1920/1080",
-        });
+        items.push({ ...news, type: "news" });
       }
     });
   }
@@ -523,9 +281,7 @@ const carouselItems = computed(() => {
       {
         id: "fallback",
         title: "Capital FM 91.3",
-        description:
-          "Uganda's Premier Radio Station - Fresh Hits, Breaking News & Entertainment",
-        image: "/api/placeholder/1920/1080",
+        description: "Uganda's Premier Radio Station - Fresh Hits, Breaking News & Quality Entertainment",
         type: "default",
       },
     ];
@@ -539,63 +295,29 @@ const currentSlideData = computed(() => {
   return carouselItems.value[currentSlide.value] || null;
 });
 
-// Helper methods
-const getCurrentHosts = () => {
-  if (!currentShow.value?.program?.hosts) return [];
-
-  return currentShow.value.program.hosts.map((hostId) => {
-    const host = currentShow.value.program.hosts.find((h) => h.id === hostId);
-    return host || { id: hostId, name: "Unknown Host", role: "Host" };
-  });
-};
-
 const getCurrentSessionHosts = (session) => {
   if (!session?.program?.hosts) return "Live Presenters";
-
   const sessionHostIds = session.hosts || [];
-  const hosts = session.program.hosts.filter((host) =>
-    sessionHostIds.includes(host.id)
-  );
-  return hosts.length > 0
-    ? hosts.map((h) => h.name).join(" & ")
-    : "Live Presenters";
+  const hosts = session.program.hosts.filter((host) => sessionHostIds.includes(host.id));
+  return hosts.length > 0 ? hosts.map((h) => h.name).join(" & ") : "Live Presenters";
 };
 
 const getCurrentTime = () => {
   const now = new Date();
-  return `${now.getHours().toString().padStart(2, "0")}:${now
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}`;
+  return `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
 };
 
 const isTimeBetween = (currentTime, startTime, endTime) => {
   const current = currentTime.replace(":", "");
   const start = startTime.replace(":", "");
   const end = endTime.replace(":", "");
-
-  if (end < start) {
-    return current >= start || current <= end;
-  }
-
+  if (end < start) return current >= start || current <= end;
   return current >= start && current <= end;
 };
 
 const getCurrentDay = () => {
-  const days = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
+  const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
   return days[new Date().getDay()];
-};
-
-const selectProgram = (session) => {
-  selectedProgram.value = session.program;
 };
 
 const isCurrentSession = (session) => {
@@ -603,21 +325,11 @@ const isCurrentSession = (session) => {
   return isTimeBetween(now, session.start_time, session.end_time);
 };
 
-const isUpcoming = (session) => {
-  const now = getCurrentTime();
-  return now < session.start_time;
-};
-
 const getSessionHosts = (session) => {
   if (!session?.program?.hosts) return "Live Presenters";
-
   const sessionHostIds = session.hosts || [];
-  const hosts = session.program.hosts.filter((host) =>
-    sessionHostIds.includes(host.id)
-  );
-  return hosts.length > 0
-    ? hosts.map((h) => h.name).join(" & ")
-    : "Live Presenters";
+  const hosts = session.program.hosts.filter((host) => sessionHostIds.includes(host.id));
+  return hosts.length > 0 ? hosts.map((h) => h.name).join(" & ") : "Live Presenters";
 };
 
 const truncateText = (text, maxLength) => {
@@ -629,7 +341,7 @@ const togglePlayPause = async () => {
   try {
     await store.dispatch("togglePlayPause");
   } catch (err) {
-    console.error("Failed to toggle playbook:", err);
+    console.error("Failed to toggle playback:", err);
   }
 };
 
@@ -643,23 +355,7 @@ const handleAdvertClick = () => {
 };
 
 const handleDetailsClick = (slideData) => {
-  let id = slideData.slug;
-  router.push({ name: "news_details", params: { id: id } });
-  console.log(slideData);
-};
-
-const nextSlide = () => {
-  if (!carouselItems.value || carouselItems.value.length === 0) return;
-  currentSlide.value = (currentSlide.value + 1) % carouselItems.value.length;
-  resetCarouselTimer();
-};
-
-const prevSlide = () => {
-  if (!carouselItems.value || carouselItems.value.length === 0) return;
-  currentSlide.value =
-    (currentSlide.value - 1 + carouselItems.value.length) %
-    carouselItems.value.length;
-  resetCarouselTimer();
+  router.push({ name: "news_details", params: { id: slideData.slug } });
 };
 
 const setCurrentSlide = (index) => {
@@ -670,7 +366,6 @@ const setCurrentSlide = (index) => {
 
 const startCarouselTimer = () => {
   if (!carouselItems.value || carouselItems.value.length <= 1) return;
-
   carouselTimer.value = setInterval(() => {
     currentSlide.value = (currentSlide.value + 1) % carouselItems.value.length;
   }, 7000);
@@ -692,45 +387,30 @@ onMounted(() => {
   if (carouselItems.value && carouselItems.value.length > 1) {
     startCarouselTimer();
   }
+  window.addEventListener('resize', () => {
+    windowWidth.value = window.innerWidth;
+  });
 });
 
 onUnmounted(() => {
   stopCarouselTimer();
+  window.removeEventListener('resize', () => {
+    windowWidth.value = window.innerWidth;
+  });
 });
 </script>
 
 <style scoped>
-/* Custom scrollbar for webkit browsers */
 ::-webkit-scrollbar {
-  display: none;
-}
-
-/* Custom scrollbar for schedule */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(239, 68, 68, 0.5) transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #ef4444, #dc2626);
+::-webkit-scrollbar-thumb {
+  background: #F8CB00;
   border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #dc2626, #b91c1c);
-}
-
-/* Ensure smooth transitions */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 </style>

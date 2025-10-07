@@ -4,23 +4,58 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>91.3 Capital FM - Fresh Hits for Kampala</title>
-    <meta name="description" content="91.3 Capital FM - Uganda's #1 Radio Station playing the freshest hits for Kampala" />
+    <meta name="description" content="91.3 Capital FM - Uganda's #1 Radio Station playing the freshest hits for Kampala." />
+    <meta name="keywords" content="capital radio, capital fm, uganda radio, kampala, music, news, entertainment, events" />
+    <meta name="theme-color" content="#E30613" />
+
+    <!-- Canonical base; will be overwritten per-route by router -->
+    <link rel="canonical" href="https://capitalradio.co.ug/" />
+
+    <!-- Favicons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+    <meta name="apple-mobile-web-app-title" content="Capital Radio" />
     <link rel="manifest" href="/site.webmanifest" />
-    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+
+    <!-- Open Graph defaults -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Capital Radio" />
+    <meta property="og:title" content="91.3 Capital FM - Fresh Hits for Kampala" />
+    <meta property="og:description" content="91.3 Capital FM - Uganda's #1 Radio Station playing the freshest hits for Kampala." />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:url" content="https://capitalradio.co.ug/" />
+
+    <!-- Twitter Card defaults -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@CapitalFMUg" />
+    <meta name="twitter:title" content="91.3 Capital FM - Fresh Hits for Kampala" />
+    <meta name="twitter:description" content="91.3 Capital FM - Uganda's #1 Radio Station playing the freshest hits for Kampala." />
+    <meta name="twitter:image" content="/logo.png" />
+
+    <!-- Preconnects -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&amp;family=Red+Rose:wght@300..700&amp;display=swap" rel="stylesheet">
+
+    <!-- JSON-LD placeholders; router will populate -->
+    <script id="seo-org-jsonld" type="application/ld+json"></script>
+    <script id="seo-website-jsonld" type="application/ld+json"></script>
 
   </head>
   <body id="body">
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VRTBZR5T5W"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
+      gtag('config', 'G-VRTBZR5T5W');
+    </script>
   </body>
-</html> 
+</html>

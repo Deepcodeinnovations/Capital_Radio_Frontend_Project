@@ -1,213 +1,88 @@
 <template>
-  <div class="min-h-screen">
-    <!-- Hero Section -->
-    <section
-      class="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
-      style="margin-top: -5rem !important"
-    >
-      <!-- Background Image with Overlay -->
+  <div class="min-h-screen bg-gray-50">
+    <!-- Hero Header Section -->
+    <div class="relative bg-black border-b border-gray-800 overflow-hidden" style="margin-top: -5rem !important; padding-top: 5rem;">
+      <!-- Background Image -->
       <div class="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
           alt="Community Discussion"
-          class="w-full h-full object-cover"
+          class="w-full h-full object-cover opacity-40"
         />
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"
-        ></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-black/80"></div>
       </div>
 
-      <!-- Animated Background Elements -->
-      <div class="absolute inset-0 overflow-hidden opacity-20">
-        <div
-          class="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full blur-3xl animate-pulse"
-        ></div>
-        <div
-          class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500 rounded-full blur-3xl animate-pulse"
-          style="animation-delay: 1s"
-        ></div>
-        <div
-          class="absolute top-1/2 right-1/3 w-48 h-48 bg-green-500 rounded-full blur-3xl animate-pulse"
-          style="animation-delay: 2s"
-        ></div>
-      </div>
-
-      <!-- Hero Content -->
-      <div
-        class="relative z-10 container mx-auto px-6 py-28 md:py-0 text-center"
-      >
-        <!-- Hero Badge -->
-        <div class="inline-flex items-center justify-center mb-8 lg:pt-20">
-          <div class="h-px w-12 bg-blue-500"></div>
-          <span
-            class="mx-4 text-blue-400 font-bold tracking-wider text-sm uppercase"
-            >Community</span
-          >
-          <div class="h-px w-12 bg-blue-500"></div>
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center max-w-3xl mx-auto">
+          <div class="inline-flex items-center justify-center mb-4">
+            <MessageCircle class="text-[#F8CB00] mr-2" :size="24" />
+            <span class="text-[#F8CB00] font-semibold uppercase tracking-wider text-sm">Community</span>
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4">
+            Community Forums
+          </h1>
+          <p class="text-lg text-gray-300">
+            Join the discussion and connect with fellow Capital FM listeners
+          </p>
         </div>
 
-        <!-- Main Heading -->
-        <h1
-          class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
-        >
-          Community <span class="text-blue-400">Forums</span>
-        </h1>
-
-        <!-- Subtitle -->
-        <p
-          class="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto leading-relaxed"
-        >
-          Join the discussion and connect with fellow Capital FM listeners
-          across Uganda
-        </p>
-
-        <!-- Live Stats Row -->
-        <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 max-w-4xl mx-auto"
-        >
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-4xl mx-auto">
           <div class="text-center">
-            <div class="text-3xl md:text-4xl font-bold text-blue-400 mb-2">
-              {{ forumStats.total_topics }}
-            </div>
-            <div class="text-sm text-gray-300 uppercase tracking-wide">
-              Total Topics
-            </div>
+            <div class="text-3xl font-bold text-[#F8CB00]">{{ forumStats.total_topics }}</div>
+            <div class="text-sm text-gray-400 mt-1">Total Topics</div>
           </div>
           <div class="text-center">
-            <div class="text-3xl md:text-4xl font-bold text-green-400 mb-2">
-              {{ forumStats.total_replies }}
-            </div>
-            <div class="text-sm text-gray-300 uppercase tracking-wide">
-              Total Replies
-            </div>
+            <div class="text-3xl font-bold text-[#F8CB00]">{{ forumStats.total_replies }}</div>
+            <div class="text-sm text-gray-400 mt-1">Total Replies</div>
           </div>
           <div class="text-center">
-            <div class="text-3xl md:text-4xl font-bold text-purple-400 mb-2">
-              {{ forumStats.active_users }}
-            </div>
-            <div class="text-sm text-gray-300 uppercase tracking-wide">
-              Active Users
-            </div>
+            <div class="text-3xl font-bold text-[#F8CB00]">{{ forumStats.active_users }}</div>
+            <div class="text-sm text-gray-400 mt-1">Active Users</div>
           </div>
           <div class="text-center">
-            <div
-              class="text-3xl md:text-4xl font-bold text-emerald-400 mb-2 flex items-center justify-center gap-2"
-            >
+            <div class="text-3xl font-bold text-[#F8CB00] flex items-center justify-center gap-2">
               {{ forumStats.online_now }}
-              <div
-                class="w-3 h-3 bg-green-500 rounded-full animate-pulse"
-              ></div>
+              <div class="w-2 h-2 bg-[#F8CB00] rounded-full animate-pulse"></div>
             </div>
-            <div class="text-sm text-gray-300 uppercase tracking-wide">
-              Online Now
-            </div>
+            <div class="text-sm text-gray-400 mt-1">Online Now</div>
           </div>
         </div>
-
-        <!-- CTA Buttons -->
-        <div
-          class="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <button
-            @click="togglePlayPause"
-            :disabled="isLoading"
-            class="relative group overflow-hidden rounded-2xl"
-          >
-            <div
-              class="absolute -inset-0.5 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-80 transition duration-300"
-            ></div>
-            <div
-              class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-8 py-4 rounded-2xl text-black font-bold flex items-center space-x-3 transition-all duration-300"
-            >
-              <div
-                v-if="isLoading"
-                class="w-5 rounded-full h-5 border-2 border-black border-t-transparent animate-spin"
-              ></div>
-              <Volume2
-                v-else-if="isPlaying"
-                :size="20"
-                class="animate-bounce"
-              />
-              <Play class="text-white" v-else :size="20" />
-              <span class="tracking-wide" v-if="isLoading">CONNECTING</span>
-              <span class="tracking-wide" v-else-if="isPlaying"
-                >LISTENING LIVE</span
-              >
-              <span class="tracking-wide text-white" v-else>TUNE IN NOW</span>
-            </div>
-          </button>
-
-          <button
-            @click="scrollToForums"
-            class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300"
-          >
-            <span class="tracking-wide">Browse Topics</span>
-          </button>
-        </div>
       </div>
-
-      <!-- Bottom Wave Divider -->
-      <div class="absolute bottom-0 left-0 w-full">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          class="w-full h-16"
-        >
-          <path
-            fill="white"
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C0,0,31,17,94.98,30.44c64.64,13.91,93.29,29.88,150.17,38.07,65.88,9.2,165.63,17.05,240.88,12.55Z"
-          />
-        </svg>
-      </div>
-    </section>
+    </div>
 
     <!-- Main Content -->
-    <div class="bg-white relative" id="forums-content">
-      <!-- Floating background elements -->
-      <div
-        class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none"
-      >
-        <div
-          class="absolute top-1/4 left-1/5 w-32 h-32 bg-blue-500 rounded-full blur-2xl animate-float"
-        ></div>
-        <div
-          class="absolute bottom-1/3 right-1/5 w-40 h-40 bg-purple-500 rounded-full blur-3xl animate-float"
-          style="animation-delay: 2s"
-        ></div>
-        <div
-          class="absolute top-1/2 left-1/2 w-24 h-24 bg-green-500 rounded-full blur-xl animate-pulse-slow"
-        ></div>
-      </div>
+    <div class="bg-gray-50 relative" id="forums-content">
 
-      <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative z-10">
         <!-- Search Bar -->
-        <div class="mb-12">
+        <div class="mb-8 md:mb-12">
           <div class="relative max-w-2xl mx-auto">
             <Search
-              class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+              class="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 md:w-5 md:h-5"
             />
             <input
               v-model="searchQuery"
               @input="debounceSearch"
               type="text"
               placeholder="Search forum discussions..."
-              class="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+              class="w-full pl-10 md:pl-12 pr-3 md:pr-4 py-3 md:py-4 bg-white border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#F8CB00] focus:border-transparent shadow-sm"
             />
           </div>
         </div>
 
         <!-- Loading State -->
-        <div v-if="isLoading" class="flex justify-center items-center py-20">
+        <div v-if="isLoading" class="flex justify-center items-center py-12 md:py-20">
           <div
-            class="w-12 h-12 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"
+            class="w-8 h-8 md:w-12 md:h-12 border-4 border-gray-300 border-t-[#F8CB00] rounded-full animate-spin"
           ></div>
         </div>
 
         <!-- Forums Content -->
         <div v-else-if="forums && forums.data && forums.data.length > 0">
           <!-- Results Info -->
-          <div class="flex items-center justify-between mb-8">
-            <div class="text-gray-600">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-2">
+            <div class="text-sm md:text-base text-gray-600">
               {{
                 searchQuery
                   ? `Search results for "${searchQuery}"`
@@ -215,32 +90,32 @@
               }}
               - Showing {{ forums.data.length }} of {{ forums.total }}
             </div>
-            <div class="text-gray-600">
+            <div class="text-xs md:text-sm text-gray-500">
               Page {{ forums.current_page }} of {{ forums.total_pages }}
             </div>
           </div>
 
           <!-- Pinned Topics -->
-          <div v-if="pinnedTopics.length > 0" class="mb-12">
-            <div class="flex items-center gap-3 mb-8">
+          <div v-if="pinnedTopics.length > 0" class="mb-8 md:mb-12">
+            <div class="flex items-center gap-2 md:gap-3 mb-6 md:mb-8">
               <div
-                class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center"
+                class="w-8 h-8 md:w-9 md:h-9 bg-[#F8CB00]/20 rounded-lg flex items-center justify-center flex-shrink-0"
               >
-                <Pin class="w-5 h-5 text-yellow-600" />
+                <Pin class="w-4 h-4 md:w-5 md:h-5 text-[#F8CB00]" />
               </div>
-              <h2 class="text-2xl font-bold text-gray-900">
+              <h2 class="text-xl md:text-2xl font-bold text-gray-900">
                 Pinned Discussions
               </h2>
               <div
-                class="flex-1 h-px bg-gradient-to-r from-yellow-500 to-transparent"
+                class="flex-1 h-px bg-gray-200"
               ></div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
               <div
                 v-for="topic in pinnedTopics"
                 :key="topic.id"
-                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group cursor-pointer relative overflow-hidden"
+                class="bg-white rounded-lg md:rounded-xl p-4 md:p-6 border border-gray-200 shadow-sm hover:shadow-md hover:border-[#F8CB00] transition-all group cursor-pointer relative"
                 @click="
                   $router.push({
                     name: 'forum_details',
@@ -248,65 +123,61 @@
                   })
                 "
               >
-                <!-- Gradient background on hover -->
-                <div
-                  class="absolute -inset-1 bg-gradient-to-r from-yellow-500 via-blue-500 to-purple-500 rounded-xl blur opacity-0 group-hover:opacity-10 transition duration-300"
-                ></div>
 
                 <div class="relative">
-                  <div class="flex items-start justify-between mb-4">
-                    <div class="flex items-center space-x-2">
+                  <div class="flex items-start justify-between mb-3 md:mb-4">
+                    <div class="flex items-center flex-wrap gap-1.5 md:gap-2">
                       <span
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] md:text-xs font-medium bg-[#F8CB00]/20 text-[#F8CB00]"
                       >
-                        <Pin class="w-3 h-3 mr-1" />
+                        <Pin class="w-2.5 h-2.5 md:w-3 md:h-3 mr-1" />
                         Pinned
                       </span>
                       <span
                         v-if="topic.is_hot"
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] md:text-xs font-medium bg-red-100 text-red-700"
                       >
-                        <Flame class="w-3 h-3 mr-1" />
+                        <Flame class="w-2.5 h-2.5 md:w-3 md:h-3 mr-1" />
                         Hot
                       </span>
                     </div>
 
                     <div
-                      class="flex items-center space-x-4 text-sm text-gray-500"
+                      class="flex items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-500 flex-shrink-0"
                     >
-                      <div class="flex items-center space-x-1">
-                        <Eye class="w-4 h-4" />
+                      <div class="flex items-center gap-1">
+                        <Eye class="w-3 h-3 md:w-4 md:h-4" />
                         <span>{{ topic.views_count || 0 }}</span>
                       </div>
-                      <div class="flex items-center space-x-1">
-                        <MessageCircle class="w-4 h-4" />
+                      <div class="flex items-center gap-1">
+                        <MessageCircle class="w-3 h-3 md:w-4 md:h-4" />
                         <span>{{ topic.comments_count || 0 }}</span>
                       </div>
                     </div>
                   </div>
 
                   <h3
-                    class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2"
+                    class="text-base md:text-lg font-semibold text-gray-900 mb-2 md:mb-3 group-hover:text-[#F8CB00] transition-colors line-clamp-2"
                   >
                     {{ topic.title }}
                   </h3>
 
-                  <p class="text-gray-600 mb-4 line-clamp-2">
+                  <p class="text-sm md:text-base text-gray-600 mb-3 md:mb-4 line-clamp-2">
                     {{ topic.body }}
                   </p>
 
                   <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center gap-2">
                       <div
-                        class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
+                        class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0"
                       >
-                        <User class="w-4 h-4 text-gray-500" />
+                        <User class="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-500" />
                       </div>
-                      <div>
-                        <p class="text-sm font-medium text-gray-900">
+                      <div class="min-w-0">
+                        <p class="text-xs md:text-sm font-medium text-gray-900 truncate">
                           {{ topic.creator?.name || "Anonymous" }}
                         </p>
-                        <p class="text-xs text-gray-500">
+                        <p class="text-[10px] md:text-xs text-gray-500">
                           {{ formatDate(topic.created_at) }}
                         </p>
                       </div>
@@ -318,23 +189,23 @@
           </div>
 
           <!-- Regular Topics -->
-          <div class="space-y-4 mb-8">
-            <div class="flex items-center gap-3 mb-8">
+          <div class="space-y-3 md:space-y-4 mb-6 md:mb-8">
+            <div class="flex items-center gap-2 md:gap-3 mb-6 md:mb-8">
               <div
-                class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center"
+                class="w-8 h-8 md:w-9 md:h-9 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0"
               >
-                <MessageCircle class="w-5 h-5 text-blue-600" />
+                <MessageCircle class="w-4 h-4 md:w-5 md:h-5 text-gray-900" />
               </div>
-              <h2 class="text-2xl font-bold text-gray-900">All Discussions</h2>
+              <h2 class="text-xl md:text-2xl font-bold text-gray-900">All Discussions</h2>
               <div
-                class="flex-1 h-px bg-gradient-to-r from-blue-500 to-transparent"
+                class="flex-1 h-px bg-gray-200"
               ></div>
             </div>
 
             <div
               v-for="topic in regularTopics"
               :key="topic.id"
-              class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group cursor-pointer relative overflow-hidden"
+              class="bg-white rounded-lg md:rounded-xl p-4 md:p-6 border border-gray-200 shadow-sm hover:shadow-md hover:border-[#F8CB00] transition-all group cursor-pointer relative"
               @click="
                 $router.push({
                   name: 'forum_details',
@@ -342,79 +213,75 @@
                 })
               "
             >
-              <!-- Gradient background on hover -->
-              <div
-                class="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 rounded-xl blur opacity-0 group-hover:opacity-8 transition duration-300"
-              ></div>
 
               <div class="relative">
-                <div class="flex items-start space-x-4">
+                <div class="flex items-start gap-3 md:gap-4">
                   <div class="flex-shrink-0 mt-1">
                     <div
-                      class="w-12 h-12 rounded-full flex items-center justify-center"
+                      class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
                       :class="
                         topic.is_hot
                           ? 'bg-red-100 text-red-600'
-                          : 'bg-gray-100 text-gray-500'
+                          : 'bg-gray-100 text-gray-600'
                       "
                     >
-                      <MessageCircle class="w-6 h-6" />
+                      <MessageCircle class="w-5 h-5 md:w-6 md:h-6" />
                     </div>
                   </div>
 
                   <div class="flex-1 min-w-0">
-                    <div class="flex items-center space-x-3 mb-2">
+                    <div class="flex items-center flex-wrap gap-1.5 md:gap-2 mb-2">
                       <span
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] md:text-xs font-medium bg-gray-100 text-gray-700"
                       >
                         General Discussion
                       </span>
 
                       <span
                         v-if="topic.is_hot"
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] md:text-xs font-medium bg-red-100 text-red-700"
                       >
-                        <Flame class="w-3 h-3 mr-1" />
+                        <Flame class="w-2.5 h-2.5 md:w-3 md:h-3 mr-1" />
                         Hot
                       </span>
                     </div>
 
                     <h3
-                      class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2"
+                      class="text-base md:text-lg font-semibold text-gray-900 mb-2 group-hover:text-[#F8CB00] transition-colors line-clamp-2"
                     >
                       {{ topic.title }}
                     </h3>
 
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p class="text-gray-600 text-xs md:text-sm mb-3 md:mb-4 line-clamp-2">
                       {{ topic.body }}
                     </p>
 
-                    <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-2">
+                    <div class="flex items-center justify-between gap-3">
+                      <div class="flex items-center gap-2 min-w-0">
                         <div
-                          class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"
+                          class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0"
                         >
-                          <User class="w-4 h-4 text-gray-500" />
+                          <User class="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-500" />
                         </div>
-                        <div>
-                          <p class="text-sm font-medium text-gray-900">
+                        <div class="min-w-0">
+                          <p class="text-xs md:text-sm font-medium text-gray-900 truncate">
                             {{ topic.creator?.name || "Anonymous" }}
                           </p>
-                          <p class="text-xs text-gray-500">
+                          <p class="text-[10px] md:text-xs text-gray-500">
                             {{ formatDate(topic.created_at) }}
                           </p>
                         </div>
                       </div>
 
                       <div
-                        class="flex items-center space-x-4 text-sm text-gray-500"
+                        class="flex items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-500 flex-shrink-0"
                       >
-                        <div class="flex items-center space-x-1">
-                          <Eye class="w-4 h-4" />
-                          <span>{{ topic.views_count || 0 }}</span>
+                        <div class="flex items-center gap-1">
+                          <Eye class="w-3 h-3 md:w-4 md:h-4" />
+                          <span class="hidden sm:inline">{{ topic.views_count || 0 }}</span>
                         </div>
-                        <div class="flex items-center space-x-1">
-                          <MessageCircle class="w-4 h-4" />
+                        <div class="flex items-center gap-1">
+                          <MessageCircle class="w-3 h-3 md:w-4 md:h-4" />
                           <span>{{ topic.comments_count || 0 }}</span>
                         </div>
                       </div>
@@ -428,14 +295,15 @@
           <!-- Pagination -->
           <div
             v-if="forums.total_pages > 1"
-            class="flex justify-center items-center gap-2 mt-12"
+            class="flex justify-center items-center gap-1.5 md:gap-2 mt-8 md:mt-12"
           >
             <button
               @click="changePage(forums.current_page - 1)"
               :disabled="forums.current_page <= 1"
-              class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              class="px-3 md:px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm md:text-base"
             >
-              Previous
+              <span class="hidden sm:inline">Previous</span>
+              <span class="sm:hidden">Prev</span>
             </button>
 
             <div class="flex items-center gap-1">
@@ -443,10 +311,10 @@
                 v-for="page in visiblePages"
                 :key="page"
                 @click="changePage(page)"
-                class="w-10 h-10 rounded-lg transition-colors font-medium"
+                class="w-8 h-8 md:w-10 md:h-10 rounded-lg transition-colors font-medium text-sm md:text-base"
                 :class="
                   page === forums.current_page
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-[#F8CB00] text-black'
                     : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                 "
               >
@@ -457,7 +325,7 @@
             <button
               @click="changePage(forums.current_page + 1)"
               :disabled="forums.current_page >= forums.total_pages"
-              class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              class="px-3 md:px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm md:text-base"
             >
               Next
             </button>
@@ -465,16 +333,16 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else class="text-center py-20">
+        <div v-else class="text-center py-12 md:py-20 px-4">
           <div
-            class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4"
+            class="w-12 h-12 md:w-16 md:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4"
           >
-            <MessageCircle class="w-8 h-8 text-gray-400" />
+            <MessageCircle class="w-6 h-6 md:w-8 md:h-8 text-gray-400" />
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+          <h3 class="text-lg md:text-xl font-semibold text-gray-900 mb-2">
             No Discussions Found
           </h3>
-          <p class="text-gray-600 mb-6">
+          <p class="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
             {{
               searchQuery
                 ? `No results found for "${searchQuery}"`
@@ -483,19 +351,19 @@
           </p>
           <button
             @click="createTopic"
-            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            class="px-5 md:px-6 py-2.5 md:py-3 bg-[#F8CB00] text-black rounded-lg hover:bg-yellow-500 transition-colors font-medium text-sm md:text-base"
           >
             Start New Discussion
           </button>
         </div>
 
         <!-- Floating Create Button -->
-        <div class="fixed bottom-8 right-8">
+        <div class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-40">
           <button
             @click="createTopic"
-            class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-200 hover:bg-blue-700"
+            class="w-12 h-12 md:w-14 md:h-14 bg-[#F8CB00] rounded-full flex items-center justify-center text-black shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-200 hover:bg-yellow-500"
           >
-            <Plus class="w-6 h-6" />
+            <Plus class="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </div>
       </div>

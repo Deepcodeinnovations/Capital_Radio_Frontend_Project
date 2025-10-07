@@ -38,7 +38,7 @@ const fetch_initial_data = () => {
 
 const fetch_station_data = async () => {
   const radioData = {
-    access_link: 'https://www.beatradio.co.ug'
+    access_link: 'https://beatradio.co.ug'
   };
   await store.dispatch('fetch_station_details', radioData);
 }

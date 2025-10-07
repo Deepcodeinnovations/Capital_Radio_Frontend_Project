@@ -1,13 +1,13 @@
 <template>
-  <div class="relative overflow-hidden bg-transparent">
-    <Header style="background-color: transparent !important;" />
-    <HeroSection style="margin-top: -5rem !important;" v-if="$route.name == 'welcome'" />
-    
+  <div class="relative overflow-x-hidden w-full max-w-full bg-white">
+    <Header />
+    <HeroSection v-if="$route.name == 'welcome'" />
+
     <!-- Main Content -->
-    <main class="relative z-10">
+    <main class="relative z-10 w-full overflow-x-hidden bg-gray-50">
       <router-view />
     </main>
-    
+
     <LiveChat />
     <Footer />
   </div>

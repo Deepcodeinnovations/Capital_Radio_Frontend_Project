@@ -1,53 +1,45 @@
 <template>
-  <section class="py-16 relative">
-    <!-- Background decoration - more subtle -->
-    <div class="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
-      <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-capital-yellow rounded-full blur-3xl"></div>
-      <div class="absolute -top-80 -right-20 w-[500px] h-[500px] bg-capital-red/20 rounded-full blur-3xl"></div>
-    </div>
+  <section class="py-8 md:py-16 relative bg-gray-50">
     
-    <!-- Section connector - top curve -->
-    <div class="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-slate-900 to-transparent -z-10"></div>
-    
-    <div class="container mx-auto px-4 relative">
-      <div class="mb-10">
-        <div class="flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div v-scroll-reveal="{ animation: 'fade-up', delay: 0 }" class="mb-6 md:mb-10">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h2 class="font-heading text-3xl md:text-4xl font-bold text-white mb-2">Latest <span class="text-capital-yellow">News & Updates</span></h2>
-            <div class="h-1 w-20 bg-gradient-to-r from-capital-blue via-capital-yellow to-capital-red"></div>
+            <h2 class="font-heading text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Latest <span class="text-[#F8CB00]">News & Updates</span></h2>
+            <div class="h-1 w-20 bg-[#F8CB00]"></div>
           </div>
           
-          <div class="hidden md:flex items-center space-x-4">
-            <div class="flex items-center space-x-1">
-              <button 
+          <div class="flex items-center space-x-2 md:space-x-4 overflow-x-auto pb-2 md:pb-0">
+            <div class="flex items-center space-x-1 flex-shrink-0">
+              <button
                 v-for="(category, index) in newsCategories" 
                 :key="index"
                 @click="setActiveCategory(category.id)"
                 class="px-3 py-1.5 rounded-full text-sm transition-colors"
-                :class="activeCategory === category.id ? 'bg-capital-blue text-white' : 'bg-slate-800/70 text-slate-400 hover:text-white'"
+                :class="activeCategory === category.id ? 'bg-[#F8CB00] text-black' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'"
               >
                 {{ category.name }}
               </button>
             </div>
             
-            <a href="#all-news" class="text-capital-blue hover:text-capital-yellow text-sm font-medium transition-colors flex items-center gap-1">
+            <a href="#all-news" class="text-[#F8CB00] hover:text-yellow-600 text-sm font-medium transition-colors flex items-center gap-1">
               View All 
               <ArrowRight class="h-3 w-3" />
             </a>
           </div>
         </div>
-        <p class="text-slate-400 mt-4 max-w-2xl font-light">
+        <p class="text-gray-600 mt-4 max-w-2xl">
           Stay up-to-date with the latest entertainment news, music releases, events, and updates from Capital FM and the Ugandan music scene.
         </p>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 mb-6 md:mb-8">
         <!-- Main featured news item -->
-        <div class="md:col-span-7 lg:col-span-8">
-          <div class="bg-gradient-to-r p-[1px] from-capital-blue via-capital-yellow to-capital-red rounded-xl overflow-hidden">
-            <div class="h-full bg-slate-800/95 rounded-xl overflow-hidden relative group">
+        <div v-scroll-reveal="{ animation: 'fade-right', delay: 100 }" class="lg:col-span-8">
+          <div class="rounded-xl overflow-hidden">
+            <div class="h-full bg-white rounded-xl overflow-hidden relative group shadow-md hover:shadow-lg transition-shadow">
               <!-- Featured news image with overlay -->
-              <div class="aspect-[16/9] md:aspect-auto md:h-[400px] overflow-hidden relative">
+              <div class="aspect-[16/9] lg:h-[400px] overflow-hidden relative">
                 <img 
                   :src="featuredNews.imageUrl" 
                   :alt="featuredNews.title" 
@@ -57,32 +49,33 @@
               </div>
               
               <!-- Content overlay -->
-              <div class="absolute bottom-0 left-0 right-0 p-6 z-20">
+              <div class="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-20">
                 <div class="flex items-center gap-3 mb-3">
-                  <span class="bg-capital-red/90 px-3 py-1 rounded-md text-xs font-bold text-white uppercase entertainment-text tracking-wider flex items-center gap-1">
+                  <span class="bg-red-600 px-3 py-1 rounded-md text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1">
                     <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                     Breaking
                   </span>
-                  <span class="text-slate-300 text-sm flex items-center gap-1">
+                  <span class="text-gray-200 text-sm flex items-center gap-1">
                     <Calendar class="h-3.5 w-3.5" />
                     {{ featuredNews.date }}
                   </span>
                 </div>
                 
-                <h3 class="text-2xl md:text-3xl font-bold text-white mb-3 font-heading">
+                <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3 font-heading line-clamp-2">
                   {{ featuredNews.title }}
                 </h3>
                 
-                <p class="text-slate-300 mb-5 line-clamp-2">{{ featuredNews.excerpt }}</p>
+                <p class="text-gray-200 mb-4 md:mb-5 line-clamp-2 text-sm md:text-base">{{ featuredNews.excerpt }}</p>
                 
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div class="flex items-center gap-2">
                     <img :src="featuredNews.authorImage" alt="Author" class="w-8 h-8 rounded-full">
-                    <span class="text-capital-yellow font-medium text-sm">{{ featuredNews.author }}</span>
+                    <span class="text-[#F8CB00] font-medium text-sm">{{ featuredNews.author }}</span>
                   </div>
                   
-                  <a :href="featuredNews.url" class="px-4 py-2 bg-capital-blue/20 hover:bg-capital-blue/40 transition-colors text-capital-blue rounded-lg text-sm font-medium flex items-center gap-2">
-                    Read Full Story
+                  <a :href="featuredNews.url" class="px-4 py-2 bg-[#F8CB00] hover:bg-yellow-500 transition-colors text-black rounded-full text-sm font-medium flex items-center gap-2 whitespace-nowrap">
+                    <span class="hidden sm:inline">Read Full Story</span>
+                    <span class="sm:hidden">Read More</span>
                     <ArrowRight class="h-4 w-4" />
                   </a>
                 </div>
@@ -92,29 +85,29 @@
         </div>
         
         <!-- Latest news list -->
-        <div class="md:col-span-5 lg:col-span-4 flex flex-col">
-          <div class="mb-4 flex items-center justify-between">
-            <h3 class="font-heading text-xl font-bold text-white flex items-center gap-2">
-              <Clock class="h-5 w-5 text-capital-yellow" />
+        <div v-scroll-reveal="{ animation: 'fade-left', delay: 100 }" class="lg:col-span-4 flex flex-col">
+          <div class="mb-4 flex items-center justify-between flex-wrap gap-2">
+            <h3 class="font-heading text-lg md:text-xl font-bold text-gray-900 flex items-center gap-2">
+              <Clock class="h-4 md:h-5 w-4 md:w-5 text-[#F8CB00]" />
               Latest Updates
             </h3>
             
             <!-- Mobile category filter -->
-            <div class="md:hidden">
-              <button class="px-3 py-1.5 bg-slate-800 rounded-lg text-slate-300 flex items-center gap-2">
+            <div class="lg:hidden">
+              <button class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-gray-700 flex items-center gap-2 text-sm">
                 <Filter class="h-4 w-4" />
-                Filter
+                <span class="hidden sm:inline">Filter</span>
               </button>
             </div>
           </div>
           
-          <div class="divide-y divide-slate-700/50 flex-1 bg-slate-800/50 rounded-xl overflow-hidden">
+          <div class="divide-y divide-gray-200 flex-1 bg-white rounded-xl overflow-hidden border border-gray-200">
             <div 
               v-for="(item, index) in filteredNewsItems.slice(0, 4)" 
               :key="index" 
-              class="p-4 hover:bg-slate-700/20 transition-colors flex gap-4"
+              class="p-3 md:p-4 hover:bg-gray-50 transition-colors flex gap-3 md:gap-4"
             >
-              <div class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
+              <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
                 <img :src="item.imageUrl" :alt="item.title" class="w-full h-full object-cover">
               </div>
               
@@ -124,29 +117,29 @@
                         :class="getCategoryColor(item.category)">
                     {{ item.category }}
                   </span>
-                  <span class="text-slate-400 text-xs">{{ item.date }}</span>
+                  <span class="text-gray-500 text-xs">{{ item.date }}</span>
                 </div>
                 
-                <h4 class="text-white font-medium text-sm line-clamp-2 mb-1 hover:text-capital-yellow transition-colors">
+                <h4 class="text-gray-900 font-medium text-sm line-clamp-2 mb-1 hover:text-[#F8CB00] transition-colors">
                   {{ item.title }}
                 </h4>
                 
-                <a href="#" class="text-capital-blue hover:text-capital-yellow text-xs transition-colors">Read more</a>
+                <a href="#" class="text-[#F8CB00] hover:text-yellow-600 text-xs transition-colors">Read more</a>
               </div>
             </div>
           </div>
           
           <div class="mt-4">
-            <a href="#all-news" class="block w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 transition-colors rounded-lg text-center text-white text-sm">
-              View All News & Updates
+            <a href="#all-news" class="block w-full py-2.5 md:py-3 px-4 bg-[#F8CB00] hover:bg-yellow-500 transition-colors rounded-lg text-center text-black font-medium text-sm">
+              View All News
             </a>
           </div>
         </div>
       </div>
       
       <!-- News categories with stories -->
-      <div class="mb-10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="mb-6 md:mb-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <div v-for="(category, idx) in newsCategories.slice(1)" :key="idx" class="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700/30">
             <div class="h-40 relative overflow-hidden">
               <img :src="category.imageUrl" :alt="category.name" class="w-full h-full object-cover">
@@ -176,7 +169,7 @@
       </div>
       
       <!-- Newsletter signup - improved design -->
-      <div class="rounded-xl overflow-hidden">
+      <div v-scroll-reveal="{ animation: 'fade-up', delay: 0 }" class="rounded-xl overflow-hidden">
         <div class="bg-gradient-to-br from-slate-800/80 to-slate-900/95 backdrop-blur-sm p-8 border border-slate-700/40">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div class="md:col-span-7">

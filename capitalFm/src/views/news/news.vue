@@ -1,120 +1,32 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen bg-gray-50">
     <!-- Hero Section -->
-    <section
-      class="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
-      style="margin-top: -5rem !important"
-    >
-      <!-- Background Image with Overlay -->
+    <div class="relative bg-black border-b border-gray-800 overflow-hidden" style="margin-top: -5rem !important; padding-top: 5rem;">
+      <!-- Background Image -->
       <div class="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
           alt="Breaking News"
-          class="w-full h-full object-cover"
+          class="w-full h-full object-cover opacity-40"
         />
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"
-        ></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-black/80"></div>
       </div>
 
-      <!-- Animated Background Elements -->
-      <div class="absolute inset-0 overflow-hidden opacity-20">
-        <div
-          class="absolute top-1/4 left-1/4 w-64 h-64 bg-red-500 rounded-full blur-3xl animate-pulse"
-        ></div>
-        <div
-          class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-yellow-500 rounded-full blur-3xl animate-pulse"
-          style="animation-delay: 1s"
-        ></div>
-        <div
-          class="absolute top-1/2 right-1/3 w-48 h-48 bg-blue-500 rounded-full blur-3xl animate-pulse"
-          style="animation-delay: 2s"
-        ></div>
-      </div>
-
-      <!-- Hero Content -->
-      <div class="relative z-10 container mx-auto px-6 text-center">
-        <!-- Hero Badge -->
-        <div class="inline-flex items-center justify-center mb-8">
-          <div class="h-px w-12 bg-red-500"></div>
-          <span
-            class="mx-4 text-red-400 font-bold tracking-wider text-sm uppercase"
-            >News & Updates</span
-          >
-          <div class="h-px w-12 bg-red-500"></div>
-        </div>
-
-        <!-- Main Heading -->
-        <h1
-          class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
-        >
-          Latest <span class="text-yellow-400">News</span>
-        </h1>
-
-        <!-- Subtitle -->
-        <p
-          class="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto leading-relaxed"
-        >
-          Stay updated with breaking news, entertainment updates, and exclusive
-          stories from Capital FM
-        </p>
-
-        <!-- CTA Buttons -->
-        <div
-          class="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <button
-            @click="togglePlayPause"
-            :disabled="isLoading"
-            class="relative group overflow-hidden rounded-2xl"
-          >
-            <div
-              class="absolute -inset-0.5 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-2xl blur opacity-60 group-hover:opacity-80 transition duration-300"
-            ></div>
-            <div
-              class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-8 py-4 rounded-2xl text-black font-bold flex items-center space-x-3 transition-all duration-300"
-            >
-              <div
-                v-if="isLoading"
-                class="w-5 h-5 border-2 rounded-full border-black border-t-transparent animate-spin"
-              ></div>
-              <Volume2
-                v-else-if="isPlaying"
-                :size="20"
-                class="animate-bounce"
-              />
-              <Play class="text-white" v-else :size="20" />
-              <span class="tracking-wide" v-if="isLoading">CONNECTING</span>
-              <span class="tracking-wide" v-else-if="isPlaying"
-                >LISTENING LIVE</span
-              >
-              <span class="tracking-wide text-white" v-else>TUNE IN NOW</span>
-            </div>
-          </button>
-
-          <button
-            @click="scrollToNews"
-            class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl hover:bg-white/20 transition-all duration-300"
-          >
-            <span class="tracking-wide">Browse News</span>
-          </button>
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center max-w-3xl mx-auto">
+          <div class="inline-flex items-center justify-center mb-4">
+            <Newspaper class="text-[#F8CB00] mr-2" :size="24" />
+            <span class="text-[#F8CB00] font-semibold uppercase tracking-wider text-sm">News & Updates</span>
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4">
+            Latest News
+          </h1>
+          <p class="text-lg text-gray-300">
+            Stay updated with breaking news, entertainment updates, and exclusive stories from Capital FM
+          </p>
         </div>
       </div>
-
-      <!-- Bottom Wave Divider -->
-      <div class="absolute bottom-0 left-0 w-full">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          class="w-full h-16"
-        >
-          <path
-            fill="white"
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C0,0,31,17,94.98,30.44c64.64,13.91,93.29,29.88,150.17,38.07,65.88,9.2,165.63,17.05,240.88,12.55Z"
-          />
-        </svg>
-      </div>
-    </section>
+    </div>
 
     <!-- Main Content -->
     <div class="bg-white relative" id="news-content">

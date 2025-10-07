@@ -6,108 +6,64 @@
     <button
       v-if="!isExpanded"
       @click="toggleChat"
-      class="relative w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 group overflow-hidden animate-pulser"
+      class="relative w-14 h-14 md:w-16 md:h-16 bg-[#F8CB00] hover:bg-yellow-500 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl group"
       :title="`Live Chat - ${stattionData.listeners} listeners online`"
     >
       <!-- Live indicator -->
       <div
-        class="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center animate-pulse shadow-lg shadow-yellow-400/50"
+        class="absolute -top-1 -right-1 w-4 h-4 bg-red-600 rounded-full flex items-center justify-center animate-pulse"
       >
-        <div class="w-2 h-2 bg-white rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
       </div>
 
       <!-- Chat icon -->
-      <div class="relative z-10 flex items-center justify-center h-full">
-        <MessageCircle class="w-7 h-7 text-white animate-bouncer" />
+      <div class="flex items-center justify-center h-full">
+        <MessageCircle class="w-6 h-6 md:w-7 md:h-7 text-black" />
       </div>
 
       <!-- Notification badge -->
       <div
         v-if="unreadCount > 0"
-        class="absolute -top-2 -left-2 bg-yellow-400 text-red-600 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center animate-bounce"
+        class="absolute -top-2 -left-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
       >
         {{ unreadCount > 9 ? "9+" : unreadCount }}
       </div>
 
-      <!-- Enhanced Tooltip with blinking text -->
+      <!-- Tooltip -->
       <div
-        class="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none"
+        class="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none"
       >
-        <div class="animate-pulse font-bold text-yellow-300">
-          💬 Chat with {{ stattionData.listeners }} listeners!
-        </div>
-        <div class="text-gray-300 mt-1">Click to join the conversation</div>
-        <div
-          class="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"
-        ></div>
+        <div class="font-medium">💬 Live Chat</div>
+        <div class="text-gray-300 text-[10px] mt-0.5">{{ stattionData.listeners }} online</div>
       </div>
     </button>
-
-    <!-- Blinking Chat Invitation Text (when minimized) -->
-    <div
-      v-if="!isExpanded"
-      class="absolute bottom-full bottom-3 right-0 mb-5 bg-gradient-to-r w-[200px] from-red-500 to-yellow-400 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-lg animate-bouncer pointer-events-none"
-    >
-      <div class="relative">
-        <div class="animate-pulse">💬 Chat with Other Listeners!</div>
-        <div class="text-xs opacity-90 mt-1">
-          {{ stattionData.listeners }} Online Now
-        </div>
-        <!-- Arrow pointing to button -->
-        <div
-          class="absolute -bottom-2 right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-red-500"
-        ></div>
-      </div>
-    </div>
 
     <!-- Expanded Chat Window -->
     <div
       v-if="isExpanded"
-      class="w-80 md:w-96 h-[500px] md:h-[600px] bg-white/95 backdrop-blur-xl rounded-2xl border-2 border-red-500/30 overflow-hidden flex flex-col shadow-2xl shadow-red-500/20"
+      class="w-80 md:w-96 h-[500px] md:h-[600px] bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col shadow-xl"
     >
-      <!-- Enhanced Chat header -->
-      <div
-        class="relative px-4 md:px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 border-b-2 border-red-600/30"
-      >
-        <div class="relative flex items-center justify-between">
+      <!-- Chat header -->
+      <div class="px-4 md:px-6 py-4 bg-black border-b border-gray-200">
+        <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <!-- Enhanced live indicator -->
-            <div class="relative">
-              <div
-                class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse shadow-lg shadow-yellow-400/50"
-              ></div>
-              <div
-                class="absolute inset-0 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-30"
-              ></div>
-            </div>
-
+            <div class="w-2 h-2 bg-[#F8CB00] rounded-full animate-pulse"></div>
             <div>
-              <h3 class="font-bold text-lg text-white uppercase tracking-wide">
-                LIVE CHAT
-              </h3>
-              <p class="text-xs text-white/90">
-                {{ stattionData.listeners }} listeners online 👥
-              </p>
+              <h3 class="font-bold text-base text-white">Live Chat</h3>
+              <p class="text-xs text-gray-400">{{ stattionData.listeners }} online</p>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
-            <!-- Online counter with users icon -->
-            <div
-              class="bg-yellow-400/90 text-red-600 text-xs px-2 md:px-3 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1"
-            >
-              <span class="text-xs">👥</span>
+            <div class="bg-[#F8CB00] text-black text-xs px-2 py-1 rounded-lg font-bold flex items-center gap-1">
+              <span>👥</span>
               {{ stattionData.listeners }}
             </div>
-
-            <!-- Close button -->
             <button
               @click="toggleChat"
-              class="text-white/80 hover:text-white transition-all duration-300 p-2 rounded-xl hover:bg-white/20 group"
+              class="text-gray-400 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-gray-800"
             >
-              <X
-                class="h-5 w-5 group-hover:rotate-90 transition-transform duration-300"
-              />
+              <X class="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -116,7 +72,7 @@
       <!-- Chat messages -->
       <div
         ref="chatContainer"
-        class="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 bg-white scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-gray-100"
+        class="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 bg-gray-50"
         @click="handleChatClick"
       >
         <!-- Welcome message if no messages -->
@@ -136,10 +92,8 @@
         >
           <!-- System message -->
           <div v-if="message.type === 'system'" class="relative inline-block">
-            <div
-              class="text-xs text-red-600 bg-gradient-to-r from-yellow-100 to-red-50 rounded-full px-4 py-2 border border-red-200 font-medium uppercase tracking-wide"
-            >
-              <span class="mr-1">🔔</span>{{ message.message }}
+            <div class="text-xs text-gray-600 bg-gray-100 rounded-full px-4 py-2 border border-gray-200 font-medium">
+              <span class="mr-1">ℹ️</span>{{ message.message }}
             </div>
           </div>
 
@@ -155,7 +109,7 @@
               class="relative group"
             >
               <div
-                class="w-8 h-8 rounded-xl overflow-hidden flex-shrink-0 shadow-lg border-2 border-red-200 group-hover:border-red-400 transition-all duration-300"
+                class="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200"
               >
                 <img
                   v-if="message.user.image_url"
@@ -165,15 +119,15 @@
                 />
                 <div
                   v-else
-                  class="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-500 to-red-600 text-white font-bold text-xs uppercase"
+                  class="w-full h-full flex items-center justify-center bg-[#F8CB00] text-black font-bold text-xs uppercase"
                 >
                   {{ message.user.name.charAt(0).toUpperCase() }}
                 </div>
               </div>
               <!-- Online indicator -->
               <div
-                class="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-white animate-pulse"
-                title="Online listener"
+                class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white"
+                title="Online"
               ></div>
             </div>
 
@@ -182,9 +136,9 @@
               <div
                 :class="[
                   message.user.id === currentUser.id
-                    ? 'bg-gradient-to-r from-red-100 to-yellow-100 text-red-800 border-red-300'
-                    : 'bg-white text-gray-800 border-gray-200 shadow-sm',
-                  'rounded-2xl px-3 py-2 border-2 transition-all duration-300 group-hover/message:scale-[1.02] group-hover/message:shadow-md',
+                    ? 'bg-[#F8CB00]/20 text-gray-900 border-[#F8CB00]'
+                    : 'bg-white text-gray-800 border-gray-200',
+                  'rounded-2xl px-3 py-2 border',
                 ]"
               >
                 <!-- Username for other users -->
@@ -214,15 +168,6 @@
                 </div>
               </div>
 
-              <!-- Message tail -->
-              <div
-                v-if="message.user.id !== currentUser.id"
-                class="absolute top-3 -left-1 w-3 h-3 bg-white transform rotate-45 border-l-2 border-b-2 border-gray-200"
-              ></div>
-              <div
-                v-else
-                class="absolute top-3 -right-1 w-3 h-3 bg-gradient-to-r from-red-100 to-yellow-100 transform rotate-45 border-r-2 border-t-2 border-red-300"
-              ></div>
             </div>
 
             <!-- Avatar for current user -->
@@ -231,7 +176,7 @@
               class="relative group"
             >
               <div
-                class="w-8 h-8 rounded-xl overflow-hidden flex-shrink-0 shadow-lg border-2 border-yellow-300 group-hover:border-yellow-400 transition-all duration-300"
+                class="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 border border-[#F8CB00]"
               >
                 <img
                   v-if="currentUser.image_url"
@@ -241,14 +186,14 @@
                 />
                 <div
                   v-else
-                  class="w-full h-full flex items-center justify-center bg-gradient-to-br from-yellow-400 to-yellow-500 text-red-600 font-bold text-xs uppercase"
+                  class="w-full h-full flex items-center justify-center bg-[#F8CB00] text-black font-bold text-xs uppercase"
                 >
                   {{ currentUser.name.charAt(0).toUpperCase() }}
                 </div>
               </div>
               <!-- You indicator -->
               <div
-                class="absolute -bottom-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"
+                class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-[#F8CB00] rounded-full border border-white"
                 title="You"
               ></div>
             </div>
@@ -261,26 +206,26 @@
           class="flex items-center gap-2 text-gray-600 text-sm"
         >
           <div
-            class="w-6 h-6 rounded-xl overflow-hidden flex-shrink-0 shadow-md border-2 border-gray-200"
+            class="w-6 h-6 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200"
           >
             <div
-              class="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-500 to-red-600 text-white font-bold text-xs"
+              class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600 font-bold text-xs"
             >
-              DJ
+              💬
             </div>
           </div>
           <div class="flex items-center gap-2">
             <span class="font-medium">Someone is typing</span>
             <div class="flex gap-1">
               <span
-                class="w-1 h-1 bg-red-500 rounded-full animate-bounce"
+                class="w-1 h-1 bg-gray-400 rounded-full animate-bounce"
               ></span>
               <span
-                class="w-1 h-1 bg-yellow-400 rounded-full animate-bounce"
+                class="w-1 h-1 bg-gray-400 rounded-full animate-bounce"
                 style="animation-delay: 0.2s"
               ></span>
               <span
-                class="w-1 h-1 bg-red-400 rounded-full animate-bounce"
+                class="w-1 h-1 bg-gray-400 rounded-full animate-bounce"
                 style="animation-delay: 0.4s"
               ></span>
             </div>
@@ -289,14 +234,12 @@
       </div>
 
       <!-- Chat input -->
-      <div
-        class="relative p-3 md:p-4 border-t-2 border-red-200 bg-gradient-to-r from-red-50 to-yellow-50"
-      >
+      <div class="relative p-3 md:p-4 border-t border-gray-200 bg-white">
         <div class="relative flex gap-2">
           <!-- Emoji picker button -->
           <button
             @click="showEmojiPicker = !showEmojiPicker"
-            class="flex-shrink-0 p-3 bg-yellow-400 hover:bg-yellow-500 text-red-600 rounded-xl transition-all duration-300 transform hover:scale-105"
+            class="flex-shrink-0 p-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
             title="Add emoji"
           >
             😊
@@ -307,42 +250,35 @@
               ref="messageInput"
               v-model="newMessage"
               type="text"
-              placeholder="Share your thoughts... 💭"
-              class="w-full bg-white border-2 border-red-200 rounded-xl py-3 px-4 pr-10 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 placeholder-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group-hover:border-red-300"
+              placeholder="Type your message..."
+              class="w-full bg-white border border-gray-200 rounded-lg py-2.5 px-4 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#F8CB00] focus:border-[#F8CB00] placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               @keyup.enter="sendMessage"
               @click="handleInputClick"
               maxlength="500"
             />
-            <div
-              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-gray-600 transition-colors"
-            >
-              <div class="w-2 h-2 bg-current rounded-full opacity-50"></div>
-            </div>
           </div>
 
           <button
             @click="sendMessage"
             :disabled="!canSendMessage || !newMessage.trim()"
-            class="relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold p-3 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 shadow-lg hover:shadow-red-500/30 group overflow-hidden"
+            class="bg-[#F8CB00] hover:bg-yellow-500 text-black font-bold p-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Send message"
           >
-            <Send
-              class="h-5 w-5 relative z-10 group-hover:translate-x-0.5 transition-transform duration-300"
-            />
+            <Send class="h-5 w-5" />
           </button>
         </div>
 
         <!-- Emoji picker -->
         <div
           v-if="showEmojiPicker"
-          class="absolute bottom-full left-4 right-4 mb-2 bg-white rounded-xl border-2 border-red-200 shadow-xl p-4 max-h-40 overflow-y-auto"
+          class="absolute bottom-full left-4 right-4 mb-2 bg-white rounded-lg border border-gray-200 shadow-xl p-3 max-h-40 overflow-y-auto"
         >
           <div class="grid grid-cols-8 gap-2">
             <button
               v-for="emoji in commonEmojis"
               :key="emoji"
               @click="addEmoji(emoji)"
-              class="p-2 hover:bg-red-50 rounded-lg transition-colors text-lg"
+              class="p-2 hover:bg-gray-100 rounded-lg transition-colors text-lg"
             >
               {{ emoji }}
             </button>
@@ -350,16 +286,15 @@
         </div>
 
         <!-- Info text -->
-        <div class="mt-2 flex items-center gap-2 px-1">
-          <Info class="h-3 w-3 text-gray-500" />
-          <span class="text-xs text-gray-600 font-medium">
-            <span v-if="!canSendMessage" class="text-red-600"
-              >Complete your profile to join the conversation 👆</span
-            >
-            <span v-else
-              >Chat with {{ stattionData.listeners }} listeners • Keep it
-              friendly 🎵</span
-            >
+        <div class="mt-2 flex items-start gap-2 px-1">
+          <Info class="h-3.5 w-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
+          <span class="text-xs text-gray-500">
+            <span v-if="!canSendMessage" class="text-red-600">
+              Complete your profile to join the conversation
+            </span>
+            <span v-else>
+              {{ stattionData.listeners }} listeners online • Be respectful
+            </span>
           </span>
         </div>
       </div>
@@ -368,60 +303,53 @@
     <!-- User Profile Modal -->
     <div
       v-if="showUserModal"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      @click.self="closeModal"
     >
       <div
-        class="relative bg-white rounded-2xl p-6 w-full max-w-sm mx-4 border-2 border-red-300 shadow-2xl"
+        class="relative bg-white rounded-2xl p-6 w-full max-w-sm mx-4 border border-gray-200 shadow-xl"
       >
         <div class="relative">
           <div class="text-center mb-6">
             <div
-              class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg"
+              class="w-14 h-14 mx-auto mb-4 bg-[#F8CB00] rounded-xl flex items-center justify-center"
             >
-              <MessageCircle class="h-8 w-8 text-white" />
+              <MessageCircle class="h-7 w-7 text-black" />
             </div>
-            <h3
-              class="text-xl font-bold text-red-600 mb-2 uppercase tracking-wide"
-            >
-              JOIN THE CHAT 💬
+            <h3 class="text-xl font-bold text-gray-900 mb-2">
+              Join Live Chat
             </h3>
             <p class="text-gray-600 text-sm">
-              Complete your profile to start chatting with
-              {{ stattionData.listeners }} other listeners
+              Enter your details to chat with {{ stattionData.listeners }} listeners
             </p>
           </div>
 
           <div class="space-y-4">
             <div>
-              <label
-                class="block text-sm font-bold text-red-600 mb-2 uppercase tracking-wider"
-                >FULL NAME</label
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </label>
               <input
                 v-model="userForm.name"
                 type="text"
                 required
-                class="w-full bg-red-50 border-2 border-red-200 rounded-xl py-3 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all duration-300"
-                placeholder="Enter your full name"
+                class="w-full bg-white border border-gray-200 rounded-lg py-2.5 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#F8CB00] focus:border-[#F8CB00] transition-all"
+                placeholder="Enter your name"
               />
             </div>
 
             <div>
-              <label
-                class="block text-sm font-bold text-red-600 mb-2 uppercase tracking-wider"
-                >EMAIL ADDRESS</label
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
               <input
                 v-model="userForm.email"
                 type="email"
                 required
-                class="w-full bg-red-50 border-2 border-red-200 rounded-xl py-3 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-red-400 transition-all duration-300"
-                placeholder="Enter your email address"
+                class="w-full bg-white border border-gray-200 rounded-lg py-2.5 px-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#F8CB00] focus:border-[#F8CB00] transition-all"
+                placeholder="Enter your email"
               />
-              <div
-                v-if="emailError"
-                class="text-red-500 text-xs mt-2 font-medium"
-              >
+              <div v-if="emailError" class="text-red-600 text-xs mt-1.5">
                 {{ emailError }}
               </div>
             </div>
@@ -430,13 +358,13 @@
               <button
                 @click="updateUserProfile"
                 :disabled="isUpdating || !isFormValid"
-                class="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 shadow-lg hover:shadow-red-500/30 uppercase tracking-wide"
+                class="flex-1 bg-[#F8CB00] hover:bg-yellow-500 text-black font-bold py-2.5 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{ isUpdating ? "UPDATING..." : "JOIN CHAT 🚀" }}
+                {{ isUpdating ? "Joining..." : "Join Chat" }}
               </button>
               <button
                 @click="closeModal"
-                class="px-4 py-3 bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-xl text-gray-700 font-medium border-2 border-gray-200 hover:border-gray-300"
+                class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 transition-colors rounded-lg text-gray-700 font-medium border border-gray-200"
               >
                 Cancel
               </button>
@@ -669,10 +597,20 @@ const updateUserProfile = async () => {
 
     await store.dispatch("update_user_profile", profileData);
 
+    // Close modal and reset form on success
     showUserModal.value = false;
     userForm.value = { name: "", email: "" };
+    emailError.value = "";
+    
+    // Focus on message input after successful join
+    nextTick(() => {
+      if (messageInput.value) {
+        messageInput.value.focus();
+      }
+    });
   } catch (error) {
     console.error("Failed to update profile:", error);
+    emailError.value = "Failed to update profile. Please try again.";
   } finally {
     isUpdating.value = false;
   }

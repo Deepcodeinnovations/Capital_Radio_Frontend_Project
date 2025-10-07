@@ -3,11 +3,81 @@
 @import 'tailwindcss/utilities';
 @import 'animate.css';
 
+/* Global responsive fixes */
+* {
+  box-sizing: border-box;
+}
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+#app {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Prevent container overflow */
+.container {
+  max-width: 100%;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
 
 .backgroundFixed {
     background-size: cover !important;
-    background-position: center !important; 
-    background-repeat: no-repeat !important; 
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     background-attachment: fixed !important;
 }
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  /* Prevent text overflow */
+  h1, h2, h3, h4, h5, h6, p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Adjust fixed background for mobile */
+  .backgroundFixed {
+    background-attachment: scroll !important;
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+/* ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #F8CB00, #ef233c);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ef233c, #F8CB00);
+} */

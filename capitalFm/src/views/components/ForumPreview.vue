@@ -1,39 +1,33 @@
 <template>
-  <section class="py-20 bg-white relative overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 opacity-10">
-      <div class="absolute top-0 right-0 w-72 h-72 bg-[#F8CB00] rounded-full blur-3xl"></div>
-      <div class="absolute bottom-0 left-0 w-96 h-96 bg-red-500 rounded-full blur-3xl"></div>
-      <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
-    </div>
+  <section class="py-8 md:py-16 lg:py-20 bg-gray-50 relative">
     
-    <div class="container mx-auto px-6 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <div class="inline-flex items-center justify-center mb-6">
+      <div class="text-center mb-8 md:mb-12 lg:mb-16">
+        <div class="inline-flex items-center justify-center mb-4 md:mb-6">
           <div class="h-px w-12 bg-[#F8CB00]"></div>
           <span class="mx-4 text-gray-800 font-bold tracking-wider text-sm uppercase">Community</span>
           <div class="h-px w-12 bg-[#F8CB00]"></div>
         </div>
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <h2 class="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-4 md:mb-6">
           Join Our Community <span class="text-[#F8CB00]">Discussions</span>
         </h2>
-        <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+        <p class="text-base md:text-lg lg:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed px-4">
           Connect with fellow Capital FM listeners, share your thoughts, and be part of Uganda's most vibrant radio community
         </p>
       </div>
       
       <!-- Main Forum Card -->
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden mb-12">
+      <div class="bg-white rounded-xl md:rounded-2xl border border-gray-200 overflow-hidden mb-8 md:mb-12">
         <div class="grid grid-cols-1 lg:grid-cols-3">
           <!-- Community Stats -->
-          <div class="bg-gray-50 p-8 lg:p-10 relative">
-            <div class="text-center mb-8">
-              <div class="w-16 h-16 bg-[#F8CB00]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users class="w-8 h-8 text-[#F8CB00]" />
+          <div class="bg-gray-50 p-6 md:p-8 lg:p-10 relative">
+            <div class="text-center mb-6 md:mb-8">
+              <div class="w-14 h-14 md:w-16 md:h-16 bg-[#F8CB00]/20 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                <Users class="w-7 h-7 md:w-8 md:h-8 text-[#F8CB00]" />
               </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">Community Stats</h3>
-              <p class="text-gray-600">Growing every day</p>
+              <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Community Stats</h3>
+              <p class="text-sm md:text-base text-gray-600">Growing every day</p>
             </div>
             
             <!-- Loading State -->
@@ -44,19 +38,19 @@
             </div>
             
             <!-- Stats Grid -->
-            <div v-else class="grid grid-cols-2 gap-4 mb-8">
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-[#F8CB00]/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-[#F8CB00] mb-1 group-hover:animate-pulse">
+            <div v-else class="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
+              <div class="text-center p-3 md:p-4 bg-white rounded-lg md:rounded-xl border border-gray-200 hover:border-[#F8CB00]/50 transition-all group transform hover:scale-105">
+                <div class="text-xl md:text-2xl font-bold text-[#F8CB00] mb-1">
                   {{ formatNumber(forumStats.total_topics) }}
                 </div>
-                <div class="text-sm text-gray-600">Topics</div>
-                <div class="text-xs text-green-600 mt-1">
+                <div class="text-xs md:text-sm text-gray-600">Topics</div>
+                <div class="text-[10px] md:text-xs text-green-600 mt-1">
                   +{{ getWeeklyGrowth(forumStats.total_topics) }} this week
                 </div>
               </div>
               
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-blue-500/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-blue-600 mb-1 group-hover:animate-pulse">
+              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-[#F8CB00] transition-all group transform hover:scale-105">
+                <div class="text-2xl font-bold text-[#F8CB00] mb-1">
                   {{ formatNumber(forumStats.total_replies) }}
                 </div>
                 <div class="text-sm text-gray-600">Replies</div>
@@ -65,8 +59,8 @@
                 </div>
               </div>
               
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-red-500/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-red-500 mb-1 group-hover:animate-pulse">
+              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-[#F8CB00] transition-all group transform hover:scale-105">
+                <div class="text-2xl font-bold text-[#F8CB00] mb-1">
                   {{ formatNumber(forumStats.active_users) }}
                 </div>
                 <div class="text-sm text-gray-600">Active Users</div>
@@ -75,8 +69,8 @@
                 </div>
               </div>
               
-              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-orange-500/50 transition-all group transform hover:scale-105">
-                <div class="text-2xl font-bold text-orange-600 mb-1 group-hover:animate-pulse">
+              <div class="text-center p-4 bg-white rounded-xl border border-gray-200 hover:border-[#F8CB00] transition-all group transform hover:scale-105">
+                <div class="text-2xl font-bold text-[#F8CB00] mb-1">
                   {{ formatNumber(forumStats.online_now) }}
                 </div>
                 <div class="text-sm text-gray-600">Online Now</div>
@@ -89,45 +83,43 @@
             
             <button 
               @click="navigateToForums"
-              class="relative group w-full overflow-hidden"
+              class="w-full bg-[#F8CB00] hover:bg-yellow-500 px-4 md:px-6 py-2.5 md:py-3 rounded-full text-black text-sm md:text-base font-bold flex items-center justify-center space-x-2 transition-all"
             >
-              <div class="absolute -inset-1 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-xl blur opacity-50 group-hover:opacity-70 transition duration-300"></div>
-              <div class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-6 py-3 rounded-xl text-white font-bold flex items-center justify-center space-x-2 transition-all duration-300 transform hover:scale-105">
-                <MessageSquare class="w-5 h-5" />
-                <span>Join Community</span>
-              </div>
+              <MessageSquare class="w-4 h-4 md:w-5 md:h-5" />
+              <span>Join Community</span>
             </button>
           </div>
           
           <!-- Hot Discussions -->
-          <div class="lg:col-span-2 p-8 lg:p-10">
-            <div class="flex items-center justify-between mb-8">
+          <div class="lg:col-span-2 p-6 md:p-8 lg:p-10">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
               <div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Hot Discussions</h3>
-                <p class="text-gray-600">Trending topics in our community</p>
+                <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Hot Discussions</h3>
+                <p class="text-sm md:text-base text-gray-600">Trending topics in our community</p>
               </div>
               
               <div class="flex items-center space-x-2">
                 <button 
                   @click="prevTopic"
                   :disabled="currentTopicIndex === 0"
-                  class="p-2 rounded-lg hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  class="p-1.5 md:p-2 rounded-lg hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  <ChevronLeft class="w-5 h-5" />
+                  <ChevronLeft class="w-4 h-4 md:w-5 md:h-5" />
                 </button>
                 <button 
                   @click="nextTopic"
                   :disabled="currentTopicIndex >= hotTopics.length - 3"
-                  class="p-2 rounded-lg hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  class="p-1.5 md:p-2 rounded-lg hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  <ChevronRight class="w-5 h-5" />
+                  <ChevronRight class="w-4 h-4 md:w-5 md:h-5" />
                 </button>
                 <button 
                   @click="navigateToForums"
-                  class="flex items-center space-x-2 text-[#F8CB00] hover:text-red-500 font-medium ml-4 transition-colors"
+                  class="flex items-center space-x-1 md:space-x-2 text-[#F8CB00] hover:text-yellow-600 font-medium ml-2 md:ml-4 transition-colors text-sm md:text-base"
                 >
-                  <span>View All</span>
-                  <ArrowRight class="w-4 h-4" />
+                  <span class="hidden sm:inline">View All</span>
+                  <span class="sm:hidden">All</span>
+                  <ArrowRight class="w-3 h-3 md:w-4 md:h-4" />
                 </button>
               </div>
             </div>
@@ -144,7 +136,7 @@
               <div 
                 v-for="(topic, index) in visibleTopics" 
                 :key="topic.id"
-                class="group p-6 bg-gray-50 rounded-xl border border-gray-200 hover:border-[#F8CB00]/50 transition-all cursor-pointer transform hover:scale-[1.02]"
+                class="group p-4 md:p-6 bg-gray-50 rounded-lg md:rounded-xl border border-gray-200 hover:border-[#F8CB00]/50 transition-all cursor-pointer transform hover:scale-[1.02]"
                 @click="navigateToTopic(topic)"
               >
                 <div class="flex items-start justify-between mb-4">
@@ -171,11 +163,11 @@
                   </div>
                 </div>
                 
-                <h4 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-[#F8CB00] transition-colors line-clamp-2">
+                <h4 class="text-base md:text-lg font-semibold text-gray-900 mb-2 md:mb-3 group-hover:text-[#F8CB00] transition-colors line-clamp-2">
                   {{ topic.title }}
                 </h4>
                 
-                <p class="text-gray-600 mb-4 line-clamp-2">
+                <p class="text-sm md:text-base text-gray-600 mb-3 md:mb-4 line-clamp-2">
                   {{ topic.body }}
                 </p>
                 
@@ -223,13 +215,13 @@
               <p class="text-gray-600">Be the first to start a trending conversation!</p>
             </div>
             
-            <div class="mt-8 pt-6 border-t border-gray-200">
+            <div class="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-200">
               <button 
                 @click="navigateToForums"
-                class="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-xl transition-all transform hover:scale-105"
+                class="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-2.5 md:py-3 px-4 md:px-6 rounded-lg md:rounded-xl transition-all transform hover:scale-105 text-sm md:text-base"
               >
                 <div class="flex items-center justify-center space-x-2">
-                  <MessageSquare class="w-5 h-5" />
+                  <MessageSquare class="w-4 h-4 md:w-5 md:h-5" />
                   <span>Browse All Discussions</span>
                 </div>
               </button>

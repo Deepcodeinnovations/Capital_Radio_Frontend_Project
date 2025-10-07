@@ -1,47 +1,39 @@
 <template>
-  <section class="py-20 bg-white relative overflow-hidden" ref="sectionRef">
-    <!-- Background decoration -->
-    <div class="absolute inset-0 opacity-10">
-      <div class="absolute top-0 right-0 w-72 h-72 bg-[#F8CB00] rounded-full blur-3xl"></div>
-      <div class="absolute bottom-0 left-0 w-96 h-96 bg-red-500 rounded-full blur-3xl"></div>
-      <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
-    </div>
+  <section class="py-8 md:py-12 lg:py-16 xl:py-20 bg-gray-50 relative" ref="sectionRef">
     
-    <div class="container mx-auto px-6 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <div class="inline-flex items-center justify-center mb-6">
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
-          <span class="mx-4 text-gray-800 font-bold tracking-wider text-sm uppercase">Weekly Schedule</span>
-          <div class="h-px w-12 bg-[#F8CB00]"></div>
+      <div v-scroll-reveal="{ animation: 'fade-up', delay: 0 }" class="mb-8 md:mb-12">
+        <div class="flex items-center gap-2 md:gap-3 mb-4">
+          <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-[#F8CB00]/20 flex items-center justify-center flex-shrink-0">
+            <Calendar class="h-4 w-4 md:h-5 md:w-5 text-[#F8CB00]" />
+          </div>
+          <div>
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">Our Daily Shows</h2>
+            <p class="text-sm md:text-base text-gray-600">Discover your favorite programs</p>
+          </div>
         </div>
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-          Our <span class="text-[#F8CB00]">Daily Shows</span>
-        </h2>
-        <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-          Discover your favorite shows and never miss the entertainment that keeps Uganda listening
-        </p>
       </div>
 
-      <!-- Day Navigation -->
-      <div class="mb-12">
-        <div class="flex justify-center items-center mb-8">
-          <div class="flex gap-2 overflow-x-auto hide-scrollbar justify-center items-center w-full">
+      <!-- Day Navigation (Sticky) -->
+      <div class="sticky top-0 z-10 bg-gray-50 py-4 mb-6 md:mb-8 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 shadow-sm">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex gap-1.5 md:gap-2 overflow-x-auto hide-scrollbar pb-2 md:pb-0">
             <button 
               v-for="(day, index) in weekDays" 
               :key="index"
               @click="setSelectedDay(index)"
-              class="flex-shrink-0 px-6 py-4 rounded-xl transition-all duration-300 font-semibold min-w-[100px]"
+              class="flex-shrink-0 px-3 md:px-4 lg:px-5 py-2 md:py-2.5 rounded-lg transition-all duration-300 font-medium min-w-[70px] md:min-w-[90px]"
               :class="[
                 selectedDayIndex === index 
-                  ? 'bg-gradient-to-r from-[#F8CB00] to-red-500 text-white transform scale-105 shadow-lg' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-                isToday(index) ? 'ring-2 ring-[#F8CB00]/50' : ''
+                  ? 'bg-[#F8CB00] text-black shadow-sm' 
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200',
+                isToday(index) ? 'ring-1 ring-[#F8CB00]/50' : ''
               ]"
             >
               <div class="text-center">
-                <div class="text-sm font-bold">{{ day.slice(0, 3).toUpperCase() }}</div>
-                <div class="text-xs opacity-80">{{ getDayDate(index) }}</div>
+                <div class="text-xs md:text-sm font-bold">{{ day.slice(0, 3).toUpperCase() }}</div>
+                <div class="text-[10px] md:text-xs opacity-80">{{ getDayDate(index) }}</div>
               </div>
             </button>
           </div>
@@ -51,39 +43,39 @@
       <!-- Shows Carousel -->
       <div class="relative">
         <!-- Carousel Header -->
-        <div class="flex items-center justify-between mb-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
           <div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-1 md:mb-2">
               {{ getSelectedDayName() }} Shows
             </h3>
-            <p class="text-gray-600">{{ selectedDayShows.length }} programs scheduled</p>
+            <p class="text-sm md:text-base text-gray-600">{{ selectedDayShows.length }} programs scheduled</p>
           </div>
           
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 md:gap-2">
             <button 
               @click="prevShow"
               :disabled="currentPage === 0"
-              class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="p-1.5 md:p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors border border-gray-200"
             >
-              <ChevronLeft class="h-5 w-5" />
+              <ChevronLeft class="h-4 w-4 md:h-5 md:w-5" />
             </button>
-            <span class="text-sm text-gray-600 px-2">
+            <span class="text-xs md:text-sm text-gray-600 px-1 md:px-2">
               {{ currentPage + 1 }} / {{ totalPages }}
             </span>
             <button 
               @click="nextShow"
               :disabled="currentPage >= totalPages - 1"
-              class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="p-1.5 md:p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors border border-gray-200"
             >
-              <ChevronRight class="h-5 w-5" />
+              <ChevronRight class="h-4 w-4 md:h-5 md:w-5" />
             </button>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           <div v-for="i in 4" :key="i" class="animate-pulse">
-            <div class="h-80 bg-gray-200 rounded-2xl"></div>
+            <div class="h-72 md:h-80 bg-gray-200 rounded-xl md:rounded-2xl"></div>
           </div>
         </div>
 
@@ -99,64 +91,63 @@
               <div 
                 v-for="page in totalPages" 
                 :key="page"
-                class="flex-shrink-0 w-full grid gap-6"
-                :class="getGridClass()"
+                class="flex-shrink-0 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
               >
                 <div 
                   v-for="(show, index) in getShowsForPage(page - 1)" 
                   :key="`${page}-${index}`"
-                  class="bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 transform hover:scale-105 hover:shadow-xl group cursor-pointer h-full"
+                  class="bg-white rounded-xl md:rounded-2xl border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-md hover:border-[#F8CB00] group cursor-pointer h-full"
                   @click="selectShow(show)"
                 >
                   <!-- Show Image -->
-                  <div class="h-[400px] overflow-hidden relative">
+                  <div class="h-40 md:h-48 lg:h-56 overflow-hidden relative">
                     <img 
                       :src="show.image || 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'" 
                       :alt="show.title" 
-                      class="w-full h-[330px]  object-cover transition-transform duration-700 group-hover:scale-110"
+                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <!-- Gradient Overlay -->
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                     
                     <!-- Status Badge -->
-                    <div v-if="isCurrentShow(show)" class="absolute top-4 right-4">
-                      <div class="bg-red-500 px-3 py-1 rounded-full flex items-center gap-2">
-                        <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                        <span class="text-white text-xs font-bold">LIVE NOW</span>
+                    <div v-if="isCurrentShow(show)" class="absolute top-2 md:top-3 right-2 md:right-3">
+                      <div class="bg-red-600 px-2 md:px-2.5 py-0.5 md:py-1 rounded-full flex items-center gap-1">
+                        <div class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                        <span class="text-white text-[10px] md:text-xs font-bold">LIVE</span>
                       </div>
                     </div>
-                    <div v-else-if="isUpcomingShow(show)" class="absolute top-4 right-4">
-                      <div class="bg-blue-500 px-3 py-1 rounded-full flex items-center gap-2">
-                        <Clock class="w-3 h-3 text-white" />
-                        <span class="text-white text-xs font-bold">UP NEXT</span>
+                    <div v-else-if="isUpcomingShow(show)" class="absolute top-2 md:top-3 right-2 md:right-3">
+                      <div class="bg-[#F8CB00] px-2 md:px-2.5 py-0.5 md:py-1 rounded-full flex items-center gap-1">
+                        <Clock class="w-2.5 h-2.5 md:w-3 md:h-3 text-black" />
+                        <span class="text-black text-[10px] md:text-xs font-bold">UP NEXT</span>
                       </div>
                     </div>
 
                     <!-- Time Badge -->
-                    <div class="absolute bottom-4 left-4">
-                      <div class="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                        <span class="text-gray-900 text-sm font-bold">{{ show.time }}</span>
+                    <div class="absolute bottom-2 md:bottom-3 left-2 md:left-3">
+                      <div class="bg-white/95 backdrop-blur-sm px-2 md:px-2.5 py-0.5 md:py-1 rounded-full">
+                        <span class="text-gray-900 text-[10px] md:text-xs font-bold">{{ show.time }}</span>
                       </div>
                     </div>
                   </div>
                   
                   <!-- Show Info -->
-                  <div class="p-6">
-                    <div class="mb-4">
-                      <h4 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#F8CB00] transition-colors line-clamp-1">
+                  <div class="p-3 md:p-4">
+                    <div class="mb-3">
+                      <h4 class="text-sm md:text-base font-bold text-gray-900 mb-1 group-hover:text-[#F8CB00] transition-colors line-clamp-1">
                         {{ show.title }}
                       </h4>
-                      <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+                      <p class="text-gray-600 text-xs md:text-sm line-clamp-2 leading-relaxed">
                         {{ show.description }}
                       </p>
                     </div>
 
                     <!-- Hosts -->
-                    <div v-if="show.hosts && show.hosts.length > 0" class="mb-4">
-                      <div class="flex items-center gap-3">
+                    <div v-if="show.hosts && show.hosts.length > 0" class="mb-3">
+                      <div class="flex items-center gap-2">
                         <div v-for="host in show.hosts.slice(0, 2)" :key="host.id" 
-                             class="flex items-center gap-2">
-                          <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200">
+                             class="flex items-center gap-1.5">
+                          <div class="w-6 h-6 md:w-7 md:h-7 rounded-full overflow-hidden border-2 border-gray-200 flex-shrink-0">
                             <img 
                               v-if="host.image_url" 
                               :src="host.image_url" 
@@ -164,10 +155,10 @@
                               class="w-full h-full object-cover"
                             />
                             <div v-else class="w-full h-full bg-[#F8CB00] flex items-center justify-center">
-                              <span class="text-black text-xs font-bold">{{ host.name.charAt(0) }}</span>
+                              <span class="text-black text-[10px] font-bold">{{ host.name.charAt(0) }}</span>
                             </div>
                           </div>
-                          <span class="text-gray-700 text-sm font-medium">{{ host.name }}</span>
+                          <span class="text-gray-700 text-xs md:text-sm font-medium">{{ host.name }}</span>
                         </div>
                       </div>
                     </div>
@@ -176,22 +167,19 @@
                     <button 
                       v-if="isCurrentShow(show)"
                       @click.stop="togglePlayPause"
-                      class="w-full relative group overflow-hidden"
+                      class="w-full bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-white text-xs md:text-sm font-bold flex items-center justify-center gap-1.5 transition-all"
                     >
-                      <div class="absolute -inset-1 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-xl blur opacity-50 group-hover:opacity-70 transition duration-300"></div>
-                      <div class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 px-4 py-3 rounded-xl text-white font-bold flex items-center justify-center space-x-2 transition-all duration-300">
-                        <component :is="isPlaying ? Pause : Play" class="h-4 w-4" />
-                        <span>{{ isPlaying ? 'LIVE NOW' : 'LISTEN LIVE' }}</span>
-                      </div>
+                      <component :is="isPlaying ? Pause : Play" class="h-3 w-3 md:h-3.5 md:w-3.5" />
+                      <span>{{ isPlaying ? 'LIVE' : 'LISTEN' }}</span>
                     </button>
                     <button 
                       v-else
                       @click.stop="selectShow(show)"
-                      class="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-4 rounded-xl transition-all transform hover:scale-105"
+                      class="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-2 px-3 rounded-lg transition-all text-xs md:text-sm"
                     >
-                      <div class="flex items-center justify-center space-x-2">
-                        <Info class="w-4 h-4" />
-                        <span>View Details</span>
+                      <div class="flex items-center justify-center gap-1.5">
+                        <Info class="w-3 h-3 md:w-3.5 md:h-3.5" />
+                        <span>Details</span>
                       </div>
                     </button>
                   </div>
@@ -202,24 +190,24 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else class="text-center py-16">
-          <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <Calendar class="w-10 h-10 text-gray-400" />
+        <div v-else class="text-center py-8 md:py-12">
+          <div class="w-12 h-12 md:w-16 md:h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <Calendar class="w-6 h-6 md:w-8 md:h-8 text-gray-400" />
           </div>
-          <h3 class="text-2xl font-bold text-gray-900 mb-4">No Shows Scheduled</h3>
-          <p class="text-gray-600">Check back for updates to our {{ getSelectedDayName() }} programming schedule</p>
+          <h3 class="text-base md:text-lg font-bold text-gray-900 mb-2 px-4">No Shows Scheduled</h3>
+          <p class="text-sm text-gray-600 px-4">Check back for updates to our {{ getSelectedDayName() }} programming</p>
         </div>
 
         <!-- Carousel Indicators -->
-        <div v-if="totalPages > 1" class="flex justify-center mt-8 space-x-2">
+        <div v-if="totalPages > 1" class="flex justify-center mt-4 md:mt-6 gap-1.5 md:gap-2">
           <button
             v-for="page in totalPages"
             :key="page"
             @click="goToPage(page - 1)"
             :class="[
-              'w-3 h-3 rounded-full transition-all duration-300',
+              'w-1.5 h-1.5 md:w-2 md:h-2 rounded-full transition-all duration-300',
               currentPage === (page - 1)
-                ? 'bg-[#F8CB00] w-8' 
+                ? 'bg-[#F8CB00]' 
                 : 'bg-gray-300 hover:bg-gray-400'
             ]"
           />
@@ -228,15 +216,15 @@
 
       <!-- Show Details Modal -->
       <div v-if="selectedShow" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" @click="closeShowDetails">
-        <div class="bg-white rounded-2xl border border-gray-200 p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" @click.stop>
-          <div class="flex items-center justify-between mb-6">
-            <h3 class="text-2xl font-bold text-gray-900">{{ selectedShow.title }}</h3>
+        <div class="bg-white rounded-xl md:rounded-2xl border border-gray-200 p-4 md:p-6 lg:p-8 max-w-2xl w-full max-h-[85vh] md:max-h-[80vh] overflow-y-auto" @click.stop>
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-900">{{ selectedShow.title }}</h3>
             <button @click="closeShowDetails" class="text-gray-400 hover:text-gray-600">
-              <X class="h-6 w-6" />
+              <X class="h-5 w-5 md:h-6 md:w-6" />
             </button>
           </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div>
               <img 
                 :src="selectedShow.image || 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'" 
@@ -281,13 +269,10 @@
               <button 
                 v-if="isCurrentShow(selectedShow)"
                 @click="togglePlayPause" 
-                class="w-full relative group overflow-hidden"
+                class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 md:py-3 rounded-full flex items-center justify-center space-x-2 transition-all"
               >
-                <div class="absolute -inset-1 bg-gradient-to-r from-[#F8CB00] via-red-500 to-blue-500 rounded-xl blur opacity-50 group-hover:opacity-70 transition duration-300"></div>
-                <div class="relative bg-gradient-to-r from-[#F8CB00] to-red-500 text-white font-bold py-3 rounded-xl flex items-center justify-center space-x-2 transition-all duration-300">
-                  <component :is="isPlaying ? Pause : Play" class="h-5 w-5" />
-                  <span>{{ isPlaying ? 'LIVE NOW' : 'LISTEN LIVE' }}</span>
-                </div>
+                <component :is="isPlaying ? Pause : Play" class="h-4 w-4 md:h-5 md:w-5" />
+                <span class="text-sm md:text-base">{{ isPlaying ? 'LIVE NOW' : 'LISTEN LIVE' }}</span>
               </button>
               <div v-else class="text-center py-4">
                 <span class="text-gray-500">Show airs {{ selectedShow.time }}</span>

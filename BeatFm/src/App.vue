@@ -173,7 +173,7 @@ const initializeApp = async () => {
     }
       const data = {
         device_fingerprint: device_fingerprint.value,
-        access_link: 'https://www.beatradio.co.ug',
+        access_link: 'https://beatradio.co.ug',
         clientdata: JSON.stringify(clientdata.value),
       };
       console.log('Auth data:', data);
@@ -183,7 +183,7 @@ const initializeApp = async () => {
     // Step 4: Station data
     console.log('Loading station details...');
     const radioData = {
-      access_link: 'https://www.beatradio.co.ug'
+      access_link: 'https://beatradio.co.ug'
     };
     await store.dispatch('fetch_station_details', radioData);
     
