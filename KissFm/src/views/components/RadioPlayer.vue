@@ -15,12 +15,11 @@
         :class="{ 'h-20': isMinimized, 'h-auto': !isMinimized }"
       >
         <!-- Background with Glass Morphism -->
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-800/90 to-slate-700/85 backdrop-blur-xl border-t border-slate-600/30"></div>
+        <div class="absolute inset-0 bg-slate-900/95 backdrop-blur-xl border-t border-slate-600/30"></div>
         
         <!-- Animated Background Pattern -->
         <div class="absolute inset-0 opacity-10 pointer-events-none">
-          <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-capital-blue to-transparent"></div>
-          <div v-if="isPlaying" class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-capital-blue via-capital-yellow to-capital-red animate-pulse"></div>
+          <div v-if="isPlaying" class="absolute top-0 left-0 w-full h-1 bg-capital-pink animate-pulse"></div>
         </div>
 
         <!-- Minimized View -->
@@ -45,7 +44,7 @@
                   />
                 </div>
                 <!-- Live Indicator -->
-                <div v-if="isPlaying" class="absolute -top-1 -right-1 w-3 h-3 bg-capital-red rounded-full animate-pulse border-2 border-white shadow-lg" />
+                <div v-if="isPlaying" class="absolute -top-1 -right-1 w-3 h-3 bg-capital-pink rounded-full animate-pulse border-2 border-white shadow-lg" />
                 <!-- Loading Indicator -->
                 <div v-else-if="isLoading" class="absolute -top-1 -right-1 w-3 h-3 border border-capital-blue border-t-transparent rounded-full animate-spin" />
               </div>
@@ -87,8 +86,8 @@
               class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 relative overflow-hidden group"
               :class="[
                 isPlaying 
-                  ? 'bg-gradient-to-r from-capital-green to-capital-blue hover:shadow-lg hover:shadow-capital-green/30' 
-                  : 'bg-gradient-to-r from-capital-blue to-capital-purple hover:shadow-lg hover:shadow-capital-blue/30',
+                  ? 'bg-capital-pink hover:shadow-lg' 
+                  : 'bg-capital-blue hover:shadow-lg',
                 (isLoading || !canPlay) ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
               ]"
             >

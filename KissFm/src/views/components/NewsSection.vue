@@ -7,14 +7,14 @@
     </div>
     
     <!-- Section connector - top curve -->
-    <div class="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-slate-900 to-transparent -z-10"></div>
+    <div class="absolute top-0 left-0 right-0 h-20 bg-slate-900/50 -z-10"></div>
     
     <div class="container mx-auto px-4 relative">
       <div class="mb-10">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="font-heading text-3xl md:text-4xl font-bold text-white mb-2">Latest <span class="text-capital-yellow">News & Updates</span></h2>
-            <div class="h-1 w-20 bg-gradient-to-r from-capital-blue via-capital-yellow to-capital-red"></div>
+            <div class="h-1 w-20 bg-capital-pink"></div>
           </div>
           
           <div class="hidden md:flex items-center space-x-4">
@@ -44,8 +44,8 @@
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
         <!-- Main featured news item -->
         <div class="md:col-span-7 lg:col-span-8">
-          <div class="bg-gradient-to-r p-[1px] from-capital-blue via-capital-yellow to-capital-red rounded-xl overflow-hidden">
-            <div class="h-full bg-slate-800/95 rounded-xl overflow-hidden relative group">
+          <div class="border-2 border-capital-pink rounded-xl overflow-hidden">
+            <div class="h-full bg-slate-800 rounded-xl overflow-hidden relative group">
               <!-- Featured news image with overlay -->
               <div class="aspect-[16/9] md:aspect-auto md:h-[400px] overflow-hidden relative">
                 <img 
@@ -53,7 +53,7 @@
                   :alt="featuredNews.title" 
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
+                <div class="absolute inset-0 bg-slate-900/60"></div>
               </div>
               
               <!-- Content overlay -->
@@ -150,7 +150,7 @@
           <div v-for="(category, idx) in newsCategories.slice(1)" :key="idx" class="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700/30">
             <div class="h-40 relative overflow-hidden">
               <img :src="category.imageUrl" :alt="category.name" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-slate-900/50"></div>
               <div class="absolute bottom-0 left-0 p-4">
                 <h3 class="text-lg font-bold text-white">{{ category.name }}</h3>
                 <p class="text-xs text-slate-300">{{ category.description }}</p>
@@ -177,7 +177,7 @@
       
       <!-- Newsletter signup - improved design -->
       <div class="rounded-xl overflow-hidden">
-        <div class="bg-gradient-to-br from-slate-800/80 to-slate-900/95 backdrop-blur-sm p-8 border border-slate-700/40">
+        <div class="bg-slate-800 p-8 border border-slate-700/40">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div class="md:col-span-7">
               <h3 class="font-heading text-2xl font-bold text-white mb-2">Stay Connected with Capital FM</h3>
@@ -188,7 +188,7 @@
                   <input type="email" placeholder="Your email address" class="w-full bg-slate-700/50 border border-slate-600 rounded-lg py-3 px-4 text-white pr-12 focus:outline-none focus:ring-2 focus:ring-capital-blue focus:border-transparent transition-all" />
                   <Mail class="absolute right-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
                 </div>
-                <button class="py-3 px-6 bg-gradient-to-r from-capital-blue to-capital-purple rounded-lg text-white font-medium whitespace-nowrap hover:shadow-lg hover:shadow-capital-blue/20 transition-all duration-300">
+                <button class="py-3 px-6 bg-capital-pink hover:bg-capital-pink-dark rounded-lg text-white font-medium whitespace-nowrap hover:shadow-lg transition-all duration-300">
                   Subscribe Now
                 </button>
               </div>
@@ -211,7 +211,7 @@
     </div>
 
     <!-- Section connector - bottom curve -->
-    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-900 to-transparent -z-10"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-24 bg-slate-900/50 -z-10"></div>
   </section>
 </template>
 

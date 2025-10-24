@@ -32,7 +32,7 @@ const getCacheData = (key) => {
   };
 };
 
-const onlineaccess = "https://capitalfm.deepcodegroup.com/api/v1/user/";
+const onlineaccess = "https://capitalradio.deepcodegroup.com/api/v1/user/";
 const apidirecturl =
   window.location.href.includes("localhost") ||
   window.location.href.includes("192.168.100.10")

@@ -1,157 +1,71 @@
 <template>
-  <section
-    class="relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-pink-50"
-  >
-    <!-- Background decoration with KIIS colors -->
+  <section class="relative overflow-hidden bg-white">
+    <!-- Background decoration -->
     <div class="absolute inset-0 opacity-5">
-      <div
-        class="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full blur-3xl"
-      ></div>
-      <div
-        class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-3xl"
-      ></div>
-      <div
-        class="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full blur-3xl"
-      ></div>
+      <div class="absolute top-0 right-0 w-72 h-72 bg-capital-pink rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-capital-pink-light rounded-full blur-3xl"></div>
     </div>
 
     <div class="container mx-auto px-4 md:px-6 relative z-20 py-20">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <div class="inline-flex items-center justify-center mb-6">
-          <div
-            class="h-px w-12 bg-gradient-to-r from-pink-500 to-purple-500"
-          ></div>
-          <span
-            class="mx-4 text-gray-800 font-bold tracking-wider text-sm uppercase"
-            >Community</span
-          >
-          <div
-            class="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500"
-          ></div>
-        </div>
-        <h2
-          class="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-6"
-        >
-          Join Our Community
-          <span
-            class="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent"
-            >Discussions</span
-          >
+      <div class="text-center mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+          Community <span class="text-capital-pink">Forum</span>
         </h2>
-        <p
-          class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed"
-        >
+        <p class="text-gray-600 max-w-2xl mx-auto">
           Connect with fellow KIIS 100.9 listeners, share your thoughts, and be
           part of Uganda's most vibrant radio community
         </p>
       </div>
 
       <!-- Community Stats Cards -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <!-- Loading State -->
         <template v-if="isLoading">
           <div v-for="i in 4" :key="i" class="animate-pulse">
-            <div
-              class="h-32 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl"
-            ></div>
+            <div class="h-32 bg-gray-200 rounded-2xl"></div>
           </div>
         </template>
 
         <!-- Stats Cards -->
         <template v-else>
-          <div class="relative group">
-            <div
-              class="absolute -inset-0.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"
-            ></div>
-            <div
-              class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-pink-200/30 text-center transition-all duration-500 transform hover:scale-105"
-            >
-              <div
-                class="text-2xl md:text-3xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300"
-              >
-                {{ formatNumber(forumStats.total_topics) }}
-              </div>
-              <div
-                class="text-sm font-bold text-gray-600 uppercase tracking-wider"
-              >
-                Topics
-              </div>
-              <div class="text-xs text-green-600 mt-1 font-semibold">
-                +{{ getWeeklyGrowth(forumStats.total_topics) }} this week
-              </div>
+          <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-capital-pink text-center transition-colors duration-200">
+            <div class="text-2xl font-bold text-capital-pink mb-1">
+              {{ formatNumber(forumStats.total_topics) }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 uppercase">
+              Topics
             </div>
           </div>
 
-          <div class="relative group">
-            <div
-              class="absolute -inset-0.5 bg-gradient-to-br from-purple-400 to-pink-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"
-            ></div>
-            <div
-              class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-purple-200/30 text-center transition-all duration-500 transform hover:scale-105"
-            >
-              <div
-                class="text-2xl md:text-3xl font-black bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300"
-              >
-                {{ formatNumber(forumStats.total_replies) }}
-              </div>
-              <div
-                class="text-sm font-bold text-gray-600 uppercase tracking-wider"
-              >
-                Replies
-              </div>
-              <div class="text-xs text-green-600 mt-1 font-semibold">
-                +{{ getWeeklyGrowth(forumStats.total_replies) }} this week
-              </div>
+          <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-capital-pink text-center transition-colors duration-200">
+            <div class="text-2xl font-bold text-capital-pink mb-1">
+              {{ formatNumber(forumStats.total_replies) }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 uppercase">
+              Replies
             </div>
           </div>
 
-          <div class="relative group">
-            <div
-              class="absolute -inset-0.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"
-            ></div>
-            <div
-              class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-pink-200/30 text-center transition-all duration-500 transform hover:scale-105"
-            >
-              <div
-                class="text-2xl md:text-3xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300"
-              >
-                {{ formatNumber(forumStats.active_users) }}
-              </div>
-              <div
-                class="text-sm font-bold text-gray-600 uppercase tracking-wider"
-              >
-                Active Users
-              </div>
-              <div class="text-xs text-green-600 mt-1 font-semibold">
-                +{{ getWeeklyGrowth(forumStats.active_users) }} this week
-              </div>
+          <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-capital-pink text-center transition-colors duration-200">
+            <div class="text-2xl font-bold text-capital-pink mb-1">
+              {{ formatNumber(forumStats.active_users) }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 uppercase">
+              Active Users
             </div>
           </div>
 
-          <div class="relative group">
-            <div
-              class="absolute -inset-0.5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-3xl opacity-0 group-hover:opacity-60 transition duration-500 blur-sm"
-            ></div>
-            <div
-              class="relative bg-white/80 backdrop-blur-sm p-6 rounded-3xl border border-yellow-200/30 text-center transition-all duration-500 transform hover:scale-105"
-            >
-              <div
-                class="text-2xl md:text-3xl font-black bg-gradient-to-r from-yellow-500 to-orange-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300"
-              >
-                {{ formatNumber(forumStats.online_now) }}
-              </div>
-              <div
-                class="text-sm font-bold text-gray-600 uppercase tracking-wider"
-              >
-                Online Now
-              </div>
-              <div class="flex items-center justify-center mt-1">
-                <div
-                  class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-1"
-                ></div>
-                <div class="text-xs text-green-600 font-bold">Live</div>
-              </div>
+          <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-capital-pink text-center transition-colors duration-200">
+            <div class="text-2xl font-bold text-capital-pink mb-1">
+              {{ formatNumber(forumStats.online_now) }}
+            </div>
+            <div class="text-xs font-medium text-gray-600 uppercase">
+              Online Now
+            </div>
+            <div class="flex items-center justify-center mt-1">
+              <div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse mr-1"></div>
+              <div class="text-xs text-green-600 font-medium">Live</div>
             </div>
           </div>
         </template>
@@ -159,51 +73,38 @@
 
       <!-- Hot Discussions Section -->
       <div class="relative mb-12">
-        <!-- Glow Background -->
-        <div
-          class="absolute -inset-1 bg-gradient-to-r from-pink-400 via-purple-500 to-pink-400 rounded-3xl opacity-20 blur-sm"
-        ></div>
-
-        <div
-          class="relative bg-white/90 backdrop-blur-xl rounded-3xl border border-pink-200/50 overflow-hidden"
-        >
+        <div class="relative bg-white rounded-lg border border-gray-200 overflow-hidden">
           <!-- Section Header -->
-          <div
-            class="bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10 px-4 sm:px-6 md:px-8 py-4 sm:py-6 border-b border-pink-200/30"
-          >
-            <div
-              class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-            >
+          <div class="bg-gray-50 px-4 sm:px-6 py-4 border-b border-gray-200">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <h3
-                  class="text-xl sm:text-2xl md:text-3xl font-black bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent mb-1"
-                >
+                <h3 class="text-lg sm:text-xl font-bold text-capital-pink mb-1">
                   Hot Discussions
                 </h3>
-                <p class="text-gray-600 text-sm sm:text-base font-medium">
+                <p class="text-gray-600 text-sm">
                   Trending topics in our community
                 </p>
               </div>
 
               <!-- Controls -->
-              <div class="flex items-center space-x-2 sm:space-x-3">
+              <div class="flex items-center space-x-2">
                 <button
                   @click="prevTopic"
                   :disabled="currentTopicIndex === 0"
-                  class="p-2 sm:p-3 rounded-2xl bg-white/80 backdrop-blur-sm hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600 hover:text-white text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 border border-pink-200/50"
+                  class="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 border border-gray-200"
                 >
-                  <ChevronLeft class="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ChevronLeft class="w-4 h-4" />
                 </button>
                 <button
                   @click="nextTopic"
                   :disabled="currentTopicIndex >= hotTopics.length - 3"
-                  class="p-2 sm:p-3 rounded-2xl bg-white/80 backdrop-blur-sm hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600 hover:text-white text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 border border-pink-200/50"
+                  class="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 border border-gray-200"
                 >
-                  <ChevronRight class="w-4 h-4 sm:w-5 sm:h-5" />
+                  <ChevronRight class="w-4 h-4" />
                 </button>
                 <button
                   @click="navigateToForums"
-                  class="flex items-center space-x-1 sm:space-x-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-bold px-3 py-2 sm:px-4 sm:py-3 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
+                  class="flex items-center space-x-1 bg-capital-pink hover:bg-pink-600 text-white font-medium px-3 py-2 rounded-lg transition-colors duration-200 text-sm"
                 >
                   <span>View All</span>
                   <ArrowRight class="w-4 h-4" />
@@ -213,72 +114,64 @@
           </div>
 
           <!-- Topics Content -->
-          <div class="p-4 sm:p-6 md:p-8">
+          <div class="p-4 sm:p-6">
             <!-- Loading State -->
             <div
               v-if="isLoading"
-              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
             >
               <div
                 v-for="i in 3"
                 :key="i"
-                class="h-32 sm:h-40 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl animate-pulse"
+                class="h-32 bg-gray-100 rounded-lg animate-pulse"
               ></div>
             </div>
 
             <!-- Hot Topics -->
             <div
               v-else-if="hotTopics.length > 0"
-              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
             >
               <div
                 v-for="topic in visibleTopics"
                 :key="topic.id"
-                class="relative group cursor-pointer"
+                class="cursor-pointer"
                 @click="navigateToTopic(topic)"
               >
                 <div
-                  class="absolute -inset-0.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
-                ></div>
-
-                <div
-                  class="relative bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-3xl border border-pink-200/30 transition-all duration-500 transform hover:scale-[1.02]"
+                  class="bg-white p-4 rounded-lg border border-gray-200 hover:border-capital-pink transition-colors duration-200"
                 >
                   <!-- Topic Header -->
                   <div
-                    class="flex flex-wrap items-start justify-between mb-3 sm:mb-4 gap-2"
+                    class="flex flex-wrap items-start justify-between mb-3 gap-2"
                   >
-                    <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="flex items-center space-x-2">
                       <span
-                        class="inline-flex items-center px-2 sm:px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider"
+                        class="inline-flex items-center px-2 py-1 rounded text-xs font-medium uppercase"
                         :class="getCategoryStyle(topic.category || 'GENERAL')"
                       >
-                        {{ topic.category || "General Discussion" }}
+                        {{ topic.category || "General" }}
                       </span>
                       <span
                         v-if="topic.is_hot"
-                        class="inline-flex items-center px-2 sm:px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                        class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-600"
                       >
                         <Flame class="w-3 h-3 mr-1" /> HOT
                       </span>
                     </div>
 
                     <div
-                      class="flex items-center space-x-2 sm:space-x-4 text-xs sm:text-sm text-gray-500"
+                      class="flex items-center space-x-2 text-xs text-gray-500"
                     >
-                      <div
-                        class="flex items-center space-x-1 bg-white/60 backdrop-blur-sm px-2 py-1 rounded-full"
-                      >
-                        <Eye class="w-4 h-4" />
-                        <span class="font-semibold">{{
+                      <div class="flex items-center space-x-1">
+                        <Eye class="w-3.5 h-3.5" />
+                        <span class="font-medium">{{
                           formatNumber(topic.views_count || 0)
                         }}</span>
                       </div>
-                      <div
-                        class="flex items-center space-x-1 bg-white/60 backdrop-blur-sm px-2 py-1 rounded-full"
-                      >
-                        <MessageSquare class="w-4 h-4" />
-                        <span class="font-semibold">{{
+                      <div class="flex items-center space-x-1">
+                        <MessageSquare class="w-3.5 h-3.5" />
+                        <span class="font-medium">{{
                           formatNumber(topic.comments_count || 0)
                         }}</span>
                       </div>
@@ -287,23 +180,23 @@
 
                   <!-- Topic Content -->
                   <h4
-                    class="text-base sm:text-lg md:text-xl font-black text-gray-900 mb-2 sm:mb-3 group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300 line-clamp-2"
+                    class="text-base font-bold text-gray-900 mb-2 line-clamp-2"
                   >
                     {{ topic.title }}
                   </h4>
                   <p
-                    class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4 line-clamp-2 leading-relaxed"
+                    class="text-gray-600 text-sm mb-3 line-clamp-2"
                   >
                     {{ topic.body }}
                   </p>
 
                   <!-- Footer -->
                   <div
-                    class="flex items-center justify-between flex-wrap gap-3"
+                    class="flex items-center justify-between gap-2"
                   >
-                    <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="flex items-center space-x-2">
                       <div
-                        class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-pink-200"
+                        class="w-8 h-8 rounded-full overflow-hidden border border-gray-200"
                       >
                         <img
                           v-if="topic.creator?.image_url"
@@ -313,31 +206,19 @@
                         />
                         <div
                           v-else
-                          class="w-full h-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center"
+                          class="w-full h-full bg-gray-200 flex items-center justify-center"
                         >
-                          <User class="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                          <User class="w-4 h-4 text-gray-400" />
                         </div>
                       </div>
                       <div>
-                        <p class="text-xs sm:text-sm font-bold text-gray-900">
+                        <p class="text-xs font-medium text-gray-900">
                           {{ topic.creator?.name || "Anonymous" }}
                         </p>
-                        <p
-                          class="text-[10px] sm:text-xs text-gray-500 font-medium"
-                        >
-                          {{ topic.creator?.role || "Member" }}
+                        <p class="text-xs text-gray-500">
+                          {{ formatDate(topic.created_at) }}
                         </p>
                       </div>
-                    </div>
-                    <div class="text-right">
-                      <p class="text-xs sm:text-sm font-bold text-gray-900">
-                        {{ formatDate(topic.created_at) }}
-                      </p>
-                      <p
-                        class="text-[10px] sm:text-xs text-gray-500 font-medium"
-                      >
-                        Last reply {{ formatDate(topic.updated_at) }}
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -345,87 +226,25 @@
             </div>
 
             <!-- Empty State -->
-            <div v-else class="text-center py-12 sm:py-16">
+            <div v-else class="text-center py-12">
               <div
-                class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-4 sm:mb-6"
+                class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4"
               >
-                <MessageSquare class="w-8 h-8 sm:w-10 sm:h-10 text-pink-400" />
+                <MessageSquare class="w-8 h-8 text-gray-400" />
               </div>
-              <h3
-                class="text-lg sm:text-xl font-black text-gray-900 mb-1 sm:mb-2"
-              >
-                No Hot Discussions Yet
+              <h3 class="text-lg font-bold text-gray-900 mb-2">
+                No Discussions Yet
               </h3>
-              <p class="text-gray-600 text-sm sm:text-base">
-                Be the first to start a trending conversation!
+              <p class="text-gray-600 text-sm">
+                Check back soon for trending topics
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Call to Action Section -->
-      <div class="text-center">
-        <div class="relative inline-block group">
-          <div
-            class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-60 group-hover:opacity-100 transition duration-500"
-          ></div>
-          <button
-            @click="navigateToForums"
-            class="relative bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black px-12 py-6 rounded-3xl transition-all duration-500 transform hover:scale-105 shadow-2xl"
-          >
-            <div class="flex items-center space-x-3">
-              <Users class="w-6 h-6" />
-              <span class="text-lg tracking-wide">Join Our Community</span>
-              <ArrowRight class="w-6 h-6" />
-            </div>
-          </button>
-        </div>
-
-        <p class="text-gray-600 mt-4 font-medium">
-          Connect with {{ formatNumber(forumStats.active_users) }} other KIIS
-          listeners
-        </p>
-      </div>
     </div>
 
-    <!-- Bottom Curved Border -->
-    <div class="absolute bottom-0 left-0 w-full overflow-hidden z-10">
-      <svg
-        class="w-full h-auto"
-        preserveAspectRatio="none"
-        viewBox="0 0 1200 80"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M0,40 C200,80 400,0 600,40 C800,80 1000,0 1200,40 L1200,80 L0,80 Z"
-          fill="url(#bottomWave1)"
-          opacity="0.3"
-        />
-        <path
-          d="M0,50 C300,10 500,70 800,30 C900,10 1100,60 1200,35 L1200,80 L0,80 Z"
-          fill="url(#bottomWave2)"
-          opacity="0.2"
-        />
-        <path
-          d="M0,60 C250,20 450,80 700,45 C850,25 1050,75 1200,55 L1200,80 L0,80 Z"
-          fill="white"
-        />
-
-        <defs>
-          <linearGradient id="bottomWave1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color: #ff6b9d; stop-opacity: 1" />
-            <stop offset="50%" style="stop-color: #8b5cf6; stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: #ff6b9d; stop-opacity: 1" />
-          </linearGradient>
-          <linearGradient id="bottomWave2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color: #a78bfa; stop-opacity: 1" />
-            <stop offset="100%" style="stop-color: #f472b6; stop-opacity: 1" />
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
   </section>
 </template>
 
@@ -529,16 +348,11 @@ const formatDate = (dateString) => {
 
 const getCategoryStyle = (category) => {
   const styles = {
-    MUSIC:
-      "bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-600 border border-red-200",
-    EVENTS:
-      "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-600 border border-blue-200",
-    TECHNOLOGY:
-      "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-600 border border-yellow-200",
-    GENERAL:
-      "bg-gradient-to-r from-gray-500/20 to-slate-500/20 text-gray-600 border border-gray-200",
-    ANNOUNCEMENTS:
-      "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-600 border border-green-200",
+    MUSIC: "bg-red-50 text-red-600",
+    EVENTS: "bg-blue-50 text-blue-600",
+    TECHNOLOGY: "bg-yellow-50 text-yellow-600",
+    GENERAL: "bg-gray-100 text-gray-600",
+    ANNOUNCEMENTS: "bg-green-50 text-green-600",
   };
   return styles[category.toUpperCase()] || styles["GENERAL"];
 };
@@ -592,37 +406,5 @@ onMounted(() => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-/* Custom gradient text effects */
-.bg-clip-text {
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
-/* Enhanced backdrop blur for better glass effect */
-.backdrop-blur-xl {
-  backdrop-filter: blur(24px);
-}
-
-.backdrop-blur-sm {
-  backdrop-filter: blur(8px);
-}
-
-/* Smooth transitions */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Enhanced hover effects */
-button:hover,
-.group:hover {
-  transform: translateY(-2px);
-}
-
-/* Professional shadows */
-.shadow-2xl {
-  box-shadow: 0 25px 50px -12px rgba(244, 114, 182, 0.25);
 }
 </style>

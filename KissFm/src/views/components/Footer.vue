@@ -24,11 +24,8 @@
       <div class="flex flex-col lg:flex-row items-start justify-between gap-10 mb-16">
         <div class="lg:w-1/3">
           <div class="flex items-center gap-3 mb-6">
-            <div class="relative">
-              <div class="absolute -inset-1 bg-gradient-to-r from-capital-blue via-capital-yellow to-capital-red rounded-full blur opacity-30"></div>
-              <div class="relative text-capital-yellow">
-                <Radio class="h-10 w-10" />
-              </div>
+            <div class="text-capital-yellow">
+              <Radio class="h-10 w-10" />
             </div>
             <div>
               <div class="font-heading font-bold text-2xl text-white">Capital <span class="text-capital-yellow">FM</span></div>
@@ -199,18 +196,18 @@
         
         <div class="flex justify-between items-center gap-2 mt-4">
           <div v-for="(freq, index) in frequencies" :key="index" class="text-center flex-1">
-            <div class="text-lg font-bold text-capital-yellow mb-0">{{ freq.freq }}</div>
+            <div class="text-lg font-bold text-capital-pink mb-0">{{ freq.freq }}</div>
             <div class="text-xs text-slate-400">{{ freq.location }}</div>
             <div class="mt-2 h-10 flex items-end justify-center">
-              <div class="w-1 mx-px bg-gradient-to-t from-capital-blue to-capital-yellow frequency-bar" 
+              <div class="w-1 mx-px bg-capital-pink frequency-bar" 
                    :style="{ height: getRandomHeight() }"></div>
-              <div class="w-1 mx-px bg-gradient-to-t from-capital-blue to-capital-yellow frequency-bar" 
+              <div class="w-1 mx-px bg-capital-pink frequency-bar" 
                    :style="{ height: getRandomHeight(), animationDelay: '0.1s' }"></div>
-              <div class="w-1 mx-px bg-gradient-to-t from-capital-blue to-capital-yellow frequency-bar" 
+              <div class="w-1 mx-px bg-capital-pink frequency-bar" 
                    :style="{ height: getRandomHeight(), animationDelay: '0.2s' }"></div>
-              <div class="w-1 mx-px bg-gradient-to-t from-capital-blue to-capital-yellow frequency-bar" 
+              <div class="w-1 mx-px bg-capital-pink frequency-bar" 
                    :style="{ height: getRandomHeight(), animationDelay: '0.3s' }"></div>
-              <div class="w-1 mx-px bg-gradient-to-t from-capital-blue to-capital-yellow frequency-bar" 
+              <div class="w-1 mx-px bg-capital-pink frequency-bar" 
                    :style="{ height: getRandomHeight(), animationDelay: '0.4s' }"></div>
             </div>
           </div>
@@ -218,7 +215,7 @@
       </div>
       
       <!-- App promo section -->
-      <div class="mb-10 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-r from-slate-800/50 to-slate-900/50 rounded-xl overflow-hidden backdrop-blur-sm">
+      <div class="mb-10 grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-800/50 rounded-xl overflow-hidden backdrop-blur-sm">
         <div class="p-6 flex flex-col justify-center">
           <h3 class="text-2xl font-bold text-white mb-2 font-heading">Download Our App</h3>
           <p class="text-slate-300 mb-4">Listen to Capital FM on the go. Get exclusive content, notifications for your favorite shows, and more.</p>

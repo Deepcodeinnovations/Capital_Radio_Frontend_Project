@@ -126,7 +126,7 @@ export default {
                     socket.onerror = (error) => {
                         console.error('WebSocket: Connection error', error);
                         commit('setWsConnectionStatus', 'error');
-                        toast.error('Connection error occurred');
+                        // toast.error('Connection error occurred');
                         reject(error);
                     };
                 });
@@ -134,7 +134,7 @@ export default {
             } catch (error) {
                 console.error('WebSocket: Failed to create connection', error);
                 commit('setWsConnectionStatus', 'error');
-                toast.error('Failed to establish connection');
+                // toast.error('Failed to establish connection');
                 throw error;
             }
         },
@@ -143,7 +143,7 @@ export default {
         async handleReconnection({ commit, dispatch, state }) {
             if (state.wsReconnectAttempts >= state.wsMaxReconnectAttempts) {
                 console.log('WebSocket: Max reconnection attempts reached');
-                toast.error('Connection lost. Please refresh the page.');
+                // toast.error('Connection lost. Please refresh the page.');
                 return;
             }
 

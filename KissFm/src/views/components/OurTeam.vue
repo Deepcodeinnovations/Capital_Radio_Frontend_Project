@@ -210,14 +210,14 @@
                         class="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl overflow-hidden transition-all duration-500 transform hover:scale-105 h-full"
                       >
                         <!-- Image Container -->
-                        <div class="aspect-[8/5] overflow-hidden relative">
+                        <div class="h-80 overflow-hidden relative">
                           <img
                             :src="
                               host.image_url ||
                               'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
                             "
                             :alt="host.name"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                           />
                           <!-- Gradient Overlay -->
                           <div

@@ -62,7 +62,7 @@
               <!-- Logo -->
               <router-link to="/" class="absolute animate-rotate-slow">
                 <img
-                  src="/logokiis.png"
+                  src="@/assets/logokiis.png"
                   alt="KIIS Logo"
                   class="w-full h-full object-contain"
                 />
@@ -84,7 +84,7 @@
                 : 'text-xs md:text-sm opacity-100',
             ]"
           >
-            <span class="text-pink-200"> FRESH HITS FOR UGANDA </span>
+            <span class="text-pink-200"> HOT HITS FOR KAMPALA</span>
           </div>
         </div>
 
@@ -203,7 +203,7 @@
                 </h2>
               </div>
               <p class="text-white/70 text-lg font-medium">
-                Uganda's Premium Hit Station
+                HOT HITS FOR KAMPALA
               </p>
             </div>
             <hr />

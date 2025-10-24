@@ -6,7 +6,7 @@
       'bg-transparent': !scrolled,
     }"
   >
-    <div class="bg-capital-red/90 py-2 relative overflow-hidden">
+    <div class="bg-capital-pink py-2 relative overflow-hidden">
       <div class="ticker-wrapper">
         <div class="ticker-content">
           <p class="text-white font-bold animate-ticker whitespace-nowrap">
@@ -23,15 +23,8 @@
         <!-- Logo -->
         <div class="flex items-center">
           <a href="#" class="flex items-center gap-3 group">
-            <div class="relative">
-              <div
-                class="absolute -inset-1 bg-gradient-to-r from-capital-blue via-capital-yellow to-capital-red rounded-full blur opacity-30 group-hover:opacity-60 transition duration-500"
-              ></div>
-              <div
-                class="relative text-capital-yellow flex items-center transform group-hover:scale-110 transition duration-300"
-              >
-                <Radio class="h-8 w-8" />
-              </div>
+            <div class="text-capital-yellow flex items-center transform group-hover:scale-110 transition duration-300">
+              <Radio class="h-8 w-8" />
             </div>
             <div class="flex flex-col">
               <span class="font-bold text-xl text-white"
@@ -55,7 +48,7 @@
             />
 
             <button
-              class="ml-4 bg-gradient-to-r from-capital-blue to-blue-600 text-white font-medium py-2 px-5 rounded-full hover:shadow-lg hover:shadow-capital-blue/20 transition-all duration-300 hover:scale-105 flex items-center gap-2"
+              class="ml-4 bg-capital-pink hover:bg-capital-pink-dark text-white font-medium py-2 px-5 rounded-full hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-2"
             >
               <Radio class="h-4 w-4" />
               <span>Listen Live</span>
@@ -103,7 +96,7 @@
           </a>
 
           <button
-            class="mt-4 mx-2 bg-gradient-to-r from-capital-blue to-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+            class="mt-4 mx-2 bg-capital-pink hover:bg-capital-pink-dark text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
           >
             <Radio class="h-5 w-5" />
             <span>Listen Live</span>
@@ -243,18 +236,10 @@ export default {
         <a 
           :href="to" 
           class="relative px-5 py-2 rounded-full text-base font-medium transition-all duration-300"
-          :class="active ? 'text-white' : 'text-slate-300 hover:text-white'"
+          :class="active ? 'text-white bg-capital-pink' : 'text-slate-300 hover:text-white hover:bg-slate-800'"
           @click.prevent="$emit('click')"
         >
           <span class="relative z-10">{{ label }}</span>
-          <span 
-            class="absolute inset-0 bg-gradient-to-r from-capital-blue to-blue-600 rounded-full opacity-0 transition-opacity duration-300" 
-            :class="active ? 'opacity-100' : 'hover:opacity-10'"
-          ></span>
-          <span 
-            class="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-1 bg-capital-yellow rounded-full transition-all duration-300"
-            :class="active ? 'w-6' : 'w-0'"
-          ></span>
         </a>
       `,
     },

@@ -26,37 +26,25 @@
               class="w-full h-full object-cover"
             />
             <!-- Enhanced Dark Overlay for Better Text Readability -->
-            <div
-              class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/20"
-            ></div>
-            <div
-              class="absolute inset-0 bg-gradient-to-r from-black/40 via-black/30 to-black/20"
-            ></div>
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"
-            ></div>
+            <div class="absolute inset-0 bg-black/50"></div>
           </div>
         </div>
       </div>
 
       <!-- Hero Content -->
       <div
-        class="relative z-30 flex items-center min-h-[calc(115vh-4rem)] md:min-h-[calc(115vh)]"
+        class="relative z-30 flex items-center min-h-screen py-20 md:py-24"
       >
         <div
-          class="container mx-auto px-4 md:px-6 mt-[calc(100vh-55rem)] md:mt-[calc(100vh-53rem)]"
+          class="container mx-auto px-4 sm:px-6 lg:px-8"
         >
-          <div
-            class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
-          >
-            <!-- Main Content - Full Width -->
-            <div class="lg:col-span-12 text-center">
+          <div class="max-w-5xl mx-auto text-center">
               <!-- Content Badge -->
               <div
-                class="inline-flex items-center rounded-full space-x-2 bg-white/15 backdrop-blur-md px-4 md:px-5 py-2.5 border border-white/30 mb-5 md:mb-6"
+                class="inline-flex items-center rounded-full space-x-2 bg-white/20 backdrop-blur-md px-4 md:px-5 py-2.5 border border-white/30 mb-5 md:mb-6"
               >
                 <div
-                  class="w-2.5 h-2.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full animate-pulse shadow-lg"
+                  class="w-2.5 h-2.5 bg-capital-pink rounded-full animate-pulse shadow-lg"
                 ></div>
                 <span
                   class="text-white font-semibold text-sm md:text-base uppercase tracking-wider"
@@ -73,20 +61,16 @@
 
               <!-- Main Headline -->
               <h1
-                class="font-poppins text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold mb-6 md:mb-8 leading-tight tracking-tight"
+                class="font-poppins text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight text-white drop-shadow-2xl"
               >
-                <span
-                  class="bg-gradient-to-r from-white via-pink-300 to-purple-400 bg-clip-text text-transparent drop-shadow-xl"
-                >
-                  {{
-                    truncateText(currentSlideData?.title || "KIIS 100.9", 60)
-                  }}
-                </span>
+                {{
+                  truncateText(currentSlideData?.title || "KIIS 100.9", 60)
+                }}
               </h1>
 
               <!-- Subtitle -->
               <p
-                class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 mb-7 md:mb-10 leading-relaxed max-w-4xl mx-auto font-medium"
+                class="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 md:mb-10 leading-relaxed max-w-3xl mx-auto"
               >
                 {{
                   truncateText(
@@ -100,20 +84,14 @@
 
               <!-- Action Buttons -->
               <div
-                class="flex flex-col sm:flex-row gap-5 justify-center items-center mb-10 md:mb-14"
+                class="flex flex-col sm:flex-row gap-4 justify-center items-center"
               >
                 <!-- Primary Action -->
                 <button
                   @click="togglePlayPause"
                   :disabled="isLoading"
-                  class="relative group overflow-hidden rounded-2xl transform hover:scale-105 transition-all duration-500"
+                  class="bg-capital-pink hover:bg-capital-pink-dark disabled:opacity-50 disabled:cursor-not-allowed px-8 py-4 rounded-xl text-white font-bold flex items-center justify-center space-x-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 min-w-[200px]"
                 >
-                  <div
-                    class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-70 group-hover:opacity-100 transition duration-500"
-                  ></div>
-                  <div
-                    class="relative bg-gradient-to-r from-pink-500 to-purple-600 px-8 py-4 rounded-2xl text-white font-bold flex items-center space-x-3 transition-all duration-300 shadow-2xl"
-                  >
                     <div
                       v-if="isLoading"
                       class="w-5 h-5 border-3 rounded-full border-white/30 border-t-white animate-spin"
@@ -137,7 +115,6 @@
                     <span class="tracking-wide text-base font-black" v-else
                       >TUNE IN NOW</span
                     >
-                  </div>
                 </button>
 
                 <!-- Secondary Action -->
@@ -147,10 +124,10 @@
                     currentSlideData?.target_url
                   "
                   @click="handleAdvertClick"
-                  class="group rounded-2xl flex items-center justify-center space-x-3 px-7 md:px-8 py-3.5 md:py-4 font-bold text-base md:text-lg transition-all duration-500 transform hover:scale-105 shadow-2xl backdrop-blur-md border-2 bg-white/20 border-white/40 text-white hover:bg-white/30"
+                  class="group rounded-xl flex items-center justify-center space-x-2 px-6 md:px-8 py-3.5 md:py-4 font-semibold text-base transition-all duration-300 transform hover:scale-105 shadow-lg backdrop-blur-md border-2 bg-white/10 border-white/40 text-white hover:bg-white/20 hover:border-white/60"
                 >
                   <ExternalLink
-                    :size="20"
+                    :size="18"
                     class="group-hover:scale-110 transition-transform duration-300"
                   />
                   <span>{{
@@ -160,16 +137,15 @@
                 <button
                   v-else
                   @click="handleDetailsClick(currentSlideData)"
-                  class="group rounded-2xl flex items-center justify-center space-x-3 px-7 md:px-8 py-3.5 md:py-4 font-bold text-base md:text-lg transition-all duration-500 transform hover:scale-105 shadow-2xl backdrop-blur-md border-2 bg-white/20 border-white/40 text-white hover:bg-white/30"
+                  class="group rounded-xl flex items-center justify-center space-x-2 px-6 md:px-8 py-3.5 md:py-4 font-semibold text-base transition-all duration-300 transform hover:scale-105 shadow-lg backdrop-blur-md border-2 bg-white/10 border-white/40 text-white hover:bg-white/20 hover:border-white/60"
                 >
                   <ExternalLink
-                    :size="20"
+                    :size="18"
                     class="group-hover:scale-110 transition-transform duration-300"
                   />
                   <span>Read Details</span>
                 </button>
               </div>
-            </div>
           </div>
         </div>
       </div>
@@ -177,15 +153,15 @@
       <!-- Left Carousel Control -->
       <div
         v-if="carouselItems && carouselItems.length > 1"
-        class="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 z-30"
+        class="absolute left-2 sm:left-4 md:left-8 top-1/2 transform -translate-y-1/2 z-30"
       >
         <button
           @click="prevSlide"
-          class="p-4 bg-black/30 backdrop-blur-xl text-white hover:bg-black/50 transition-all duration-300 rounded-full border border-white/20 shadow-2xl group"
+          class="p-3 md:p-4 bg-black/30 backdrop-blur-md text-white hover:bg-capital-pink/80 transition-all duration-300 rounded-full border border-white/20 shadow-lg group"
         >
           <ChevronLeft
-            :size="24"
-            class="group-hover:scale-110 transition-transform duration-300"
+            :size="20"
+            class="md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300"
           />
         </button>
       </div>
@@ -193,15 +169,15 @@
       <!-- Right Carousel Control -->
       <div
         v-if="carouselItems && carouselItems.length > 1"
-        class="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-30"
+        class="absolute right-2 sm:right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-30"
       >
         <button
           @click="nextSlide"
-          class="p-4 bg-black/30 backdrop-blur-xl text-white hover:bg-black/50 transition-all duration-300 rounded-full border border-white/20 shadow-2xl group"
+          class="p-3 md:p-4 bg-black/30 backdrop-blur-md text-white hover:bg-capital-pink/80 transition-all duration-300 rounded-full border border-white/20 shadow-lg group"
         >
           <ChevronRight
-            :size="24"
-            class="group-hover:scale-110 transition-transform duration-300"
+            :size="20"
+            class="md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300"
           />
         </button>
       </div>
@@ -209,10 +185,10 @@
       <!-- Carousel Dots - Bottom Center -->
       <div
         v-if="carouselItems && carouselItems.length > 1"
-        class="absolute bottom-8 md:bottom-12 left-1/2 transform -translate-x-1/2 z-30"
+        class="absolute bottom-6 sm:bottom-8 md:bottom-12 left-1/2 transform -translate-x-1/2 z-30"
       >
         <div
-          class="flex space-x-3 bg-black/20 backdrop-blur-xl px-4 py-3 rounded-full border border-white/20 shadow-xl"
+          class="flex space-x-2 bg-black/20 backdrop-blur-md px-3 py-2 rounded-full border border-white/20 shadow-lg"
         >
           <button
             v-for="(slide, index) in carouselItems"
@@ -221,16 +197,15 @@
             :class="[
               'h-2 rounded-full transition-all duration-300',
               index === currentSlide
-                ? 'bg-gradient-to-r from-pink-500 to-purple-500 w-6 shadow-lg'
+                ? 'bg-capital-pink w-6 shadow-lg'
                 : 'bg-white/50 hover:bg-white/75 w-2',
             ]"
           />
         </div>
       </div>
 
-      <!-- Elegant Layered Bottom Border -->
+      <!-- Simple Bottom Border -->
       <div class="absolute bottom-0 left-0 w-full overflow-hidden z-20">
-        <!-- Multiple Wave Layers for Depth -->
         <svg
           class="w-full h-auto"
           preserveAspectRatio="none"
@@ -238,163 +213,11 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <!-- Back Wave Layer -->
           <path
-            d="M0,60 C200,120 400,0 600,60 C800,120 1000,0 1200,60 L1200,120 L0,120 Z"
-            fill="url(#wave1)"
-            opacity="0.4"
-          />
-
-          <!-- Middle Wave Layer -->
-          <path
-            d="M0,70 C300,10 500,110 800,40 C900,20 1100,80 1200,50 L1200,120 L0,120 Z"
-            fill="url(#wave2)"
-            opacity="0.6"
-          />
-
-          <!-- Front Wave Layer -->
-          <path
-            d="M0,80 C250,20 450,120 700,60 C850,30 1050,100 1200,70 L1200,120 L0,120 Z"
+            d="M0,60 C200,90 400,30 600,60 C800,90 1000,30 1200,60 L1200,120 L0,120 Z"
             fill="white"
           />
-
-          <!-- Decorative Elements -->
-          <circle cx="100" cy="40" r="3" fill="url(#sparkle)" opacity="0.8">
-            <animate
-              attributeName="r"
-              values="2;4;2"
-              dur="2s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.4;1;0.4"
-              dur="2s"
-              repeatCount="indefinite"
-            />
-          </circle>
-          <circle cx="300" cy="25" r="2" fill="url(#sparkle)" opacity="0.6">
-            <animate
-              attributeName="r"
-              values="1;3;1"
-              dur="3s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.3;0.9;0.3"
-              dur="3s"
-              repeatCount="indefinite"
-            />
-          </circle>
-          <circle cx="600" cy="35" r="4" fill="url(#sparkle)" opacity="0.7">
-            <animate
-              attributeName="r"
-              values="3;5;3"
-              dur="2.5s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.5;1;0.5"
-              dur="2.5s"
-              repeatCount="indefinite"
-            />
-          </circle>
-          <circle cx="900" cy="20" r="2.5" fill="url(#sparkle)" opacity="0.5">
-            <animate
-              attributeName="r"
-              values="2;4;2"
-              dur="4s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.2;0.8;0.2"
-              dur="4s"
-              repeatCount="indefinite"
-            />
-          </circle>
-          <circle cx="1100" cy="45" r="3" fill="url(#sparkle)" opacity="0.9">
-            <animate
-              attributeName="r"
-              values="2;5;2"
-              dur="1.8s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.4;1;0.4"
-              dur="1.8s"
-              repeatCount="indefinite"
-            />
-          </circle>
-
-          <!-- Gradient Definitions -->
-          <defs>
-            <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color: #ff6b9d; stop-opacity: 1" />
-              <stop offset="25%" style="stop-color: #8b5cf6; stop-opacity: 1" />
-              <stop offset="50%" style="stop-color: #06b6d4; stop-opacity: 1" />
-              <stop offset="75%" style="stop-color: #8b5cf6; stop-opacity: 1" />
-              <stop
-                offset="100%"
-                style="stop-color: #ff6b9d; stop-opacity: 1"
-              />
-            </linearGradient>
-            <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color: #fbbf24; stop-opacity: 1" />
-              <stop offset="33%" style="stop-color: #f472b6; stop-opacity: 1" />
-              <stop offset="66%" style="stop-color: #a78bfa; stop-opacity: 1" />
-              <stop
-                offset="100%"
-                style="stop-color: #fbbf24; stop-opacity: 1"
-              />
-            </linearGradient>
-            <radialGradient id="sparkle" cx="50%" cy="50%">
-              <stop offset="0%" style="stop-color: #ffffff; stop-opacity: 1" />
-              <stop
-                offset="70%"
-                style="stop-color: #fbbf24; stop-opacity: 0.8"
-              />
-              <stop
-                offset="100%"
-                style="stop-color: #ff6b9d; stop-opacity: 0"
-              />
-            </radialGradient>
-          </defs>
         </svg>
-
-        <!-- Floating Geometric Elements -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-          <!-- Triangles -->
-          <div
-            class="absolute bottom-8 left-[15%] w-0 h-0 border-l-[8px] border-r-[8px] border-b-[12px] border-l-transparent border-r-transparent border-b-pink-400/40 animate-gentle-float"
-          ></div>
-          <div
-            class="absolute bottom-12 right-[20%] w-0 h-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent border-b-purple-400/50 animate-gentle-float-delayed"
-          ></div>
-
-          <!-- Diamonds -->
-          <div
-            class="absolute bottom-10 left-[60%] w-3 h-3 bg-gradient-to-br from-cyan-400 to-blue-500 rotate-45 opacity-60 animate-gentle-float-slow"
-          ></div>
-          <div
-            class="absolute bottom-6 right-[70%] w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rotate-45 opacity-50 animate-gentle-float"
-          ></div>
-
-          <!-- Stars -->
-          <div
-            class="absolute bottom-14 left-[80%] text-yellow-400 opacity-70 animate-gentle-float-delayed"
-          >
-            ✦
-          </div>
-          <div
-            class="absolute bottom-7 left-[30%] text-pink-400 opacity-60 animate-gentle-float-slow"
-          >
-            ✧
-          </div>
-        </div>
       </div>
     </div>
   </div>
