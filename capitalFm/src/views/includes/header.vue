@@ -22,7 +22,7 @@
             <div class="flex items-center space-x-3">
               <button
                 @click="showAdvertiseModal = true"
-                class="text-gray-400 hover:text-[#F8CB00] transition-colors font-medium"
+                class="text-gray-500 hover:text-[#F8CB00] transition-colors font-medium"
               >
                 Advertise With Us
               </button>

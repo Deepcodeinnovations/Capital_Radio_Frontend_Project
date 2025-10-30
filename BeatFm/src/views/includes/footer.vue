@@ -126,10 +126,10 @@
                       Studio: +256 414 215100 </a
                     ><br />
                     <a
-                      href="tel:+256703766257"
+                      href="tel:+256752237963"
                       class="hover:text-yellow-400 transition-colors"
                     >
-                      Hotline: +256 703 766257
+                      Whatsapp: +256 752 237 963
                     </a>
                   </p>
                 </div>
@@ -145,17 +145,27 @@
                   <p class="text-white font-medium">Email Us</p>
                   <p class="text-gray-300 text-sm">
                     <a
-                      href="mailto:tkyobe@capitalfm-ug.com"
-                      class="hover:text-yellow-400 transition-colors"
-                    >
-                      tkyobe@capitalfm-ug.com </a
-                    ><br />
-                    <a
                       href="mailto:info@beatradio.co.ug"
                       class="hover:text-yellow-400 transition-colors"
                     >
                       info@beatradio.co.ug
                     </a>
+                    <br/>
+                    <a
+                      href="mailto:promotions@beatfm.co.ug"
+                      class="hover:text-yellow-400 transition-colors"
+                    >
+                      promotions@beatfm.co.ug
+                    </a>
+                    <br/>
+                    <a
+                      href="mailto:technical@beatfm.co.ug"
+                      class="hover:text-yellow-400 transition-colors"
+                    >
+                      technical@beatfm.co.ug </a
+                    ><br />
+                    
+                    
                   </p>
                 </div>
               </div>

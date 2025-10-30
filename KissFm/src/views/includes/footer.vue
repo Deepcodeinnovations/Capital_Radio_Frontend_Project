@@ -87,11 +87,11 @@
                 <div>
                   <p class="text-white font-medium">Call Us</p>
                   <p class="text-gray-300 text-sm">
-                    <a href="tel:+256323501200" class="hover:text-pink-400 transition-colors">
-                      Studio: +256 323 501200
+                    <a href="tel:+256414215100" class="hover:text-pink-400 transition-colors">
+                      Studio: +256 414 215 100
                     </a><br/>
-                    <a href="tel:+256414543672" class="hover:text-pink-400 transition-colors">
-                      Office: +256 414 543672
+                    <a href="tel:+256757350100" class="hover:text-pink-400 transition-colors">
+                      Whatsapp: +256 757 350 100
                     </a>
                   </p>
                 </div>
@@ -103,12 +103,15 @@
                 </div>
                 <div>
                   <p class="text-white font-medium">Email Us</p>
-                  <p class="text-gray-300 text-sm">
+                  <p class="text-gray-400 text-sm">
                     <a href="mailto:info@kiis1009.co.ug" class="hover:text-pink-400 transition-colors">
                       info@kiis1009.co.ug
                     </a><br/>
-                    <a href="mailto:rolaboro@capitalfm-ug.com" class="hover:text-pink-400 transition-colors">
-                      rolaboro@capitalfm-ug.com
+                    <a href="mailto:promotions@kiis1009.co.ug" class="hover:text-pink-400 transition-colors">
+                       promotions@kiisfm.co.ug
+                    </a><br/>
+                    <a href="mailto:technical@capitalfm-ug.com" class="hover:text-pink-400 transition-colors">
+                      technical@capitalfm-ug.com 
                     </a>
                   </p>
                 </div>

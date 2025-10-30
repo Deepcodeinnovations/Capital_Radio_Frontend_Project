@@ -54,10 +54,17 @@
               </a>
             </li>
             <li>
-              <div class="text-gray-500 text-xs mb-1">Official Email</div>
-              <a href="mailto:info@capitalfm.co.ug" class="text-gray-300 hover:text-[#F8CB00] transition-colors">
-                info@capitalfm.co.ug
+              <div class="text-gray-500 text-xs mb-1">Email Us</div>
+              <a href="mailto:sales@capitalfm.co.ug" class="text-gray-300 hover:text-[#F8CB00] transition-colors">
+                sales@capitalfm.co.ug
+              </a><br/>
+              <a href="mailto:promotions@capitalfm.co.ug" class="text-gray-300 hover:text-[#F8CB00] transition-colors">
+                 Promotions@capitalfm-ug.com
+              </a><br/>
+              <a href="mailto:technical@capitalfm-ug.com" class="text-gray-300 hover:text-[#F8CB00] transition-colors">
+                  technical@capitalfm-ug.com 
               </a>
+               
             </li>
             <li>
               <div class="text-gray-500 text-xs mb-1">Address</div>
