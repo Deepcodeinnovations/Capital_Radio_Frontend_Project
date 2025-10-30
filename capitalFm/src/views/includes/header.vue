@@ -252,7 +252,7 @@
                 </a>
                 <a href="mailto:sales@capitalfm.co.ug" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm">
                   <Mail :size="16" />
-                  <span>sales@capitalfm.co.ug</span>
+                  <span> sales@capitalfm-ug.com</span>
                 </a>
               </div>
             </div>

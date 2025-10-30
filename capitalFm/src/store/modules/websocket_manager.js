@@ -15,7 +15,7 @@ export default {
         wsConnectedAt: null,
         wsHeartbeatInterval: null,
     },
-    
+
     getters: {
         wsSocket: (state) => state.wsSocket,
         wsConnectionStatus: (state) => state.wsConnectionStatus,
@@ -86,22 +86,22 @@ export default {
                 const getWebSocketUrl = `${protocol}//${host}/api/v1/websockets/eventStream/connect`;
                 const wsUrl = getWebSocketUrl + `?token=${authtoken}`;
                 console.log('WebSocket: Connecting to', wsUrl);
-                
+
                 const socket = new WebSocket(wsUrl);
                 commit('setWsSocket', socket);
-                
+
                 return new Promise((resolve, reject) => {
                     socket.onopen = () => {
                         console.log('WebSocket: Connected successfully');
                         commit('setWsConnectionStatus', 'connected');
                         commit('resetWsReconnectAttempts');
                         commit('setWsConnectedAt', new Date().toISOString());
-                        
+
                         // Start heartbeat
                         dispatch('startHeartbeat');
                         resolve(true);
                     };
-                    
+
                     socket.onmessage = (event) => {
                         try {
                             const message = JSON.parse(event.data);
@@ -110,31 +110,31 @@ export default {
                             console.error('WebSocket: Error parsing message', error);
                         }
                     };
-                    
+
                     socket.onclose = (event) => {
                         console.log('WebSocket: Connection closed', event.code, event.reason);
                         commit('setWsConnectionStatus', 'disconnected');
                         commit('setWsSocket', null);
                         dispatch('stopHeartbeat');
-                        
+
                         // Auto-reconnect if not intentionally closed
                         if (event.code !== 1000 && authuser && authtoken) {
                             dispatch('handleReconnection');
                         }
                     };
-                    
+
                     socket.onerror = (error) => {
                         console.error('WebSocket: Connection error', error);
                         commit('setWsConnectionStatus', 'error');
-                        toast.error('Connection error occurred');
+                        // toast.error('Connection error occurred');
                         reject(error);
                     };
                 });
-                
+
             } catch (error) {
                 console.error('WebSocket: Failed to create connection', error);
                 commit('setWsConnectionStatus', 'error');
-                toast.error('Failed to establish connection');
+                // toast.error('Failed to establish connection');
                 throw error;
             }
         },
@@ -143,13 +143,13 @@ export default {
         async handleReconnection({ commit, dispatch, state }) {
             if (state.wsReconnectAttempts >= state.wsMaxReconnectAttempts) {
                 console.log('WebSocket: Max reconnection attempts reached');
-                toast.error('Connection lost. Please refresh the page.');
+                // toast.error('Connection lost. Please refresh the page.');
                 return;
             }
 
             commit('incrementWsReconnectAttempts');
             console.log(`WebSocket: Attempting reconnection ${state.wsReconnectAttempts}/${state.wsMaxReconnectAttempts}`);
-            
+
             setTimeout(() => {
                 dispatch('connectWebSocket').catch(console.error);
             }, state.wsReconnectDelay);
@@ -185,25 +185,25 @@ export default {
             commit('setWsLastMessage', message);
             const { type, response, user_id } = message;
             console.log(response)
-            if(response.data.data.message){
-                let user_id =  rootGetters.authuser.id;
-                   if(response.type == 'deleted_message'){
+            if (response.data.data.message) {
+                let user_id = rootGetters.authuser.id;
+                if (response.type == 'deleted_message') {
                     commit('removefromlivechatmessages', response.data.data.message)
-                   }else{
+                } else {
                     commit('pushtolivechatmessages', response.data.data.message)
-                   }
-                   if(user_id != response.data.data.user_id){
+                }
+                if (user_id != response.data.data.user_id) {
                     comp_play_success_file('New Chat Message Received')
-                   }
+                }
             }
         },
 
-    
+
 
         // Start heartbeat to keep connection alive
         startHeartbeat({ commit, dispatch, state }) {
             dispatch('stopHeartbeat'); // Clear any existing interval
-            
+
             const interval = setInterval(() => {
                 if (state.wsConnectionStatus === 'connected') {
                     dispatch('sendWebSocketMessage', {
@@ -212,7 +212,7 @@ export default {
                     });
                 }
             }, 30000); // Send heartbeat every 30 seconds
-            
+
             commit('setWsHeartbeatInterval', interval);
         },
 

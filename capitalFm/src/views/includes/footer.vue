@@ -48,7 +48,13 @@
               </a>
             </li>
             <li>
-              <div class="text-gray-500 text-xs mb-1">Email</div>
+              <div class="text-gray-500 text-xs mb-1">Whatsapp Number</div>
+              <a href="tel:+256752345913" class="text-gray-300 hover:text-[#F8CB00] transition-colors">
+                +256 752 345 913
+              </a>
+            </li>
+            <li>
+              <div class="text-gray-500 text-xs mb-1">Official Email</div>
               <a href="mailto:info@capitalfm.co.ug" class="text-gray-300 hover:text-[#F8CB00] transition-colors">
                 info@capitalfm.co.ug
               </a>
