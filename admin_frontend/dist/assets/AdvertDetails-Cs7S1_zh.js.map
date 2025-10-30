@@ -1,0 +1,1 @@
+{"version":3,"file":"AdvertDetails-Cs7S1_zh.js","sources":["../../src/views/app/adverts/AdvertDetails.vue"],"sourcesContent":["<template>\r\n    <div>\r\n        <h1>Adverts</h1>\r\n    </div>\r\n</template>"],"names":["_createElementBlock","_cache","_createElementVNode"],"mappings":"mGACIA,EAEM,MAAA,KAAAC,EAAA,CAAA,IAAAA,EAAA,CAAA,EAAA,CADFC,EAAgB,UAAZ,UAAO,EAAA"}

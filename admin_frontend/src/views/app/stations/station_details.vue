@@ -214,16 +214,20 @@
           <!-- Program Selection -->
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Program *</label>
-            <select 
-              v-model="sessionForm.program_id" 
+            <select
+              v-model="sessionForm.program_id"
               class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
               required
+              :disabled="availablePrograms.length === 0"
             >
-              <option value="">Select program...</option>
+              <option value="">{{ availablePrograms.length === 0 ? 'No programs available for this station' : 'Select program...' }}</option>
               <option v-for="program in availablePrograms" :key="program.id" :value="program.id">
                 {{ program.title }}
               </option>
             </select>
+            <p v-if="availablePrograms.length === 0" class="text-xs text-amber-600 dark:text-amber-400 mt-1">
+              Please create a program for this station first in the Radio Programs section.
+            </p>
           </div>
 
           <!-- Time -->
@@ -459,7 +463,12 @@ const sessionForm = ref({
 });
 
 // Computed properties
-const availablePrograms = computed(() => programs.value?.data || []);
+const availablePrograms = computed(() => {
+  // Filter programs to only show those belonging to the current station
+  const allPrograms = programs.value?.data || [];
+  return allPrograms.filter(program => program.station_id == stationId.value);
+});
+
 const availableHosts = computed(() => {
   return (hosts.value?.data || []).filter(host => !sessionForm.value.hosts.includes(host.id));
 });
@@ -832,8 +841,9 @@ const fetchInitialData = async () => {
       store.dispatch('get_station_schedule', { stationId: stationId.value }),
       store.dispatch('get_schedule_conflicts', { stationId: stationId.value }),
       store.dispatch('get_schedule_statistics', { stationId: stationId.value }),
-      
-      // Fetch reference data
+
+      // Fetch reference data - fetch all programs (filtering happens in computed property)
+      // This ensures we have all programs available if needed, but only show station-specific ones
       store.dispatch('fetch_programs', { data: { per_page: 100 }, page: 1 }),
       store.dispatch('fetch_hosts', { data: { per_page: 100 }, page: 1 })
     ]);
@@ -889,6 +899,56 @@ onUnmounted(() => {
 watch(() => stationSchedule.value?.sessions, () => {
   scheduleAutoSave();
 }, { deep: true });
+
+// Helper function to calculate end time based on program duration
+const calculateEndTime = () => {
+  const selectedProgram = availablePrograms.value.find(p => p.id == sessionForm.value.program_id);
+
+  if (selectedProgram && selectedProgram.duration && sessionForm.value.start_time) {
+    const [hours, minutes] = sessionForm.value.start_time.split(':').map(Number);
+    const totalMinutes = hours * 60 + minutes + parseInt(selectedProgram.duration);
+    const endHours = Math.floor(totalMinutes / 60) % 24;
+    const endMinutes = totalMinutes % 60;
+    sessionForm.value.end_time = `${String(endHours).padStart(2, '0')}:${String(endMinutes).padStart(2, '0')}`;
+  }
+};
+
+// Watch for program selection to auto-populate hosts, notes, studio, and calculate end time
+watch(() => sessionForm.value.program_id, (newProgramId) => {
+  if (newProgramId && !editingSession.value) {
+    // Only auto-populate when adding a new session, not when editing
+    const selectedProgram = availablePrograms.value.find(p => p.id == newProgramId);
+
+    if (selectedProgram) {
+      // Auto-populate hosts from the program (hosts is an array of objects with id)
+      if (selectedProgram.hosts && selectedProgram.hosts.length > 0) {
+        sessionForm.value.hosts = selectedProgram.hosts.map(host => host.id);
+      }
+
+      // Auto-populate notes from program description
+      if (selectedProgram.description) {
+        sessionForm.value.notes = selectedProgram.description;
+      }
+
+      // Auto-populate studio from program
+      if (selectedProgram.studio) {
+        sessionForm.value.studio = selectedProgram.studio;
+      }
+
+      // Auto-calculate end time based on program duration
+      if (selectedProgram.duration && sessionForm.value.start_time) {
+        calculateEndTime();
+      }
+    }
+  }
+});
+
+// Watch for start time changes to auto-calculate end time based on program duration
+watch(() => sessionForm.value.start_time, (newStartTime) => {
+  if (newStartTime && sessionForm.value.program_id && !editingSession.value) {
+    calculateEndTime();
+  }
+});
 
 // Time utilities
 const formatTime = (timeString) => {

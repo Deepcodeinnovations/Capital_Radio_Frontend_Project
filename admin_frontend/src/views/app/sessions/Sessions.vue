@@ -6,10 +6,10 @@
         <h1 class="text-2xl font-semibold text-slate-900 dark:text-white">Radio Programs</h1>
         <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Create and manage your radio programs</p>
       </div>
-      
+
       <div class="flex items-center gap-3">
-        <button 
-          @click="showAddProgramModal = true" 
+        <button
+          @click="showAddProgramModal = true"
           :disabled="loading === 'create_program'"
           class="bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium disabled:opacity-50"
         >
@@ -20,115 +20,182 @@
       </div>
     </div>
 
-    <!-- Programs Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Skeleton Loading Cards -->
-      <div v-if="loading === 'fetch_programs'" v-for="n in 6" :key="`skeleton-${n}`" class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 animate-pulse">
-        <div class="flex items-center mb-4">
-          <div class="h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-700 mr-3"></div>
-          <div class="space-y-2">
-            <div class="h-4 w-24 bg-slate-200 dark:bg-slate-700 rounded"></div>
-            <div class="h-3 w-32 bg-slate-200 dark:bg-slate-700 rounded"></div>
+    <!-- Search and Filter Section -->
+    <div class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Search Input -->
+        <div class="relative">
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Search Programs</label>
+          <div class="relative">
+            <input
+              type="text"
+              v-model="searchQuery"
+              placeholder="Search by title, type, host, or description..."
+              class="w-full pl-10 pr-10 py-2 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm"
+            />
+            <SearchIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <button
+              v-if="searchQuery"
+              @click="searchQuery = ''"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+            >
+              <XIcon class="h-4 w-4" />
+            </button>
           </div>
         </div>
-        <div class="space-y-3">
-          <div class="h-4 w-20 bg-slate-200 dark:bg-slate-700 rounded"></div>
-          <div class="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded"></div>
-          <div class="h-3 w-3/4 bg-slate-200 dark:bg-slate-700 rounded"></div>
-          <div class="flex justify-between items-center mt-4">
-            <div class="h-6 w-16 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
-            <div class="flex gap-2">
-              <div class="h-8 w-8 bg-slate-200 dark:bg-slate-700 rounded"></div>
-              <div class="h-8 w-8 bg-slate-200 dark:bg-slate-700 rounded"></div>
-            </div>
+
+        <!-- Station Filter -->
+        <div>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Filter by Station</label>
+          <div class="relative">
+            <select
+              v-model="selectedStationFilter"
+              class="w-full px-3 py-2 pr-10 border border-slate-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm appearance-none"
+            >
+              <option value="">All Stations</option>
+              <option v-for="station in stations" :key="station.id" :value="station.id">
+                {{ station.name }} - {{ station.frequency }} FM
+              </option>
+            </select>
+            <button
+              v-if="selectedStationFilter"
+              @click="selectedStationFilter = ''"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+            >
+              <XIcon class="h-4 w-4" />
+            </button>
           </div>
         </div>
       </div>
 
+      <!-- Results Count -->
+      <div class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+        Showing {{ filteredPrograms.length }} of {{ programs.data?.length || 0 }} programs
+      </div>
+    </div>
+
+    <!-- Programs List -->
+    <div class="space-y-4">
+      <!-- Skeleton Loading Cards -->
+      <div v-if="loading === 'fetch_programs'" v-for="n in 4" :key="`skeleton-${n}`" class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 animate-pulse">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="w-full md:w-48 h-32 bg-slate-200 dark:bg-slate-700 rounded-lg flex-shrink-0"></div>
+          <div class="flex-1 space-y-3">
+            <div class="h-5 w-3/4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div class="h-4 w-1/2 bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div class="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded"></div>
+            <div class="h-3 w-5/6 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="filteredPrograms.length === 0" class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-12 text-center">
+        <RadioIcon class="h-16 w-16 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">No programs found</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+          {{ searchQuery || selectedStationFilter ? 'Try adjusting your filters' : 'Create your first program to get started' }}
+        </p>
+      </div>
+
       <!-- Actual Program Cards -->
-      <div v-else v-for="program in programs.data" :key="program.id" class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-shadow">
-        <div class="p-6">
-          <div class="flex items-center mb-4">
-            <div class="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-lg mr-3">
-              <RadioIcon class="h-6 w-6" />
+      <div v-else v-for="program in filteredPrograms" :key="program.id" class="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all duration-200">
+        <div class="flex flex-col sm:flex-row">
+          <!-- Program Image -->
+          <div class="w-full sm:w-48 md:w-56 h-48 sm:h-auto flex-shrink-0">
+            <div v-if="program.image_url" class="w-full h-full bg-slate-100 dark:bg-slate-700 overflow-hidden">
+              <img :src="program.image_url" :alt="program.title" class="w-full h-full object-cover" />
             </div>
-            <div class="flex-1">
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white">{{ program.title }}</h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400">{{ program.type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) }}</p>
-            </div>
-          </div>
-
-          <!-- Station Info -->
-          <div class="flex items-center text-sm text-slate-600 dark:text-slate-400 mb-3">
-            <MapPinIcon class="h-4 w-4 mr-1" />
-            {{ program.station?.name }} - {{ program.station?.frequency }} FM
-          </div>
-
-          <!-- Duration -->
-          <div class="flex items-center text-sm text-slate-600 dark:text-slate-400 mb-3">
-            <ClockIcon class="h-4 w-4 mr-1" />
-            {{ formatDuration(program.duration) }} program
-          </div>
-
-          <!-- Studio Info -->
-          <div class="flex items-center text-sm text-slate-600 dark:text-slate-400 mb-4">
-            <MicIcon class="h-4 w-4 mr-1" />
-            Studio {{ program.studio }}
-          </div>
-
-          <!-- Hosts Pills -->
-          <div v-if="program.hosts && program.hosts.length > 0" class="mb-4">
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">Hosts:</p>
-            <div class="flex flex-wrap gap-1">
-              <span v-for="host in program.hosts" :key="host.id" 
-                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300"
-              >
-                {{ host.name }}
-              </span>
+            <div v-else class="w-full h-full bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/30 dark:to-emerald-800/30 flex items-center justify-center">
+              <RadioIcon class="h-12 w-12 sm:h-16 sm:w-16 text-emerald-600 dark:text-emerald-400 opacity-50" />
             </div>
           </div>
 
-          <!-- Description -->
-          <p v-if="program.description" class="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">{{ program.description }}</p>
+          <!-- Program Content -->
+          <div class="flex-1 p-4 sm:p-5 md:p-6">
+            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
+              <div class="flex-1 min-w-0">
+                <h3 class="text-lg sm:text-xl font-semibold text-slate-900 dark:text-white mb-1 truncate">{{ program.title }}</h3>
+                <div class="flex flex-wrap items-center gap-2 text-sm">
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                    {{ program.type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) }}
+                  </span>
+                  <button
+                    @click="toggleProgramStatus(program)"
+                    :disabled="loading === 'toggle_program_status'"
+                    :class="[
+                      'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium disabled:opacity-50 transition-colors',
+                      program.status == 1
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50'
+                        : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
+                    ]"
+                  >
+                    <LoaderIcon v-if="loading === 'toggle_program_status'" class="w-3 h-3 mr-1.5 animate-spin" />
+                    <div v-else
+                      :class="[
+                        'w-1.5 h-1.5 rounded-full mr-1.5',
+                        program.status == 1 ? 'bg-green-500' : 'bg-slate-400'
+                      ]"
+                    ></div>
+                    {{ program.status == 1 ? 'Active' : 'Inactive' }}
+                  </button>
+                </div>
+              </div>
 
-          <!-- Status and Actions -->
-          <div class="flex items-center justify-between">
-            <button 
-              @click="toggleProgramStatus(program)"
-              :disabled="loading === 'toggle_program_status'"
-              :class="[
-                'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium disabled:opacity-50 transition-colors',
-                program.status == 1 
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50' 
-                  : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
-              ]"
-            >
-              <LoaderIcon v-if="loading === 'toggle_program_status'" class="w-3 h-3 mr-1.5 animate-spin" />
-              <div v-else
-                :class="[
-                  'w-1.5 h-1.5 rounded-full mr-1.5',
-                  program.status == 1 ? 'bg-green-500' : 'bg-slate-400'
-                ]"
-              ></div>
-              {{ program.status == 1 ? 'Active' : 'Inactive' }}
-            </button>
-            
-            <div class="flex items-center gap-1">
-              <button 
-                @click="editProgram(program)" 
-                :disabled="loading === 'update_program'"
-                class="text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 disabled:opacity-50 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-              >
-                <EditIcon class="h-4 w-4" />
-              </button>
-              <button 
-                @click="deleteProgram(program)" 
-                :disabled="loading === 'delete_program'"
-                class="text-slate-400 hover:text-red-600 dark:hover:text-red-400 disabled:opacity-50 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-              >
-                <TrashIcon class="h-4 w-4" />
-              </button>
+              <!-- Action Buttons -->
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button
+                  @click="editProgram(program)"
+                  :disabled="loading === 'update_program'"
+                  class="text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 disabled:opacity-50 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                >
+                  <EditIcon class="h-5 w-5" />
+                </button>
+                <button
+                  @click="deleteProgram(program)"
+                  :disabled="loading === 'delete_program'"
+                  class="text-slate-400 hover:text-red-600 dark:hover:text-red-400 disabled:opacity-50 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                >
+                  <TrashIcon class="h-5 w-5" />
+                </button>
+              </div>
             </div>
+
+            <!-- Program Details Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+              <!-- Station Info -->
+              <div class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                <MapPinIcon class="h-4 w-4 mr-2 flex-shrink-0" />
+                <span class="truncate">{{ program.station?.name }} - {{ program.station?.frequency }} FM</span>
+              </div>
+
+              <!-- Duration -->
+              <div class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                <ClockIcon class="h-4 w-4 mr-2 flex-shrink-0" />
+                <span>{{ formatDuration(program.duration) }}</span>
+              </div>
+
+              <!-- Studio Info -->
+              <div class="flex items-center text-sm text-slate-600 dark:text-slate-400">
+                <MicIcon class="h-4 w-4 mr-2 flex-shrink-0" />
+                <span>Studio {{ program.studio }}</span>
+              </div>
+            </div>
+
+            <!-- Hosts Pills -->
+            <div v-if="program.hosts && program.hosts.length > 0" class="mb-3">
+              <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">Hosts:</p>
+              <div class="flex flex-wrap gap-1.5">
+                <span v-for="host in program.hosts" :key="host.id"
+                  class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300"
+                >
+                  {{ host.name }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p v-if="program.description" class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{{ program.description }}</p>
           </div>
         </div>
       </div>
@@ -354,7 +421,8 @@ import {
   Mic as MicIcon,
   Clock as ClockIcon,
   Image as ImageIcon,
-  Upload as UploadIcon
+  Upload as UploadIcon,
+  Search as SearchIcon
 } from 'lucide-vue-next';
 
 const store = useStore();
@@ -370,6 +438,8 @@ const showAddProgramModal = ref(false);
 const editingProgram = ref(null);
 const selectedHostToAdd = ref('');
 const imagePreview = ref('');
+const selectedStationFilter = ref('');
+const searchQuery = ref('');
 
 // Form data
 const programForm = ref({
@@ -394,6 +464,44 @@ const isFormValid = computed(() => {
 // Available hosts for selection
 const availableHosts = computed(() => {
   return hosts.value.data.filter(host => !programForm.value.selected_hosts.includes(host.id));
+});
+
+// Filtered programs based on selected station and search query
+const filteredPrograms = computed(() => {
+  let filtered = programs.value.data || [];
+
+  // Filter by station
+  if (selectedStationFilter.value) {
+    filtered = filtered.filter(program => program.station_id == selectedStationFilter.value);
+  }
+
+  // Filter by search query
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase().trim();
+    filtered = filtered.filter(program => {
+      // Search in title
+      if (program.title?.toLowerCase().includes(query)) return true;
+
+      // Search in description
+      if (program.description?.toLowerCase().includes(query)) return true;
+
+      // Search in type
+      if (program.type?.toLowerCase().replace('_', ' ').includes(query)) return true;
+
+      // Search in station name
+      if (program.station?.name?.toLowerCase().includes(query)) return true;
+
+      // Search in hosts
+      if (program.hosts?.some(host => host.name?.toLowerCase().includes(query))) return true;
+
+      // Search in studio
+      if (program.studio?.toLowerCase().includes(query)) return true;
+
+      return false;
+    });
+  }
+
+  return filtered;
 });
 
 // Helper functions
